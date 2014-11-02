@@ -24,12 +24,11 @@
 #define LOG_D(str)				\
   std::cout << "[DEBUG] " << str << std::endl
 
-#define MEASURE_TIME(description, unit, ...)		\
+#define MEASURE_TIME(unit, ...)						\
   [&] {									\
     using namespace std::chrono;					\
-    using std::string;							\
     auto start = high_resolution_clock::now ();				\
-    __VA_ARGS__;								\
+    __VA_ARGS__;							\
     auto time = high_resolution_clock::now () - start;			\
     return duration_cast<unit> (time).count ();				\
   } ();
@@ -47,10 +46,10 @@ void run_processing (const string& filename, const string& expected)
 {
   LOG_D("start processing " + filename);
   string result;
-  MEASURE_TIME("test", milliseconds, 
+  auto duration = MEASURE_TIME(milliseconds, 
 	       result = get_number_plates (filename.c_str ());
 	       );
-  
+  LOG_D("Running time: " + to_string (duration));
   if (result == expected)
     LOG_D("OK");
   else
