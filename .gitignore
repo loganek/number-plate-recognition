@@ -27,3 +27,13 @@
 *.i*86
 *.x86_64
 *.hex
+
+# Backup files
+*~
+
+# /doc (e.g. latex generated files)
+/doc/*.aux
+/doc/*.log
+/doc/*.pdf
+/doc/*.toc
+
