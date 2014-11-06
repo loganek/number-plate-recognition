@@ -31,9 +31,3 @@
 # Backup files
 *~
 
-# /doc (e.g. latex generated files)
-/doc/*.aux
-/doc/*.log
-/doc/*.pdf
-/doc/*.toc
-
