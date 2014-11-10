@@ -26,14 +26,43 @@ Obraz binarny jest to obraz cyfrowy którego składowe piksele przyjmują warto�
 \subsection{Podstawowe algorytmy przetwarzania obrazów}
 \subsubsection{Operacje morfologiczne}
 Operacje morfologiczne na obrazach binarnych wykoszystywane są do filtracji morfologicznej oraz analizy kształtów obiektów na obrazie. Algorytmy morfologiczne są podstawą dla wielu bardziej złożonych algorytmów analizy wizji komputerowej.
-\paragraph {Dylatacja obrazu} to rozszerzenie obrazu element strukturalny. Operacja definiowana jest wzorem
+\paragraph {Dylatacja obrazu} to rozszerzenie obrazu wykorzystując zadany element strukturalny. Operacja definiowana jest wzorem
 \begin{gather*}
-  A \bigoplus B \equiv \bigcup \limits_{b \in B} A_b
+  A \oplus B \equiv \bigcup \limits_{b \in B} A_b
 \end{gather*}.
 Przykładowy wynik operacji dylatacji przedstawiony jest na rysunku~\ref{fig:dilate}.
 \begin{figure}
   \centering
-  \includegraphics[width=15.5cm]{img/dilate}
+  \includegraphics[width=15cm]{img/dilate}
   \caption{Obraz binarny poddany procesowi dylatacji z zadanym elementem strukturalnym}
   \label{fig:dilate}
+\end{figure}
+\paragraph {Erozja obrazu} to usuwanie zwężanie obrazu z wykorzystaniem zadanego elementu strukturalnego. Operacja definiowana jest wzorem
+\begin{gather*}
+  A \ominus B \equiv \bigcap \limits_{b \in B} A_{-b}
+\end{gather*}.
+Przykładowy wynik operacji erozji obrazu przedstawiony został na rysunku~\ref{fig:erode}.
+\begin{figure}
+  \centering
+  \includegraphics[width=15cm]{img/erode}
+  \caption{Obraz binarny poddany procesowi erozji z zadanym elementem strukturalnym}
+  \label{fig:erode}
+\end{figure}
+\paragraph {Zamknięcie i otwarcie obrazu} to złożenie dwóch wyżej wymienionych operacji (dylatacji oraz erozji) w odpowiedni sposób.
+\begin{itemize}
+\item zamknięcie obrazu definiowane jest w następujący sposób:
+  \begin{gather*}
+    A \bullet B = (A \oplus B) \ominus B
+  \end{gather*}, czyli najpierw wykonywana jest operacja dylatacji obrazu, a następnie przekształcony obraz poddawany jest operacji erozji
+\item otwarcie obrazu definiowane jest wzorem:
+  \begin{gather*}
+    A \circ B = (A \ominus B) \oplus B
+  \end{gather*}. W przypadku algorytmu otwarcia obrazu, w pierwszej kolejności wykonywana jest operacja erozji, a następnie opracja dylatacji obrazu.
+\end{itemize}
+Na rysunku~\ref{fig:open_close} przedstawiony został wynik działania obydwu algorytmów na tym samym obrazie, z tym samym elementem strukturalnym.
+\begin{figure}
+  \centering
+  \includegraphics[width=15cm]{img/open-close}
+  \caption{Obraz binarny poddany operacji otwarcia oraz zamknięcia obrazu, dla takiego samego elementu strukturalnego}
+  \label{fig:open_close}
 \end{figure}
