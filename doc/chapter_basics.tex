@@ -23,3 +23,17 @@ Obraz binarny jest to obraz cyfrowy którego składowe piksele przyjmują warto�
 \begin{gather*}
   f(x, y) = z, z \in {0, 1}
 \end{gather*}.
+\subsection{Podstawowe algorytmy przetwarzania obrazów}
+\subsubsection{Operacje morfologiczne}
+Operacje morfologiczne na obrazach binarnych wykoszystywane są do filtracji morfologicznej oraz analizy kształtów obiektów na obrazie. Algorytmy morfologiczne są podstawą dla wielu bardziej złożonych algorytmów analizy wizji komputerowej.
+\paragraph {Dylatacja obrazu} to rozszerzenie obrazu element strukturalny. Operacja definiowana jest wzorem
+\begin{gather*}
+  A \bigoplus B \equiv \bigcup \limits_{b \in B} A_b
+\end{gather*}.
+Przykładowy wynik operacji dylatacji przedstawiony jest na rysunku~\ref{fig:dilate}.
+\begin{figure}
+  \centering
+  \includegraphics[width=15.5cm]{img/dilate}
+  \caption{Obraz binarny poddany procesowi dylatacji z zadanym elementem strukturalnym}
+  \label{fig:dilate}
+\end{figure}
