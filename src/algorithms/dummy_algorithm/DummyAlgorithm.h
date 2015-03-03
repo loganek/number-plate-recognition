@@ -12,11 +12,17 @@
 
 class DummyAlgorithm : public IAlgorithm
 {
+	Gtk::Box box;
+	Gtk::Scale scale;
+
 public:
+	DummyAlgorithm();
 	virtual ~DummyAlgorithm() {}
 
 	std::string get_name() const override;
 	std::string process(const cv::Mat& mat) override;
+
+	Gtk::Widget* get_tuner_widget() override;
 };
 
 

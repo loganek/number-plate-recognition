@@ -31,7 +31,7 @@ MainWindow::MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>
 	selectDirButton->signal_clicked().connect(sigc::mem_fun(*this, &MainWindow::on_selectDirButton_clicked));
 
 	builder->get_widget("dirEntry", dirEntry);
-	dirEntry->signal_activate().connect([this] { current_directory = dirEntry->get_text(); load_images_from_directory(); });
+	dirEntry->signal_activate().connect([this] { set_current_directory(dirEntry->get_text()); });
 
 	builder->get_widget("filesTreeView", filesTreeView);
 	file_model = Gtk::ListStore::create(tree_columns);
@@ -43,9 +43,10 @@ MainWindow::MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>
 	algorithm_model = Gtk::ListStore::create(tree_columns);
 	algorithmComboBox->set_model(algorithm_model);
 	algorithmComboBox->pack_start(tree_columns.col_str_first);
+	algorithmComboBox->signal_changed().connect(sigc::mem_fun(*this, &MainWindow::on_algorithmComboBox_changed));
 
 	builder->get_widget("runProcessingButton", runProcessingButton);
-	runProcessingButton->signal_clicked().connect(sigc::mem_fun(*this, &MainWindow::on_runProcessingButton_clicked));
+	runProcessingButton->signal_clicked().connect([this] { run_processing(); });
 
 	builder->get_widget("inputImage", inputImage);
 
@@ -54,6 +55,8 @@ MainWindow::MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>
 	builder->get_widget("mainStatusbar", mainStatusbar);
 
 	builder->get_widget("processingOutputLabel", processingOutputLabel);
+
+	builder->get_widget("algorithmViewport", algorithmViewport);
 }
 
 MainWindow::~MainWindow()
@@ -88,7 +91,7 @@ void MainWindow::on_selectDirButton_clicked()
 	}
 }
 
-void MainWindow::on_runProcessingButton_clicked()
+void MainWindow::run_processing()
 {
 	auto algorithm = get_selected_algorithm();
 
@@ -193,4 +196,26 @@ void MainWindow::show_message(const std::string& header, const std::string& msg,
 	Gtk::MessageDialog dialog(header, false, type, Gtk::BUTTONS_OK);
 	dialog.set_secondary_text(msg);
 	dialog.run();
+}
+
+void MainWindow::on_algorithmComboBox_changed()
+{
+	auto algorithm = get_selected_algorithm();
+
+	if (!algorithm)
+		return;
+
+	auto widget = algorithm->get_tuner_widget();
+	if (!widget)
+		return;
+
+	widget->show();
+	algorithm->set_processing_handler([this]{ run_processing(); });
+	algorithmViewport->add(*widget);
+}
+
+void MainWindow::set_current_directory(const std::string& dirpath)
+{
+	current_directory = dirpath;
+	load_images_from_directory();
 }
