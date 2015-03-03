@@ -12,13 +12,17 @@
 
 #include <set>
 #include <memory>
+#include <vector>
 
 class AlgorithmManager
 {
-	std::set<std::shared_ptr<IAlgorithm>> algorithms;
+	std::vector<std::shared_ptr<IAlgorithm>> algorithms;
 
 public:
 	virtual ~AlgorithmManager() {}
+	AlgorithmManager(std::initializer_list<std::shared_ptr<IAlgorithm>> algorithms);
+
+	void register_algorith(std::shared_ptr<IAlgorithm> algorithm);
 
 	std::vector<std::string> get_algorithms() const;
 	std::shared_ptr<IAlgorithm> get_algorithm(const std::string& name) const;

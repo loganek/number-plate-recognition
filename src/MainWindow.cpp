@@ -27,15 +27,26 @@ MainWindow::MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>
 	algorithmComboBox->set_model(algorithm_model);
 	algorithmComboBox->pack_start(tree_columns.col_str_first);
 
-	for (auto algo : manager.get_algorithms())
-	{
-		auto row = *(algorithm_model->append());
-		row[tree_columns.col_str_first] = algo;
-	}
+	builder->get_widget("runProcessingButton", runProcessingButton);
+	runProcessingButton->signal_clicked().connect(sigc::mem_fun(*this, &MainWindow::on_runProcessingButton_clicked));
+
+	builder->get_widget("processingOutputLabel", processingOutputLabel);
 }
 
 MainWindow::~MainWindow()
 {
+}
+
+void MainWindow::set_manager(std::shared_ptr<AlgorithmManager> manager)
+{
+	this->manager = manager;
+	algorithm_model->clear();
+
+	for (auto algo : manager->get_algorithms())
+	{
+		auto row = *(algorithm_model->append());
+		row[tree_columns.col_str_first] = algo;
+	}
 }
 
 void MainWindow::on_selectDirButton_clicked()
@@ -49,6 +60,16 @@ void MainWindow::on_selectDirButton_clicked()
 		dirEntry->set_text(filename);
 		load_images_from_directory(filename);
 	}
+}
+
+void MainWindow::on_runProcessingButton_clicked()
+{
+	auto algorithm = get_selected_algorithm();
+
+	if (!algorithm)
+		return;
+
+	processingOutputLabel->set_text(algorithm->process(cv::Mat()));
 }
 
 void MainWindow::load_images_from_directory(const Glib::ustring& filename)
@@ -69,4 +90,21 @@ void MainWindow::load_images_from_directory(const Glib::ustring& filename)
 			row[tree_columns.col_str_first] = dir_iter->path().string();
 		}
 	}
+}
+
+std::shared_ptr<IAlgorithm> MainWindow::get_selected_algorithm() const
+{
+	Gtk::TreeModel::iterator iter = algorithmComboBox->get_active();
+	std::shared_ptr<IAlgorithm> alg_empty;
+
+	if (!iter)
+		return alg_empty;
+
+	Gtk::TreeModel::Row row = *iter;
+	if (!row)
+		return alg_empty;
+
+	Glib::ustring name = row[tree_columns.col_str_first];
+
+	return manager->get_algorithm(name);
 }
