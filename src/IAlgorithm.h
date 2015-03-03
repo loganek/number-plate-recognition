@@ -12,12 +12,15 @@
 
 class IAlgorithm
 {
+protected:
+	cv::Mat output;
+
 public:
 	virtual ~IAlgorithm() {}
 
 	virtual std::string get_name() const = 0;
 	virtual std::string process(const cv::Mat& mat) = 0;
-	virtual cv::Mat get_debug_image() const = 0;
+	virtual cv::Mat get_output_image() const { return output; }
 };
 
 

@@ -33,6 +33,9 @@ class MainWindow : public Gtk::Window
 	Gtk::ComboBox *algorithmComboBox;
 	Gtk::Button *runProcessingButton;
 	Gtk::Label *processingOutputLabel;
+	Gtk::Image *inputImage;
+	Gtk::Image *outputImage;
+	Gtk::Statusbar *mainStatusbar;
 
 	ModelColumns tree_columns;
 
@@ -40,12 +43,18 @@ class MainWindow : public Gtk::Window
 	Glib::RefPtr<Gtk::ListStore> algorithm_model;
 
 	std::shared_ptr<AlgorithmManager> manager;
+	std::string current_directory;
 
 	void on_selectDirButton_clicked();
 	void on_runProcessingButton_clicked();
+	void on_filesTreeView_row_activated(const Gtk::TreeModel::Path& path, Gtk::TreeViewColumn* column);
 
-	void load_images_from_directory(const Glib::ustring& filename);
+	std::string get_selected_filename() const;
+	void load_images_from_directory();
 	std::shared_ptr<IAlgorithm> get_selected_algorithm() const;
+	void load_input_file(const std::string& filename);
+
+	void show_message(const std::string& header, const std::string& msg, Gtk::MessageType type) const;
 
 public:
 	MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refBuilder);

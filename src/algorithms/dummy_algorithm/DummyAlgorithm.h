@@ -17,7 +17,6 @@ public:
 
 	std::string get_name() const override;
 	std::string process(const cv::Mat& mat) override;
-	cv::Mat get_debug_image() const override;
 };
 
 

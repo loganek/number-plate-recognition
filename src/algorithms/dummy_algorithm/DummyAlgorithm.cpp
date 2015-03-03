@@ -7,6 +7,8 @@
 
 #include "DummyAlgorithm.h"
 
+#include <opencv2/imgproc/imgproc.hpp>
+
 std::string DummyAlgorithm::get_name() const
 {
 	return "Dummy Algorithm";
@@ -14,10 +16,11 @@ std::string DummyAlgorithm::get_name() const
 
 std::string DummyAlgorithm::process(const cv::Mat& mat)
 {
-	return "empty string";
-}
+	cv::cvtColor(mat, output, CV_BGR2GRAY);
 
-cv::Mat DummyAlgorithm::get_debug_image() const
-{
-	return cv::Mat();
+	cv::threshold(output, output, 100, 255, 0);
+
+	cv::cvtColor(output, output, CV_GRAY2BGR);
+
+	return "empty string";
 }
