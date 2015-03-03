@@ -8,7 +8,7 @@
 #ifndef DUMMYALGORITHM_H_
 #define DUMMYALGORITHM_H_
 
-#include "IAlgorithm.h"
+#include "algorithms/IAlgorithm.h"
 
 class DummyAlgorithm : public IAlgorithm
 {

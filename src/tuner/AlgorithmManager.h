@@ -8,7 +8,7 @@
 #ifndef SRC_ALGORITHMMANAGER_H_
 #define SRC_ALGORITHMMANAGER_H_
 
-#include "IAlgorithm.h"
+#include "algorithms/IAlgorithm.h"
 
 #include <set>
 #include <memory>

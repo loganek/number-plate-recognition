@@ -16,5 +16,4 @@ find_package(Boost 1.55.0 COMPONENTS system filesystem REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
 
 add_subdirectory(src)
-add_subdirectory(test)
 add_subdirectory(doc)
