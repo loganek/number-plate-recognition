@@ -12,8 +12,10 @@
 
 class DummyAlgorithm : public IAlgorithm
 {
-	Gtk::Box box;
+	Gtk::VBox box;
 	Gtk::Scale scale;
+	Gtk::Scale canny_threshold1;
+	Gtk::Scale canny_threshold2;
 
 public:
 	DummyAlgorithm();

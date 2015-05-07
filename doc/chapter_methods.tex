@@ -1,0 +1,156 @@
+\section{Przegląd metod segmentacji obrazu}
+\subsection{Wstęp}
+Segmentacja obrazu jest procesem umożliwiającym podział obrazu na obszary, które pod względem zadanego kryterium różnią się miedzy sobą. 
+\subsection{Progowanie}
+Najłatwiejszą metodą segmentacji obrazu jest metoda progowania, opisywana w podrozdziale \nameref{sssec:threshold}.
+
+\subsection{Detekcja krawędzi}
+Celem algorytmów detekcji krawędzi jest znalezienie na obrazie zbioru punktów, które reprezentują obrysy poszukiwanych elementów. 
+
+\subsubsection{Algorytm Robertsa}
+Algorytm Robertsa do wykrywania krawędzi w obrazie jest jednym z pierwszych algorytmów w swojej kategorii. Cechuje się szybkością działania oraz stosunkowo niską odpornością na szumy. Działanie algorytmu wymaga zastosowaniu dla każdego piksela obrazu dwóch masek:
+\begin{gather*}
+\begin{matrix}
+  \begin{bmatrix}
+    +1 & 0 \\
+    0 & -1
+  \end{bmatrix}
+&
+  \begin{bmatrix}
+    0 & +1 \\
+    -1 & 0
+  \end{bmatrix}
+\end{matrix}
+\end{gather*}
+Niech \textit{$I_{in}$(x, y)} jest pikselem obrazu wejściowego o współrzędnych \textit{(x, y)}, a \textit{$I_{out}$(x, y)} jest pikselem obrazu wyjściowego o współrzędnych \textit{(x, y)}. Wartości poszczególnych pikseli obrazu wyjściowego wyliczane są następującym wzorem:
+\begin{gather*}
+  I_{out}(x, y) = \sqrt{I_{in_x}^2(x, y)+I_{in_y}^2(x, y)}
+\end{gather*}, gdzie \textit{$I_{in_x}$}(x, y) oraz \textit{$I_{in_y}$}(x, y) są wartościami piksela o współrzędnych \textit{(x, y)} po zastosowaniu wspomnianych wcześniej masek.
+Kierunek gradientu może zostać wyznaczony ze wzoru:
+\begin{gather*}
+  \theta(x, y) = arctan(\frac{G_y(x, y)}{G_x(x, y)})
+\end{gather*}.
+\subsubsection{Sobel} \label{sssec:sobel}
+Działanie algorytmu Sobel jest bardzo podobne do przedstawionego wcześniej algorytmu Robertsa. W przypadku tego algorytmu, dane są dwie maski o następującej postaci:
+\begin{gather*}
+\begin{matrix}
+  \begin{bmatrix}
+    -1 & 0 & +1 \\
+    -2 & 0 & +2 \\
+    -1 & 0 & +1
+  \end{bmatrix}
+&
+  \begin{bmatrix}
+    -1 & 0 & +1 \\
+    -2 & 0 & +2 \\
+    -1 & 0 & +1
+  \end{bmatrix}
+\end{matrix}
+\end{gather*}
+Algorytm jest znacznie bardziej odporny na szumy występujące na obrazie niż algorytm Robertsa. \\
+Kierunek gradientu może zostać wyznaczony ze wzoru:
+\begin{gather*}
+  \theta(x, y) = arctan(\frac{G_y(x, y)}{G_x(x, y)})
+\end{gather*}.
+\subsubsection{Algorytm Canny'ego}
+Algorytm Canny'ego składa się z czterech podstawowych kroków.
+\begin{enumerate}
+\item Wygładzanie obrazu \\
+  Celem tego kroku jest usunięcie z obrazu szumów mogących wystąpić na obrazie. Szumy mogą powodować detekcję fałszywych krawędzi, dlatego usunięcie ich przed faktycznym procesem wyszukiwania algorytmu powoduje poprawę jakości wyników algorytmu. W algorytmie Canny'ego stosuje do wygładzenia obrazu, stosuje się filtr Gaussa. 
+\item Znajdowanie gradientu \\
+  Do znajdowania gradientu obrazu wykorzystywany jest operator sobela, opisywany w podrozdziale \nameref{sssec:sobel}.
+\item Tłumienie nie-maksymalnych sygnałów \\
+  Po zastosowaniu operatora Sobel, krawędzie obrazu są rozmyte. W tym kroku następuje filtrowanie wszystkich lokalnych maksymalnych wartości w obrazie gradientowym, oraz usunięcie wartości nie-maksymalnych. Dla każdego piksela, kierunek gradientu zaokrąglany jest z dokładnością do 45 stopni, otrzymując w ten sposób 8 wartości kierunków. Dla każdego piksela pod uwagę brane są trzy wartości: wartość badanego piksela, najbliższy piksel wskazywany przez kierunek gradientu, oraz najbliższy piksel leżący w przeciwnym kierunku niż kierunek wskazywany przez gradient. Jeśli badany piksel ma wartość maksymalną spośród trzech podanych wartości, nie zostaje on usunięty. W przeciwnym razie, wartość piksela zostaje zastąpiona wartością zerową.
+\item Podwójne progowanie(progowanie z histerezą)
+  Pomimo zastosowania metody wygładzania w pierwszym etapie algorytmu, znalezienie niektórych krawędzi może być efektem zaszumionego obrazu. Dlatego w algorytmie Canny'ego stosuje się podwójne progowanie, z wartościami:
+\begin{itemize}
+  \item \textit{$T_{high}$} - wartość wyższego progu,
+  \item \textit{$T_{low}$} - wartość niższego progu
+\end{itemize}, będącymi w relacji:
+\begin{gather*}
+  T_{max} \gg T_{min} 
+\end{gather*}.
+Piksele o wartościach większych niż \textit{$T_{max}$} klasyfikowane są jako \textit{krawędzie silne}. Piksele o wartościach pomiędzy \textit{$T_{min}$} i \textit{$T_{max}$} to tzw. \textit{krawędzie słabe}. Piksele o wartościach mniejszych niż \textit{$T_{min}$} są usuwane z obrazu.
+
+\end{enumerate}
+
+\subsection{Algorytmy oparte o histogram}
+Algorytmy oparte o analizę histogramu obrazu cechują się szybkością działania, ponieważ budowa histogramu wymaga tylko jednej iteracji przez wszystkie piksele w obrazie. Istnieje kilka technik segmentacji obrazu w oparciu o analizę histogramu. \\
+Przed wykonaniem jednego z niżej omawianych algorytmów, w celu poprawy rezultatów, należy zastosować operację wyrównania histogramu, oraz operację wygładzenia histogramu.
+
+\subsubsection{Wyszukiwanie szczytów histogramu}
+Wyszukiwanie szczytów histogramu wykorzystywane jest do separacji tła od obiektu pierwszoplanowego. Po wyznaczeniu histogramu, wyszukiwane zostają dwie wartości, które najczęściej pojawiają się w obrazie. Następnie na podstawie tych wartości wyznaczana jest progowa wartość, służąca do klasyfikacji pikseli na obrazie:
+\begin{gather*}
+  T = \frac{p_1 + p_2}{2}
+\end{gather*}, gdzie $p_1$ jest pierwszą wartością szczytową w histogramie, a $p_2$ jest drugą wartością szczytową w histogramie. \\
+Powyższa wersja algorytmu ma jednak wadę, która powoduje, że algorytm nie może zostać użyty w rzeczywistych przypadkach. Bardzo często piksele tła oraz piksele obiektu pierwszoplanowego nie mają takich samych wartości dla całego obiektu, ale przyjmują wiele wartości oscylujących wokół jednej z nich. Przykład histogramu dla takiego obrazu został pokazany na rysunku~\ref{fig:histogram_peaks}. Histogram zawiera widoczne dwa skupiska wartości, natomiast obydwie największe wartości szczytowe w histogramie należą do jednego skupiska. Aby wyeliminować ten problem, należy założyć, że wartości szczytowe nie mogą znajdować się we wcześniej zdefiniowanym sąsiedztwie. 
+
+\begin{figure}
+  \centering
+% todo  \includegraphics[width=15cm]{img/histogram_peaks}
+  \caption{Obraz oraz jego histogram}
+  \label{fig:histogram_peaks}
+\end{figure}
+
+\subsubsection{Wyszukiwanie minimum histogramu}
+Metoda wyszukiwania minimum histogramu jest bardzo podobna do metody omawianej w poprzednim akapicie. Na początku wyszukiwane są dwie wartości szczytowe, które powinny być odległe od siebie o pewną ustaloną wartość. Jednak w przeciwieństwie do omawianego wcześniej algorytmu, jako wartość progową przyjmuje się najmniejszą wartość pomiędzy dwoma szczytami w histogramie. \\
+Rysunek~\ref{fig:histogram_valleys} przedstawia histogram pewnego obrazu. Stosując metodę wyszukiwania szczytów histogramu, jako wartość progowa została by wybrana wartość 10. Stosując omawianą w tym akapicie metodę, jako wartość progowa zostanie wybrana liczba 14, co prawdopodobnie jest poprawnym wyborem dla danego obrazu.
+
+\begin{figure}
+  \centering
+% todo  \includegraphics[width=15cm]{img/histogram_valleys}
+  \caption{Obraz oraz jego histogram}
+  \label{fig:histogram_valleys}
+\end{figure}
+
+\subsection{Segmentacja przez rozrost obszarów}
+Metoda segmentacji przez rozrost obszarów polega na wyszukiwanie na obrazie elementów o podobnej jasności. Algorytm rozpoczyna działanie od punktów startowych, które mogą powinny zostać podane jako parametr algorytmu. Algorytm można opisać w następujący sposób:
+\begin{enumerate}
+  \item Nadaj każdemu punktowi startowemu etykietę.
+  \item Dodaj punkty startowe do kolejki.
+  \item Jeśli kolejka jest pusta, zakończ algorytm.
+  \item Pobierz punkt z kolejki, a następnie sprawdź wszystkie punkty znajdujące się w sąsiedztwie pod względem podobieństwa. Jeśli sąsiedni punkt spełnia kryterium podobieństwa, oznacz go etykietą punktu pobranego z kolejki, a następnie umieść punkt w kolejce.
+  \item Przejdź do kroku 3.
+\end{enumerate}
+Wynikiem algorytmu będzie zbiór punktów oznaczonych etykietami. Punkty oznaczone tą samą etykietą reprezentują pojedynczy obszar znaleziony na obrazie.
+
+Podczas projektowania metody segmentacji przez rozrost, należy, biorąc pod uwagę warunki działania algorytmu, rozważyć dwa problemy:
+\begin{itemize}
+  \item wybór punktów startowych,
+  \item wybór kryterium podobieństwa
+\end{itemize}.
+W celu rozwiązania pierwszego problemu, można zastosować jedną z wcześniej omawianych metod segmentacji (np. szybki algorytm progowania), a następnie wybrać punkty oddalone od siebie o zadaną wartość. \\
+Kryterium podobieństwa może zostać określone na dwa sposoby, w zależności od problemu, do rozwiązywania którego został zaprojektowany algorytm:
+\begin{enumerate}
+  \item dla obrazów w których różnica jasności w ramach jednego obszaru może być bardzo duża, należy zastosować kryterium 
+    \begin{gather*}
+      |I_{in}(c) - I_{in}(n)| < \epsilon
+    \end{gather*}
+    gdzie $I_{in}$ to funkcja zwracająca wartość piksela o współrzędnych przekazanych jako argument, \textit{c} to współrzędne aktualnie przetwarzanego punktu, \textit{n} to współrzędne aktualnie przetwarzanego sąsiada, a $\epsilon$ to maksymalna różnica pomiędzy sąsiednimi punktami, taka, że dwa punkty uznawane są za podobne. Stosując powyższe kryterium mamy pewność, że obiekt ze zmiennym natężeniem oświetlenia zostanie sklasyfikowany jako jeden obszar. Stosowanie tego kryterium może jednak spowodować, że do obszaru zostaną zaklasyfikowane elementy tła.
+    \item dla obrazów o stałym oświetleniu, stosuje się kryterium
+      \begin{gather*}
+        |I_{in}(seed) - I_{in}(n)| < \epsilon
+      \end{gather*}
+      gdzie $I_{in}$ to funkcja zwracająca wartość piksela o współrzędnych przekazanych jako argument, \textit{seed} to współrzędne punktu wyjściowego, \textit{n} to współrzędne aktualnie przetwarzanego sąsiada, a $\epsilon$ to maksymalna różnica pomiędzy dwoma punktami, taka, że dwa punkty uznawane są za podobne. Stosując powyższe kryterium mamy pewność, że obiekt ze zmiennym natężeniem oświetlenia zostanie sklasyfikowany jako jeden obszar. Stosowanie tego kryterium może jednak spowodować, że do obszaru zostaną zaklasyfikowane elementy tła.
+\end{enumerate}
+Na rysunku~\ref{fig:region_growing} przedstawiony został wynik operacji segmentacji obrazu przez rozrost obszarów stosując dwa różne kryteria. Widać, że w tym wypadku, należało zastosować kryterium nr 1, aby dokonać poprawnej segmentacji obrazu.
+\begin{figure}
+  \centering
+% todo  \includegraphics[width=15cm]{img/region_growing}
+  \caption{Porównanie wyników zastosowania algorytmu rozrostu obszarów z zastosowaniem różnych kryterium}
+  \label{fig:region_growing}
+\end{figure}
+
+\subsection{Segmentacja przy użyciu rzutu jasności}
+Algorytm rzutu jasności bardzo dobrze sprawdza się w lokalizacji obiektów na obrazie, kiedy natężenie koloru obiektu znacząco różni się od koloru tła, a ponadto, obiekty zajmują znaczącą część powierzchni obrazu. Obraz rozpatrywany jest zarówno w poziomie, jak i w pionie. Dla każdego wiersza(kolumny) w obrazie, sumuje się wszystkie wartości pikseli należące dla danego wiersza(kolumny), otrzymując tablicę wartości:
+\begin{gather*}
+  P_x[i] = \sum\limits_{i=1}^h I_{in}(i, j) dla i = 0,1,2,...,w \\
+  P_y[j] = \sum\limits_{j=1}^w I_{in}(i, j) dla j = 0,1,2,...,h
+\end{gather*}, gdzie $I_{in}$ to funkcja zwracająca wartość piksela o podanych współrzędnych, \textit{w} to szerokość obrazu, \textit{h} to wysokość obrazu, $P_x$ oraz $P_y$ to tablice rzutu jasności. Analizując tablice rzutu jasności, można zauważyć, że w miejscach na obrazie, gdzie występują obiekty, wartości w tablicy przyjmują wartości znacznie większe w przypadku, gdy kolor tła jest ciemniejszy od obiektu, lub znacznie mniejsze, w przypadku gdy kolor tła jest jaśniejszy od obiektu. Na podstawie tych informacji możliwe jest zlokalizowanie obiektów na obrazie. Rysunek~\ref{fig:rzut_jasnosci} przedstawia użycie metody segmentacji przy użyciu rzutu jasności dla przykładowej tablicy rejestracyjnej. Tablice rzutu jasności przedstawione zostały na wykresie. W miejscach, gdzie pojawiają się na obrazie litery, wartości na wykresie są znacznie mniejsze.
+
+\begin{figure}
+  \centering
+% todo  \includegraphics[width=15cm]{img/rzut_jasnosci}
+  \caption{Tablice rzutu jasności dla przykładowego obrazu przedstawione na wykresach}
+  \label{fig:rzut_jasnosci}
+\end{figure}

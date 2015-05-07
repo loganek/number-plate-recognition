@@ -16,13 +16,23 @@ DummyAlgorithm::DummyAlgorithm()
 	scale.set_value(100);
 	box.pack_start(scale);
 	scale.show();
+	canny_threshold1.set_range(0, 255);
+	canny_threshold1.set_value(100);
+	box.pack_start(canny_threshold1);
+	canny_threshold1.show();
+	canny_threshold2.set_range(0, 255);
+	canny_threshold2.set_value(100);
+	box.pack_start(canny_threshold2);
+	canny_threshold2.show();
 
 	scale.signal_change_value().connect([this](Gtk::ScrollType,double){processing_handler(); return true;});
+	canny_threshold1.signal_change_value().connect([this](Gtk::ScrollType,double){processing_handler(); return true;});
+	canny_threshold2.signal_change_value().connect([this](Gtk::ScrollType,double){processing_handler(); return true;});
 }
 
 std::string DummyAlgorithm::get_name() const
 {
-	return "Dummy Algorithm";
+	return "Test Algorithm";
 }
 
 std::string DummyAlgorithm::process(const cv::Mat& mat)

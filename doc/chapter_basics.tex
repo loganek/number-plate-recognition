@@ -15,7 +15,7 @@ Obraz cyfrowy jest macierzą pikseli, postaci
 \end{gather*}
 gdzie
 \begin{itemize}
-\item \(f(x, y)\) - pojedynelement macierzy, piksel
+\item \(f(x, y)\) - pojedynczy element macierzy, piksel
 \item \(M, N\) - szerokość oraz wysokość obrazu
 \end{itemize}
 \subsubsection{Obraz binarny}
@@ -25,7 +25,7 @@ Obraz binarny jest to obraz cyfrowy którego składowe piksele przyjmują warto�
 \end{gather*}.
 \subsection{Podstawowe algorytmy przetwarzania obrazów}
 \subsubsection{Operacje morfologiczne}
-Operacje morfologiczne na obrazach binarnych wykoszystywane są do filtracji morfologicznej oraz analizy kształtów obiektów na obrazie. Algorytmy morfologiczne są podstawą dla wielu bardziej złożonych algorytmów analizy wizji komputerowej.
+Operacje morfologiczne na obrazach binarnych wykorzystywane są do filtracji morfologicznej oraz analizy kształtów obiektów na obrazie. Algorytmy morfologiczne są podstawą dla wielu bardziej złożonych algorytmów analizy wizji komputerowej.
 \paragraph {Dylatacja obrazu} to rozszerzenie obrazu wykorzystując zadany element strukturalny. Operacja definiowana jest wzorem
 \begin{gather*}
   A \oplus B \equiv \bigcup \limits_{b \in B} A_b
@@ -57,7 +57,7 @@ Przykładowy wynik operacji erozji obrazu przedstawiony został na rysunku~\ref{
 \item otwarcie obrazu definiowane jest wzorem:
   \begin{gather*}
     A \circ B = (A \ominus B) \oplus B
-  \end{gather*}. W przypadku algorytmu otwarcia obrazu, w pierwszej kolejności wykonywana jest operacja erozji, a następnie opracja dylatacji obrazu.
+  \end{gather*}. W przypadku algorytmu otwarcia obrazu, w pierwszej kolejności wykonywana jest operacja erozji, a następnie operacja dylatacji obrazu.
 \end{itemize}
 Na rysunku~\ref{fig:open_close} przedstawiony został wynik działania obydwu algorytmów na tym samym obrazie, z tym samym elementem strukturalnym.
 \begin{figure}
@@ -66,7 +66,7 @@ Na rysunku~\ref{fig:open_close} przedstawiony został wynik działania obydwu al
   \caption{Obraz binarny poddany operacji otwarcia oraz zamknięcia obrazu, dla takiego samego elementu strukturalnego}
   \label{fig:open_close}
 \end{figure}
-\subsubsection{Progowanie}
+\subsubsection{Progowanie} \label{sssec:threshold}
 Progowanie polega na podziale pikseli obrazu na dwie grupy, poprzez wybranie określonej wartości progowej $t$. Każdy piksel jest porównywany z wartością progową, i w zależności od tego, czy wartość piksela jest większa od wartości progowej, czy mniejsza, w tej samej pozycji nowo powstałego obrazu, przypisuje się wartość $1$, lub $0$. Operację można opisać wzorem:
 \begin{gather*}
   I_{out}(x, y) = \left\{\begin{matrix}
@@ -113,4 +113,36 @@ Rysunek~\ref{fig:lena_smooth} przedstawia zaszumiony obraz oraz wynik działania
   \includegraphics[width=15cm]{img/lena-smooth}
   \caption{Wynik działania filtra rozmycia medianowego z jądrem w kształcie kwadratu 3x3}
   \label{fig:lena_smooth}
+\end{figure}
+
+\subsection{Operacje na histogramach}
+Bardzo często podczas analizy obrazu pod kątem znajdowania segmentów, wykorzystywana jest analiza histogramu. W celu ułatwienia analizy, a także poprawy jej wyników, przed jej rozpoczęciem można zastosować niżej wymienione algorytmy.
+\subsubsection{Wyrównanie histogramu}
+Metoda wyrównywania histogramu ma na celu zmianę kontrastu obrazu. Algorytm wykorzystywany jest w przypadku, gdy zarówno tło, jak i pierwszy plan obrazu, są ciemne lub jasne. Wadą metody wyrównywania histogramu jest możliwe wzmocnienie zakłóceń występujących na obrazie, gdyż algorytm traktuje je jak sygnał opisujący prawidłowy obraz. Przed zastosowaniem tej metody, warto zatem zastosować jeden z algorytmów rozmycia obrazu, opisywany we wcześniejszej części tego rozdziału.\\
+Metoda wyrównania histogramu sprowadza się do wyznaczenia tablicy LUT(\textit{ang. Lookup table}), na podstawie której wyznaczone zostaną wartości poszczególnych pikseli obrazu wejściowego. W celu wyznaczenia tablicy LUT, należy wyznaczyć dystrybuantę rozkładu prawdopodobieństwa dla wartości pikseli obrazu:
+\begin{gather*}
+  D(i) = \sum\limits_{j=0}^i p(j)
+\end{gather*}, gdzie i jest wartością występującą na obrazie, a p(j) jest prawdopodobieństwem wystąpienia wartości j w obrazie. Wykorzystując wyznaczone wartości dystrybuanty, możemy opisać tablicę LUT za pomocą wzoru:
+\begin{gather*}
+  LUT(i) = \frac{D(i)-D_0}{1-D_0}*K
+\end{gather*}, gdzie i to wartość składowej obrazu wejściowego, $D_0$ to pierwsza wartość dystrybuanty różna od zera, a K jest maksymalną wartością występującym w obrazie wejściowym.\\
+Rysunek~\ref{fig:equalizehistogram} przedstawia efekt działania operacji wyrównania histogramu na przykładowym obrazie.
+\begin{figure}
+  \centering
+%  \includegraphics[width=15cm]{img/histogram_equalization}
+  \caption{Obraz monochromatyczny przed, oraz po zastosowaniu operacji wyrównywania histogramu}
+  \label{fig:equalizehistogram}
+\end{figure}
+
+\subsubsection{Wygładzenie histogramu}
+Często histogram obrazu zawiera w sobie nagłe skoki wartości, które utrudniają analizę histogramu, gdyż mogą reprezentować fałszywe ekstrema. Wygładzanie histogramu ma na celu usunięcie nagłych skoków wartości, zachowując przy tym oryginalny kształt histogramu. Dla każdej wartości histogramu wejściowego \textit{$H_{in}$} należy zastosować następującą operację:
+\begin{gather*}
+  \vee i \in <H_{in}(0), H_{in}(H_{max})> H_{out}(i) = H_{in}(i-1) + H_{in}(i) + H_{in}(i+1)
+\end{gather*},
+gdzie \textit{$H_{out}$} jest histogramem wyjściowym, a $H_{max}$ największym indeksem w histogramie. Przykład działania algorytmu wygładzania histogramu przedstawiony został na rysunku~\ref{fig:histogram_smooth}
+\begin{figure}
+  \centering
+%  \includegraphics[width=15cm]{img/histogram_smooth}
+  \caption{Histogram przed, oraz po zastosowaniu operacji wygładzania}
+  \label{fig:histogram_smooth}
 \end{figure}
