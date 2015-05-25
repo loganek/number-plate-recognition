@@ -57,6 +57,11 @@ MainWindow::MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>
 	builder->get_widget("processingOutputLabel", processingOutputLabel);
 
 	builder->get_widget("algorithmViewport", algorithmViewport);
+
+	// todo temporary hack
+	dirEntry->set_text("/home/loganek/Dokumenty/plates_set/edited");
+	current_directory = "/home/loganek/Dokumenty/plates_set/edited";
+	load_images_from_directory();
 }
 
 MainWindow::~MainWindow()
@@ -188,7 +193,7 @@ void MainWindow::on_filesTreeView_row_activated(const Gtk::TreeModel::Path& path
 
 void MainWindow::load_input_file(const std::string& filename)
 {
-	inputImage->set(filename);
+	inputImage->set(filename.c_str());
 }
 
 void MainWindow::show_message(const std::string& header, const std::string& msg, Gtk::MessageType type) const
