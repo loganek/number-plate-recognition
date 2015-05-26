@@ -26,6 +26,12 @@ std::string RzutJasnosci::get_name() const
 std::string RzutJasnosci::process(const cv::Mat& mat)
 {
 	cv::cvtColor(mat, output, CV_BGR2GRAY);
+	convert_if_need(output);
+	cv::Mat mf;
+	cv::GaussianBlur(output, mf, cv::Size(0, 0), 3);
+	cv::addWeighted(output, 1.5, mf, -0.5, 0, mf);
+	output = mf;
+
 	cv::equalizeHist(output, output);
 
 	cv::Mat element = cv::getStructuringElement( cv::MORPH_RECT, cv::Size( 2, 2 ));
@@ -54,15 +60,15 @@ std::string RzutJasnosci::process(const cv::Mat& mat)
 	std::vector<cv::Rect> rects;
 	std::vector<cv::Point2i> pts;
 	auto maximums = find_local_extremum(brightness_h, ExtremumType::MINIMUM, 1);
+
 	for (auto m : maximums)
 	{
 		for (int i = 5; i < 28; i++)
 		{
 			if ( output.at<uchar>(i, m) < 40)
 			{
-				region_growing(output, real_output, cv::Point2i(m, i), 20);
+				region_growing(output, real_output, cv::Point2i(m, i), output.at<uchar>(i, m)+30);
 				pts.push_back(cv::Point2i(m, i));
-				i+=10;
 			}
 		}
 	}
