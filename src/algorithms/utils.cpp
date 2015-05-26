@@ -12,7 +12,7 @@
 #include <opencv2/imgproc/imgproc.hpp>
 
 #define REGION_GROWING_RECURSIVE(OP_Y, OP_X) \
-		if (input.at<uchar>(seed.y, seed.x) + relative_threshold > input.at<uchar>(seed.y OP_Y, seed.x OP_X) && output.at<uchar>(seed.y OP_Y, seed.x OP_X) != 0) \
+		if (relative_threshold > input.at<uchar>(seed.y OP_Y, seed.x OP_X) && output.at<uchar>(seed.y OP_Y, seed.x OP_X) != 0) \
 		region_growing(input, output, cv::Point2i(seed.x OP_X, seed.y OP_Y), relative_threshold);
 
 void region_growing(const cv::Mat& input, cv::Mat& output, const cv::Point2i& seed, int relative_threshold)
@@ -129,3 +129,27 @@ std::vector<int> smooth_histogram(const std::vector<int>& input, std::size_t eps
 	return output;
 }
 
+// todo another method should be used
+void convert_if_need(cv::Mat& mat)
+{
+	std::vector<int> bh;
+	for (int i = 0; i < mat.cols; i++)
+	{
+		bh.push_back(0);
+		for (int j = 0; j < mat.rows; j++)
+			bh.back() += mat.at<uchar>(j, i);
+	}
+	bh = smooth_histogram(bh, 3);
+	auto m = find_local_extremum(bh, ExtremumType::MAXIMUM, 4);
+	int maxes = 0;
+	for (std::size_t i = 0; i < m.size(); i++)
+		maxes += bh[m[i]]; maxes = maxes / m.size();
+	m = find_local_extremum(bh, ExtremumType::MINIMUM, 4);
+	int mins = 0;
+	for (std::size_t  i = 0; i < m.size(); i++)
+		mins += bh[m[i]];
+	mins = mins / m.size();
+
+	if ((double)mins / maxes < 0.5)
+		mat = cv::Scalar::all(255) - mat;
+}
