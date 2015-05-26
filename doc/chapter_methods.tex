@@ -28,7 +28,7 @@ Niech \textit{$I_{in}$(x, y)} jest pikselem obrazu wejściowego o współrzędny
 \end{gather*}, gdzie \textit{$I_{in_x}$}(x, y) oraz \textit{$I_{in_y}$}(x, y) są wartościami piksela o współrzędnych \textit{(x, y)} po zastosowaniu wspomnianych wcześniej masek.
 Kierunek gradientu może zostać wyznaczony ze wzoru:
 \begin{gather*}
-  \theta(x, y) = arctan(\frac{G_y(x, y)}{G_x(x, y)})
+  \theta(x, y) = arctan(\frac{I_{in_y}(x, y)}{I_{in_x}(x, y)})
 \end{gather*}.
 \subsubsection{Sobel} \label{sssec:sobel}
 Działanie algorytmu Sobel jest bardzo podobne do przedstawionego wcześniej algorytmu Robertsa. W przypadku tego algorytmu, dane są dwie maski o następującej postaci:
