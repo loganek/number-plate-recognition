@@ -82,15 +82,16 @@ static bool is_extremum(const std::vector<int>& input, std::size_t pos, Extremum
 			[](int x, int y) {return x>y;} :
 			[](int x, int y) {return x<y;};
 
-	auto prev = input[pos-epsilon];
-	for (auto i = pos-epsilon+1; i <= pos; i++)
+	auto start = std::max<int>(pos-epsilon, 0);
+	auto prev = input[start];
+	for (auto i = start+1; i <= pos; i++)
 	{
 		if (cmp(input[i], prev))
 			return false;
 		prev = input[i];
 	}
 	prev = input[pos];
-	for (auto i = pos+1; i <= pos+epsilon; i++)
+	for (auto i = std::min(pos+1, input.size()-1); i <= std::min(pos+epsilon, input.size()-1); i++)
 	{
 		if (cmp(prev, input[i]))
 			return false;
@@ -103,7 +104,7 @@ std::vector<int> find_local_extremum(const std::vector<int>& input, ExtremumType
 {
 	std::vector<int> extms;
 
-	for (std::size_t i = epsilon; i < input.size() - epsilon; i++)
+	for (std::size_t i = 0; i < input.size(); i++)
 	{
 		if (is_extremum(input, i, ex_type, epsilon))
 			extms.push_back(i);
@@ -118,13 +119,13 @@ std::vector<int> smooth_histogram(const std::vector<int>& input, std::size_t eps
 	output.reserve(input.size());
 
 	for (std::size_t i = 0; i < epsilon; i++)
-		output.push_back(input[i]);
+		output.push_back(std::accumulate(input.begin(), input.begin()+epsilon+i, 0)/(epsilon+1+i));
 
 	for (std::size_t i = epsilon; i < input.size()-epsilon; i++)
 		output.push_back(std::accumulate(input.begin()+i-epsilon, input.begin()+i+epsilon, 0)/(epsilon*2+1));
 
 	for (std::size_t i = input.size() - epsilon; i < input.size(); i++)
-		output.push_back(input[i]);
+		output.push_back(std::accumulate(input.begin()+i-epsilon, input.end(), 0)/(epsilon+1+input.size()-i));
 
 	return output;
 }

@@ -7,6 +7,7 @@
 #include "MainWindow.h"
 #include "algorithms/dummy_algorithm/DummyAlgorithm.h"
 #include "algorithms/rzut_jasnosci/RzutJasnosci.h"
+#include "algorithms/szczyty_histogramu/SzczytyHistogramu.h"
 
 #include <gtkmm.h>
 
@@ -20,7 +21,11 @@ int main(int argc, char** argv)
 	Glib::RefPtr<Gtk::Builder> builder =
 			Gtk::Builder::create_from_file("/home/loganek/Dokumenty/number-plate-recognition/src/tuner/ui/tuner.glade");
 
-	std::initializer_list<std::shared_ptr<IAlgorithm>> list = {std::make_shared<DummyAlgorithm>(), std::make_shared<RzutJasnosci>()};
+	std::initializer_list<std::shared_ptr<IAlgorithm>> list = {
+			std::make_shared<DummyAlgorithm>(),
+			std::make_shared<RzutJasnosci>(),
+			std::make_shared<SzczytyHistogramu>()
+	};
 	auto manager = std::make_shared<AlgorithmManager>(list);
 
 	MainWindow* wnd_handler;
