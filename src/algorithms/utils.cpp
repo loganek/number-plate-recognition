@@ -154,3 +154,32 @@ void convert_if_need(cv::Mat& mat)
 	if ((double)mins / maxes < 0.5)
 		mat = cv::Scalar::all(255) - mat;
 }
+
+std::vector<int> find_ridges(const cv::Mat& mat, int pos, bool horizontal, int min_width, int threshold)
+{
+	bool was_white = false;
+	int start_ridge = -1;
+
+	std::vector<int> ridges;
+
+	for (int i = 1; i < mat.cols; i++)
+	{
+		auto val = mat.at<uchar>(pos, i);
+		if (val > threshold)
+		{
+			if (start_ridge < 0)
+				continue;
+
+			if (i - start_ridge >= min_width)
+				ridges.push_back(i-(i-start_ridge)/2);
+			start_ridge = -1;
+		}
+		else
+		{
+			if (start_ridge < 0 && mat.at<uchar>(pos, i-1))
+				start_ridge = i;
+		}
+	}
+
+	return ridges;
+}

@@ -22,4 +22,5 @@ void draw_plot(const std::vector<int>& v, const std::string& name, bool horizont
 std::vector<int> find_local_extremum(const std::vector<int>& input, ExtremumType ex_type, int epsilon=1);
 std::vector<int> smooth_histogram(const std::vector<int>& input, std::size_t epsilon = 1);
 void convert_if_need(cv::Mat& mat);
+std::vector<int> find_ridges(const cv::Mat& mat, int pos, bool horizontal, int min_width, int threshold);
 #endif /* SRC_ALGORITHMS_UTILS_H_ */
