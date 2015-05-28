@@ -12,11 +12,11 @@
 
 class SzczytyHistogramu : public IAlgorithm
 {
+	virtual int get_threshold_value(int max_pos1, int max_pos2, const std::vector<int>& histogram) = 0;
 public:
 	SzczytyHistogramu(){}
 	virtual ~SzczytyHistogramu() {}
 
-	std::string get_name() const override;
 	std::string process(const cv::Mat& mat) override;
 };
 

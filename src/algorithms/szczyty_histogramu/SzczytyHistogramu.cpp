@@ -6,6 +6,9 @@
  */
 
 #include "SzczytyHistogramu.h"
+#include "SzczytySrednia.h"
+#include "SzczytyMinimum.h"
+
 #include "../utils.h"
 
 #include <opencv2/imgproc/imgproc.hpp>
@@ -13,11 +16,31 @@
 
 #include <vector>
 
-std::string SzczytyHistogramu::get_name() const
-{
-	return "Szczyty histogramu";
-}
 #include <iostream>
+
+int SzczytySrednia::get_threshold_value(int max_pos1, int max_pos2, const std::vector<int>& histogram)
+{
+	return std::min(max_pos1, max_pos2) + std::abs((max_pos1-max_pos2)/2);
+}
+
+int SzczytyMinimum::get_threshold_value(int max_pos1, int max_pos2, const std::vector<int>& histogram)
+{
+	int i1, i2;
+	if (max_pos1 < max_pos2) { i1 = max_pos1; i2 = max_pos2; }
+	else { i2 = max_pos1; i1 = max_pos2; }
+
+	int min_value = 256;
+	int min_pos = 0;
+
+	for (int i = i1; i < i2; i++)
+		if (histogram[i] < min_value)
+		{
+			min_value = histogram[i];
+			min_pos = i;
+		}
+	return min_pos;
+}
+
 std::string SzczytyHistogramu::process(const cv::Mat& mat)
 {
 	cv::cvtColor(mat, output, CV_BGR2GRAY);
@@ -57,8 +80,9 @@ std::string SzczytyHistogramu::process(const cv::Mat& mat)
 			m2i = e;
 		}
 	}
-
-	cv::threshold(output, output, std::min(m1i, m2i) + std::abs((m1i-m2i)/2), 255, 0);
+	int threshold_value = get_threshold_value(m1i, m2i, histogram);
+	std::cout << "Threshold value: " << threshold_value << std::endl;
+	cv::threshold(output, output, threshold_value, 255, 0);
 	cv::Mat real_output(mat.rows, mat.cols, output.type(), cv::Scalar(255, 0, 0));
 	auto ctr = output.rows / 6;
 	std::vector<cv::Point2i> pts;
@@ -93,13 +117,19 @@ std::string SzczytyHistogramu::process(const cv::Mat& mat)
 		}
 	}
 
-	bool one_liner = max_y - min_y < sum_heights/rects.size();
+	if (rects.empty())
+		std::cout << "Whoops! No characters found";
+	else
+	{
+		bool one_liner = static_cast<std::size_t>(max_y - min_y) < sum_heights/rects.size();
 
-	std::cout << "lines cout: " << (one_liner ? 1 : 2) << std::endl;
+		std::cout << "lines cout: " << (one_liner ? 1 : 2) << std::endl;
 
-	for (auto r : rects)
-		cv::rectangle(real_output, r.tl(), r.br(), cv::Scalar(100));
-	imshow("out", tmp);
+		for (auto r : rects)
+			cv::rectangle(real_output, r.tl(), r.br(), cv::Scalar(100));
+		imshow("out", tmp);
+	}
+
 	cv::cvtColor(real_output, output, CV_GRAY2BGR);
 
 	return "empty string";
