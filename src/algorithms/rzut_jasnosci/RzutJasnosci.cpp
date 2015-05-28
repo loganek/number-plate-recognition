@@ -63,7 +63,7 @@ std::string RzutJasnosci::process(const cv::Mat& mat)
 
 	for (auto m : maximums)
 	{
-		for (int i = 5; i < 28; i++)
+		for (int i = 5; i < output.rows; i++)
 		{
 			if ( output.at<uchar>(i, m) < 40)
 			{
