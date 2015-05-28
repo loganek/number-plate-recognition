@@ -58,7 +58,7 @@ std::string SzczytyHistogramu::process(const cv::Mat& mat)
 		}
 	}
 
-	cv::threshold(output, output, std::abs((m1i-m2i)/2), 255, 0);
+	cv::threshold(output, output, std::min(m1i, m2i) + std::abs((m1i-m2i)/2), 255, 0);
 	cv::Mat real_output(mat.rows, mat.cols, output.type(), cv::Scalar(255, 0, 0));
 	auto ctr = output.rows / 6;
 	std::vector<cv::Point2i> pts;
@@ -74,18 +74,29 @@ std::string SzczytyHistogramu::process(const cv::Mat& mat)
 	}
 	cv::Mat tmp(mat.rows, mat.cols, output.type(), cv::Scalar(255, 0, 0));
 	std::vector<cv::Rect> rects;
-
+	int max_y = 0, min_y = output.rows;
+	int sum_heights = 0;
 	for (auto p : pts)
 	{
 		cv::Rect rect(p.x, p.y, 0, 0);
 		region_bounding_box(real_output, tmp, p, 150, rect);
+		if (rect.height <= output.rows/4)
+			continue;
 		if ((double)rect.height/rect.width > 1.2)
 		{
 			rect.width += 2; rect.height += 2;
 			rect.x -= 2; rect.y -= 2;
 			rects.push_back(rect);
+			if (rect.y < min_y) min_y = rect.y;
+			if (rect.y > max_y) max_y = rect.y;
+			sum_heights += rect.height;
 		}
 	}
+
+	bool one_liner = max_y - min_y < sum_heights/rects.size();
+
+	std::cout << "lines cout: " << (one_liner ? 1 : 2) << std::endl;
+
 	for (auto r : rects)
 		cv::rectangle(real_output, r.tl(), r.br(), cv::Scalar(100));
 	imshow("out", tmp);
