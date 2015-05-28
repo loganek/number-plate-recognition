@@ -183,3 +183,25 @@ std::vector<int> find_ridges(const cv::Mat& mat, int pos, bool horizontal, int m
 
 	return ridges;
 }
+
+std::vector<int> build_histogram(const cv::Mat& img)
+{
+	std::vector<int> histogram(256, 0);
+
+	for (int i = 0; i < img.cols; i++)
+		for (int j = 0; j < img.rows; j++)
+			histogram[img.at<uchar>(j, i)]++;
+
+	return histogram;
+}
+
+cv::Rect pump_rectangle(const cv::Rect& rect, int e)
+{
+	cv::Rect r2 = rect;
+	r2.width += e;
+	r2.height += e;
+	r2.x -= e;
+	r2.y -= e;
+
+	return r2;
+}

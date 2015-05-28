@@ -53,6 +53,7 @@ std::string RzutJasnosci::process(const cv::Mat& mat)
 	}
 
 	brightness_h = smooth_histogram(brightness_h, 1);
+	brightness_v = smooth_histogram(brightness_v, output.rows/20);
 
 	draw_plot(brightness_h, "h");
 	draw_plot(brightness_v, "v", false);

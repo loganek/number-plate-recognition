@@ -23,4 +23,7 @@ std::vector<int> find_local_extremum(const std::vector<int>& input, ExtremumType
 std::vector<int> smooth_histogram(const std::vector<int>& input, std::size_t epsilon = 1);
 void convert_if_need(cv::Mat& mat);
 std::vector<int> find_ridges(const cv::Mat& mat, int pos, bool horizontal, int min_width, int threshold);
+std::vector<int> build_histogram(const cv::Mat& img);
+cv::Rect pump_rectangle(const cv::Rect& rect, int e);
+
 #endif /* SRC_ALGORITHMS_UTILS_H_ */
