@@ -68,7 +68,7 @@ void draw_plot(const std::vector<int>& v, const std::string& name, bool horizont
 	for(std::size_t i = 1; i < v.size(); i++)
 	{
 		if (horizontal)
-			cv::line(histImage, cv::Point(i-1, v[i-1]*sc), cv::Point(i, v[i]*sc), fg_color);
+			cv::line(histImage, cv::Point(i-1, hist_h - v[i-1]*sc), cv::Point(i, hist_h - v[i]*sc), fg_color);
 		else
 			cv::line(histImage, cv::Point(v[i-1]*sc, i-1), cv::Point(v[i]*sc, i), fg_color);
 	}
@@ -84,7 +84,7 @@ static bool is_extremum(const std::vector<int>& input, std::size_t pos, Extremum
 
 	auto start = std::max<int>(pos-epsilon, 0);
 	auto prev = input[start];
-	for (auto i = start+1; i <= pos; i++)
+	for (std::size_t i = start+1; i <= pos; i++)
 	{
 		if (cmp(input[i], prev))
 			return false;
@@ -157,7 +157,6 @@ void convert_if_need(cv::Mat& mat)
 
 std::vector<int> find_ridges(const cv::Mat& mat, int pos, bool horizontal, int min_width, int threshold)
 {
-	bool was_white = false;
 	int start_ridge = -1;
 
 	std::vector<int> ridges;
