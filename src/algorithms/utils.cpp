@@ -58,19 +58,35 @@ void region_bounding_box(const cv::Mat& input, cv::Mat& output, const cv::Point2
 	REGION_BOUNDING_BOX_RECURSIVE(+1, +0)
 }
 
-void draw_plot(const std::vector<int>& v, const std::string& name, bool horizontal, cv::Scalar fg_color, cv::Scalar bg_color)
+void draw_plot(const std::vector<int>& v, const std::string& name, bool horizontal, bool fill, cv::Scalar fg_color, cv::Scalar bg_color)
 {
 	double hist_h = 400.0;
 	cv::Mat histImage( horizontal ? hist_h : v.size(), horizontal ? v.size() : hist_h, CV_8UC1, bg_color);
 
 	double sc = hist_h / *std::max_element(v.begin(), v.end());
 
+	if (fill)
+	{
+		if (horizontal)
+			cv::line(histImage, cv::Point(0, hist_h), cv::Point(0, hist_h - v[0]*sc), fg_color);
+		else
+			cv::line(histImage, cv::Point(0, 0), cv::Point(v[0]*sc, 0), fg_color);
+	}
+
 	for(std::size_t i = 1; i < v.size(); i++)
 	{
 		if (horizontal)
+		{
 			cv::line(histImage, cv::Point(i-1, hist_h - v[i-1]*sc), cv::Point(i, hist_h - v[i]*sc), fg_color);
+			if (fill)
+				cv::line(histImage, cv::Point(i, hist_h), cv::Point(i, hist_h - v[i]*sc), fg_color);
+		}
 		else
+		{
 			cv::line(histImage, cv::Point(v[i-1]*sc, i-1), cv::Point(v[i]*sc, i), fg_color);
+			if (fill)
+				cv::line(histImage, cv::Point(0, i), cv::Point(v[i]*sc, i), fg_color);
+		}
 	}
 
 	cv::imshow(name, histImage);
