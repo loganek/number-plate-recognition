@@ -62,9 +62,9 @@ Operacja kadrowania polega na pozostawieniu na obrazie wejściowym tylko tych pi
   \forall p \in I\quad p.x \in {p1.x, p2.x} \wedge p.y \in {p1.y, p2.y}
 \end{gather*}, gdzie:
 \begin{itemize}
-  \item I - obraz wejściowy
-  \item p1 - współrzędne lewego górnego rogu obszaru kadru,
-  \item p2 - współrzędne prawego dolnego rogu obszaru kadru
+\item I - obraz wejściowy
+\item p1 - współrzędne lewego górnego rogu obszaru kadru,
+\item p2 - współrzędne prawego dolnego rogu obszaru kadru
 \end{itemize}. Na rysunku ~\ref{fig:crop_image} przedstawiona została operacja kadrowania obrazu. Celem kadrowania jest usunięcie z obrazu informacji, które są zbędne podczas wykonywania analizy obrazu, ponieważ mogą negatywnie wpłynąć na czas oraz rezultaty wykonania algorytmów.
 \begin{figure}
   \centering
@@ -166,24 +166,122 @@ Zazwyczaj operacji progowania poddawane są obrazy jednokanałowe. Istnieje jedn
 gdzie $C$ to liczba kanałów w obrazie.
 Algorytm progowania operujący na wielu kanałach może zostać wykorzystany, kiedy znana jest dokładna barwa badanego obiektu.
 
-\subsubsection{Rozmycie obrazu}
-Algorytmy rozmycia stosuje się w celu usunięcia z obrazu szumów oraz zbędnych detali. Rozmycie polega na zastosowaniu dla każdego piksela w obrazie funkcji przyjmującej jako argument dany piksel wraz z jego najbliższym sąsiedztwem (tzw. jądro). Powszechnie stosuje się następujące funkcje rozmycia:
+\subsubsection{Filtracja obrazu}
+Algorytmy filtracji mają na celu wykonanie zadanego przekształcenia matematycznego dla każdego piksela, generując tym samym nowy obraz. Filtrację obrazu stosuje się zwykle w celu wydobycia z obrazu żądanych informacji lub usunięcia szumu na obrazie. Poniżej wymienionych zostało kilka najczęściej używanych operacji filtrowania obrazu:
 \begin{itemize}
-\item mediana,
-\item średnia,
-\item rozmycie Gaussa
+\item filtr uśredniający - stosowany jest w celu rozmycia obrazu
+  \begin{gather*}
+    I_{out} = \frac{\sum_{x=M-k_x/2}^{M+k_x/2} \sum_{y=N-k_y/2}^{N+k_y/2} I_{in}(x, y)}{k_x*k_y}
+  \end{gather*}, gdzie:
+  \begin{itemize}
+    \item M, N - rozmiar obrazu
+    \item $k_x, k_y$ - rozmiar jądra użytego w algorytmie filtracji
+    \item $I_{in}$ - obraz wejściowy
+    \item $I_{out}$ - obraz wyjściowy
+  \end{itemize}
+\item filtr medianowy - wykorzystywany jest do usuwania zakłóceń na obrazie
+  \begin{gather*}
+    I_{out}(x, y) = median\_element(\{I_{in}(x, y), \;x \in <M-\frac{k_x}{2}, M+\frac{k_x}{2}> \\
+    \vee\; y \in <N-\frac{k_y}{2}, N+\frac{k_y,}{2}>\})
+    \end{gather*}
+  \begin{itemize}
+    \item M, N - rozmiar obrazu
+    \item $k_x, k_y$ - rozmiar jądra użytego w algorytmie filtracji
+    \item $I_{in}$ - obraz wejściowy
+    \item $I_{out}$ - obraz wyjściowy
+  \end{itemize}
+\item filtr Gaussa - podobnie jak filtr uśredniający, filtr Gaussa stosuje się do redukcji detali na obrazie poprzez jego rozmycie
+  \begin{gather*}
+    I_{out}(x, y) = \frac{1}{\sqrt{2 \pi \sigma}} e^{-\frac{x^2}{2 \sigma^2}}
+  \end{gather*}
 \end{itemize}
-. Jądro zastosowane w filtrze może mieć dowolne kształty i rozmiary, natomiast w przypadku dużych jąder, algorytm będzie wykonywał się znacznie dłużej, a obraz może zostać rozmyty zbyt bardzo (utracone zostaną istotne informacje zapisane w wejściowym obrazie).
+. 
 Rysunek~\ref{fig:lena_smooth} przedstawia zaszumiony obraz oraz wynik działania algorytmu rozmycia medianowego.
 \begin{figure}
   \centering
-  \includegraphics[width=15cm]{img/lena-smooth}
-  \caption{Wynik działania filtra rozmycia medianowego z jądrem w kształcie kwadratu 3x3}
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{img/smooth-lena-input}
+    \caption{Obraz wejściowy}
+    \label{fig:smooth_lena_input}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{img/smooth-lena-gauss}
+    \caption{Operacja rozmycia Gaussa}
+    \label{fig:smooth_lena_gauss}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{img/smooth-lena-mean}
+    \caption{Operacja rozmycia średniego}
+    \label{fig:smooth_lena_gauss}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{img/smooth-lena-median}
+    \caption{Operacja rozmycia medianowego}
+    \label{fig:smooth_lena_gauss}
+  \end{subfigure}
+  \caption{Wynik działania podstawowych operacji rozmycia na obrazie wejściowym}
   \label{fig:lena_smooth}
 \end{figure}
-
+\subsection{Dodawanie obrazów}
+Operacja dodawania obrazów definiowana jest następująco:
+\begin{gather*}
+  I_{out}(x, y) = \displaystyle\sum_{i}^{C} I_i(x, y), \quad x \in <0; M>,  y \in <0; N>
+\end{gather*}, gdzie:
+\begin{itemize}
+  \item C - liczba obrazów do posumowania
+  \item $I_i$ - obrazy wejściowe, które zostaną dodane
+  \item $I_{out}$ - obraz wyjściowy
+  \item M, N - rozmiar obrazu wyjściowego
+\end{itemize}
+\subsubsection{Dodawanie obrazów z wagami}
+Dodawanie obrazów z wagami zdefiniowane jest wzorem:
+\begin{gather*}
+  I_{out}(x, y) = \displaystyle\sum_{i}^{C} I_i(x, y) * w_i, \quad x \in <0; M>, y \in <0; N>
+\end{gather*}, gdzie:
+\begin{itemize}
+  \item $w_i$ - wektor wag dla poszczególnych obrazów wejściowych
+  \end{itemize}.
+\subsection{Wyostrzenie obrazu}
+W celu uzyskania efektu wyostrzonych krawędzi obrazu, należy wykonać na obrazie wejściowym operację rozmycia Gaussa, a następnie obraz wynikowy dodać do obrazu wejściowego z wagami:
+\begin{itemize}
+  \item 1.5 dla obrazu wejściowego
+  \item -0.5 dla obrazu poddanego operacji rozmycia Gaussa
+\end{itemize}. Na rysunku~\ref{fig:image_sharpen} przedstawiono obraz poddany operacji wyostrzania, oraz wynik tej operacji.
+\begin{figure}
+  \centering
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{img/image-sharpen-before}
+    \label{fig:image_sharpen_before}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{img/image-sharpen-after}
+    \label{fig:image_sharpen_after}
+  \end{subfigure}
+  \caption{Operacja wyostrzenia wykonana na obrazie jednokanałowym}
+  \label{fig:image_sharpen}
+\end{figure}
 \subsection{Operacje na histogramach}
 Bardzo często podczas analizy obrazu pod kątem znajdowania segmentów, wykorzystywana jest analiza histogramu. W celu ułatwienia analizy, a także poprawy jej wyników, przed jej rozpoczęciem można zastosować niżej wymienione algorytmy.
+\subsubsection{Histogram obrazu}
+\begin{figure}
+  \centering
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{img/image-histogram}
+    \label{fig:image_histogram}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{img/image-histogram-histogram}
+    \label{fig:image_histogram_histogram}
+  \end{subfigure}
+  \caption{Jednokanałowy obraz oraz jego histogram}
+  \label{fig:image_histogram_g}
+\end{figure}
+Histogram obrazu jest graficzną reprezentacją rozkładu częstości występowania danej wartości jasności w obrazie. Przykładowy obraz oraz jego histogram przedstawiony został na rysunku~\ref{fig:image_histogram_g}. Ponieważ obraz jest bardzo ciemny, większość wartości na histogramie jest bliska wartości 0(ta wartość reprezentuje kolor czarny).
 \subsubsection{Wyrównanie histogramu}
 Metoda wyrównywania histogramu ma na celu zmianę kontrastu obrazu. Algorytm wykorzystywany jest w przypadku, gdy zarówno tło, jak i pierwszy plan obrazu, są ciemne lub jasne. Wadą metody wyrównywania histogramu jest możliwe wzmocnienie zakłóceń występujących na obrazie, gdyż algorytm traktuje je jak sygnał opisujący prawidłowy obraz. Przed zastosowaniem tej metody, warto zatem zastosować jeden z algorytmów rozmycia obrazu, opisywany we wcześniejszej części tego rozdziału.\\
 Metoda wyrównania histogramu sprowadza się do wyznaczenia tablicy LUT(\textit{ang. Lookup table}), na podstawie której wyznaczone zostaną wartości poszczególnych pikseli obrazu wejściowego. W celu wyznaczenia tablicy LUT, należy wyznaczyć dystrybuantę rozkładu prawdopodobieństwa dla wartości pikseli obrazu:
@@ -193,7 +291,7 @@ Metoda wyrównania histogramu sprowadza się do wyznaczenia tablicy LUT(\textit{
 \begin{gather*}
   LUT(i) = \frac{D(i)-D_0}{1-D_0}*K
 \end{gather*}, gdzie i to wartość składowej obrazu wejściowego, $D_0$ to pierwsza wartość dystrybuanty różna od zera, a K jest maksymalną wartością występującym w obrazie wejściowym.\\
-Rysunek~\ref{fig:equalizehistogram} przedstawia efekt działania operacji wyrównania histogramu na przykładowym obrazie.
+Rysunek~\ref{fig:equalize_histogram} przedstawia efekt działania operacji wyrównania histogramu na przykładowym obrazie.
 \begin{figure}
   \centering
   \begin{subfigure}[b]{0.45\textwidth}
@@ -209,17 +307,17 @@ Rysunek~\ref{fig:equalizehistogram} przedstawia efekt działania operacji wyrów
   \end{subfigure}
   ~
   \begin{subfigure}[b]{0.45\textwidth}
-    \includegraphics[width=\textwidth]{img/equalize-histogram-after}
+    \includegraphics[width=\textwidth]{img/equalize-histogram-histogram-before}
     \caption{Histogram obrazu wejściowego}
-%    \label{fig:equalize_histogram_histogram_before}
+    \label{fig:equalize_histogram_histogram_before}
   \end{subfigure}
   ~
   \begin{subfigure}[b]{0.45\textwidth}
-    \includegraphics[width=\textwidth]{img/equalize-histogram-after}
+    \includegraphics[width=\textwidth]{img/equalize-histogram-histogram-after}
     \caption{Histogram obrazu wyjściowego}
     \label{fig:equalize_histogram_histogram_after}
   \end{subfigure}
- % \caption{Operacja wyrównania histogramu dla obrazu jednokanałowego}\label{fig:equalize_histogram}
+  \caption{Operacja wyrównania histogramu dla obrazu jednokanałowego}\label{fig:equalize_histogram}
 \end{figure}
 
 \subsubsection{Wygładzenie histogramu}
