@@ -36,19 +36,19 @@ Obraz binarny jest to obraz cyfrowy jednokanałowy, którego piksele przyjmują 
 Obraz binarny przedstawiony został na rysunku~\ref{fig:basics_image_binary}.
 \begin{figure}
   \centering
-  \begin{subfigure}[b]{0.3\textwidth}
+  \begin{subfigure}[b]{0.45\textwidth}
     \includegraphics[width=\textwidth]{img/basics-image-color}
     \caption{Trójkanałowy obraz cyfrowy(kolorowy)}
     \label{fig:basics_image_color}
   \end{subfigure}
   ~
-  \begin{subfigure}[b]{0.3\textwidth}
+  \begin{subfigure}[b]{0.45\textwidth}
     \includegraphics[width=\textwidth]{img/basics-image-gray}
     \caption{Jednokanałowy obraz cyfrowy(skala szarości)}
     \label{fig:basics_image_gray}
   \end{subfigure}
   ~
-  \begin{subfigure}[b]{0.3\textwidth}
+  \begin{subfigure}[b]{0.45\textwidth}
     \includegraphics[width=\textwidth]{img/basics-image-binary}
     \caption{Obraz jednokanałowy(binarny)}
     \label{fig:basics_image_binary}
@@ -156,7 +156,7 @@ Na rysunku ~\ref{fig:threshold_image} przedstawiony został wynik operacji progo
 \end{figure}
 
 \paragraph{Progowanie obrazów z większą ilością składowych}\mbox{}\\
-Zazwyczaj operacji progowania poddawane są obrazy jednokanałowe. Istnieje jednak możliwość wykonania operacji dla obrazów wielokanałowych (np. dla obrazów RGB). Operacja ta definiowana jest następującym wzorem:
+Zazwyczaj operacji progowania poddawane są obrazy jednokanałowe. Istnieje jednak możliwość wykonania operacji progowania dla obrazów wielokanałowych (np. dla obrazów RGB). Operacja ta definiowana jest następującym wzorem:
 \begin{gather*}
   I_{out}(x, y) = \left\{\begin{matrix}
   1, \; \text{jeżeli} \; \forall c \in C, \; I_{in}(x, y, c) > t(c)\\
@@ -171,9 +171,9 @@ Algorytmy rozmycia stosuje się w celu usunięcia z obrazu szumów oraz zbędnyc
 \begin{itemize}
 \item mediana,
 \item średnia,
-\item Gauss.
+\item rozmycie Gaussa
 \end{itemize}
-Jądro zastosowane w filtrze może mieć dowolne kształty i rozmiary, natomiast w przypadku dużych jąder, algorytm będzie wykonywał się znacznie dłużej, a obraz może zostać rozmyty zbyt bardzo (utracone zostaną istotne informacje zapisane w wejściowym obrazie).
+. Jądro zastosowane w filtrze może mieć dowolne kształty i rozmiary, natomiast w przypadku dużych jąder, algorytm będzie wykonywał się znacznie dłużej, a obraz może zostać rozmyty zbyt bardzo (utracone zostaną istotne informacje zapisane w wejściowym obrazie).
 Rysunek~\ref{fig:lena_smooth} przedstawia zaszumiony obraz oraz wynik działania algorytmu rozmycia medianowego.
 \begin{figure}
   \centering
@@ -196,20 +196,50 @@ Metoda wyrównania histogramu sprowadza się do wyznaczenia tablicy LUT(\textit{
 Rysunek~\ref{fig:equalizehistogram} przedstawia efekt działania operacji wyrównania histogramu na przykładowym obrazie.
 \begin{figure}
   \centering
-  %  \includegraphics[width=15cm]{img/histogram_equalization}
-  \caption{Obraz monochromatyczny przed, oraz po zastosowaniu operacji wyrównywania histogramu}
-  \label{fig:equalizehistogram}
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{img/equalize-histogram-before}
+    \caption{Obraz wejściowy dla operacji wyrównania histogramu}
+    \label{fig:equalize_histogram_before}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{img/equalize-histogram-after}
+    \caption{Obraz wyjściowy, poddany operacji wyrównania histogramu}
+    \label{fig:equalize_histogram_after}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{img/equalize-histogram-after}
+    \caption{Histogram obrazu wejściowego}
+%    \label{fig:equalize_histogram_histogram_before}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{img/equalize-histogram-after}
+    \caption{Histogram obrazu wyjściowego}
+    \label{fig:equalize_histogram_histogram_after}
+  \end{subfigure}
+ % \caption{Operacja wyrównania histogramu dla obrazu jednokanałowego}\label{fig:equalize_histogram}
 \end{figure}
 
 \subsubsection{Wygładzenie histogramu}
-Często histogram obrazu zawiera w sobie nagłe skoki wartości, które utrudniają analizę histogramu, gdyż mogą reprezentować fałszywe ekstrema. Wygładzanie histogramu ma na celu usunięcie nagłych skoków wartości, zachowując przy tym oryginalny kształt histogramu. Dla każdej wartości histogramu wejściowego \textit{$H_{in}$} należy zastosować następującą operację:
+Często histogram obrazu zawiera w sobie nagłe skoki wartości, które utrudniają analizę histogramu, gdyż mogą reprezentować fałszywe ekstrema. Wygładzanie histogramu ma na celu usunięcie takich skoków, zachowując przy tym oryginalny kształt histogramu. Dla każdej wartości histogramu wejściowego \textit{$H_{in}$} należy zastosować następującą operację:
 \begin{gather*}
   \vee i \in <H_{in}(0), H_{in}(H_{max})> H_{out}(i) = H_{in}(i-1) + H_{in}(i) + H_{in}(i+1)
 \end{gather*},
 gdzie \textit{$H_{out}$} jest histogramem wyjściowym, a $H_{max}$ największym indeksem w histogramie. Przykład działania algorytmu wygładzania histogramu przedstawiony został na rysunku~\ref{fig:histogram_smooth}
 \begin{figure}
   \centering
-  %  \includegraphics[width=15cm]{img/histogram_smooth}
-  \caption{Histogram przed, oraz po zastosowaniu operacji wygładzania}
-  \label{fig:histogram_smooth}
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{img/smooth-histogram-before}
+    \caption{Obraz wejściowy dla operacji wygładzenia histogramu}
+    \label{fig:equalize_histogram_before}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{img/smooth-histogram-after}
+    \caption{Obraz wyjściowy, poddany operacji wygładzenia histogramu}
+    \label{fig:equalize_histogram_after}
+  \end{subfigure}
+  \caption{Operacja wygładzenia histogramu}\label{fig:histogram_smooth}
 \end{figure}
