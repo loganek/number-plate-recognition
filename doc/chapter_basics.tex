@@ -123,6 +123,59 @@ Na rysunku~\ref{fig:open_close} przedstawiony został wynik działania obydwu al
   \caption{Obraz binarny poddany operacji otwarcia oraz zamknięcia obrazu, dla takiego samego elementu strukturalnego}
   \label{fig:open_close}
 \end{figure}
+\paragraph{Transformata odległościowa,} inaczej zwana funkcją odległości, służy do wyznaczania minimalnej odległości punktu o wartości 1 od punktu o wartości 0. Dla punktów o wartości 0 automatycznie przypisywana jest wartość 0. \\
+Tabela~\ref{tab:distance_transform} przedstawia wynik działania operacji na macierzy zawierającej obrazy binarne, natomiast rysunek~\ref{fig:distance_transform} prezentuje wynik działania tej samej operacji na obrazie. W celu podkreślenia wyniku operacji, obraz wyjściowy został poddany operacji normalizacji.
+
+\begin{table}
+\centering
+\begin{minipage}[b]{80mm}
+\centering
+\begin{tabular}{|l|l|l|l|l|l|l|l|}
+\hline
+0&0&0&0&0&0&0&0 \\ \hline
+0&1&1&1&1&1&1&0 \\ \hline
+0&1&1&1&1&1&1&0 \\ \hline
+0&1&1&1&1&1&1&0 \\ \hline
+0&1&1&1&1&1&1&0 \\ \hline
+0&1&1&1&1&1&1&0 \\ \hline
+0&0&0&0&0&0&0&0 \\ \hline
+\end{tabular}
+\caption*{Binarny obraz wejściowy}
+\end{minipage}
+\begin{minipage}[b]{70mm}
+\centering
+\begin{tabular}{|l|l|l|l|l|l|l|l|}
+\hline
+0&0&0&0&0&0&0&0 \\ \hline
+0&1&1&1&1&1&1&0 \\ \hline
+0&1&2&2&2&2&1&0 \\ \hline
+0&1&2&3&3&2&1&0 \\ \hline
+0&1&2&2&2&2&1&0 \\ \hline
+0&1&1&1&1&1&1&0 \\ \hline
+0&0&0&0&0&0&0&0 \\ \hline
+\end{tabular}
+\caption*{Transformata odległościowa}
+\end{minipage}
+\caption{Transformacja odległościowa - macierz binarna} \label{tab:distance_transform} 
+\end{table}
+
+\begin{figure}
+  \centering
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{img/distance-transform-before}
+    \caption{Binarny obraz wejściowy}
+    \label{fig:distance_transform_before}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{img/distance-transform-after}
+    \caption{Transformata odległościowa}
+    \label{fig:distance_transform_after}
+  \end{subfigure}
+    \caption{Transformacja odległościowa - obraz binarny}
+    \label{fig:distance_transform}
+\end{figure}
+
 \subsubsection{Progowanie} \label{sssec:threshold}
 Progowanie polega na podziale pikseli obrazu na dwie grupy, poprzez wybranie określonej wartości progowej $t$. Każdy piksel jest porównywany z wartością progową, i w zależności od tego, czy wartość piksela jest większa od wartości progowej, czy mniejsza, w tej samej pozycji nowo powstałego obrazu, przypisuje się wartość $1$, lub $0$. Operację można opisać wzorem:
 \begin{gather*}
