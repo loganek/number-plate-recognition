@@ -154,3 +154,41 @@ Algorytm rzutu jasności bardzo dobrze sprawdza się w lokalizacji obiektów na 
   \caption{Tablice rzutu jasności dla przykładowego obrazu przedstawione na wykresach}
   \label{fig:rzut_jasnosci}
 \end{figure}
+\subsection{Metoda Sauvola i Pietikainena}
+Algorytm polega na znalezieniu progu dla każdego piksela, analizując jego najbliższe sąsiedztwo. Wartość progu wyznaczana jest według wzoru:
+\begin{gather*}
+  T(x, y) = \mu(x, y)\Big[1+k\big(\frac{\sigma(x, y)}{R} - 1\big)\Big], \quad k > 0
+\end{gather*},
+gdzie:
+\begin{itemize}
+  \item T(x, y) - wartość progu dla piksela o współrzędnych (x, y),
+  \item $\mu$(x, y) - średnia wartości pikseli w zadanym otoczeniu piksela,
+  \item $\sigma(x, y)$ - odchylenie standardowe w zadanym otoczeniu piksela,
+  \item R - maksymalna wartość odchylenia standardowego(dla obrazu 8-bitowego jest to wartość 128),
+  \item k - parametr algorytmu
+\end{itemize}
+\subsection{Segmentacja wododziałowa}
+Algorytm segmentacji wododziałowej polega na odnajdowaniu na obrazie krawędzi, będących granicami szukanych segmentów. Segmentacja wododziałowa wzorowana jest na naturalnym procesie hydrologicznym, polegającym na tworzeniu się zlewisk w lokalnie najniżej położonych obszarach geograficznych. \\
+\subsubsection{Podstawowe pojęcia}
+Algorytm zostanie opisany używając terminologii występującej w geografii. Poniżej znajduje się rozwinięcie podstawowych pojęć:
+\begin{itemize}
+  \item zlewisko - obszar, z którego wszystkie wody spływają do większego zbiornika wodnego,
+  \item wododział - linia oddzielająca od siebie tereny zlewisk
+\end{itemize}. Na rysunku~\ref{fig:watershed_graphic} graficznie przedstawione zostały omawiane wyżej pojęcia.
+\begin{figure}
+  \centering
+  \includegraphics[width=9cm]{img/watershed-graphic}
+  \caption{Graficzna reprezentacja a) wododziałów, b) zlewisk }
+  \label{fig:watershed_graphic}
+\end{figure}
+W kontekście przetwarzania obrazów, wysokość terenu reprezentowana jest przez funkcję amplitudy gradientu obrazu lub funkcję intensywności obrazu, natomiast wododziały to ekstrema lokalne tych funkcji.
+\subsubsection{Algorytm segmentacji wododziałowej}
+Omawiany niżej algorytm został odkryty przez F. Meyera.
+\begin{enumerate}
+  \item wybierane są punkty startowe, będące również etykietami poszczególnych segmentów obrazu,
+  \item sąsiadujące z wybranymi w kroku 1) punktami piksele umieszczane są w kolejce priorytetowej, gdzie priorytet stanowi jasność piksela,
+  \item z kolejki pobierany jest piksel o najwyższym priorytecie. Jeśli wszystkie piksele w jego sąsiedztwie, którym została przypisana etykieta, mają tę samą etykietę, wtedy przetwarzany piksel również otrzymuje tę etykietę,
+  \item wszystkie sąsiadujące piksele, które nie zostały oznaczone etykietą, umieszczane są w kolejce,
+  \item jeśli kolejka nie jest pusta, powtarzany jest punkt 3). W przeciwnym razie algorytm zostaje zakończony.
+\end{enumerate}
+Piksele, które nie zostały oznaczone, reprezentują wododziały. Piksele oznaczone tą samą etykietą, należą do tego samego zlewiska, czyli tworzą ten sam segment.
