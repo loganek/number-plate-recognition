@@ -81,101 +81,6 @@ Operacja kadrowania polega na pozostawieniu na obrazie wejściowym tylko tych pi
   \end{subfigure}
   \caption{Operacja kadrowania obrazu}\label{fig:crop_image}
 \end{figure}
-\subsubsection{Operacje morfologiczne}
-Operacje morfologiczne na obrazach wykorzystywane są do filtracji morfologicznej oraz analizy kształtów obiektów na obrazie. Algorytmy morfologiczne są podstawą dla wielu bardziej złożonych algorytmów analizy wizji komputerowej.
-\paragraph {Dylatacja obrazu} to rozszerzenie obrazu wykorzystując zadany element strukturalny. Operacja definiowana jest wzorem
-\begin{gather*}
-  A \oplus B \equiv \bigcup \limits_{b \in B} A_b
-\end{gather*}.
-Przykładowy wynik operacji dylatacji przedstawiony jest na rysunku~\ref{fig:dilate}.
-\begin{figure}
-  \centering
-  \includegraphics[width=15cm]{img/dilate}
-  \caption{Obraz binarny poddany procesowi dylatacji z zadanym elementem strukturalnym}
-  \label{fig:dilate}
-\end{figure}
-\paragraph {Erozja obrazu} to usuwanie zwężanie obrazu z wykorzystaniem zadanego elementu strukturalnego. Operacja definiowana jest wzorem
-\begin{gather*}
-  A \ominus B \equiv \bigcap \limits_{b \in B} A_{-b}
-\end{gather*}.
-Przykładowy wynik operacji erozji obrazu przedstawiony został na rysunku~\ref{fig:erode}.
-\begin{figure}
-  \centering
-  \includegraphics[width=15cm]{img/erode}
-  \caption{Obraz binarny poddany procesowi erozji z zadanym elementem strukturalnym}
-  \label{fig:erode}
-\end{figure}
-\paragraph {Zamknięcie i otwarcie obrazu} to złożenie dwóch wyżej wymienionych operacji (dylatacji oraz erozji) w odpowiedni sposób.
-\begin{itemize}
-\item zamknięcie obrazu definiowane jest w następujący sposób:
-  \begin{gather*}
-    A \bullet B = (A \oplus B) \ominus B
-  \end{gather*}, czyli najpierw wykonywana jest operacja dylatacji obrazu, a następnie przekształcony obraz poddawany jest operacji erozji
-\item otwarcie obrazu definiowane jest wzorem:
-  \begin{gather*}
-    A \circ B = (A \ominus B) \oplus B
-  \end{gather*}. W przypadku algorytmu otwarcia obrazu, w pierwszej kolejności wykonywana jest operacja erozji, a następnie operacja dylatacji obrazu.
-\end{itemize}
-Na rysunku~\ref{fig:open_close} przedstawiony został wynik działania obydwu algorytmów na tym samym obrazie, z tym samym elementem strukturalnym.
-\begin{figure}
-  \centering
-  \includegraphics[width=15cm]{img/open-close}
-  \caption{Obraz binarny poddany operacji otwarcia oraz zamknięcia obrazu, dla takiego samego elementu strukturalnego}
-  \label{fig:open_close}
-\end{figure}
-\paragraph{Transformata odległościowa,} inaczej zwana funkcją odległości, służy do wyznaczania minimalnej odległości punktu o wartości 1 od punktu o wartości 0. Dla punktów o wartości 0 automatycznie przypisywana jest wartość 0. \\
-Tabela~\ref{tab:distance_transform} przedstawia wynik działania operacji na macierzy zawierającej obrazy binarne, natomiast rysunek~\ref{fig:distance_transform} prezentuje wynik działania tej samej operacji na obrazie. W celu podkreślenia wyniku operacji, obraz wyjściowy został poddany operacji normalizacji.
-
-\begin{table}
-\centering
-\begin{minipage}[b]{80mm}
-\centering
-\begin{tabular}{|l|l|l|l|l|l|l|l|}
-\hline
-0&0&0&0&0&0&0&0 \\ \hline
-0&1&1&1&1&1&1&0 \\ \hline
-0&1&1&1&1&1&1&0 \\ \hline
-0&1&1&1&1&1&1&0 \\ \hline
-0&1&1&1&1&1&1&0 \\ \hline
-0&1&1&1&1&1&1&0 \\ \hline
-0&0&0&0&0&0&0&0 \\ \hline
-\end{tabular}
-\caption*{Binarny obraz wejściowy}
-\end{minipage}
-\begin{minipage}[b]{70mm}
-\centering
-\begin{tabular}{|l|l|l|l|l|l|l|l|}
-\hline
-0&0&0&0&0&0&0&0 \\ \hline
-0&1&1&1&1&1&1&0 \\ \hline
-0&1&2&2&2&2&1&0 \\ \hline
-0&1&2&3&3&2&1&0 \\ \hline
-0&1&2&2&2&2&1&0 \\ \hline
-0&1&1&1&1&1&1&0 \\ \hline
-0&0&0&0&0&0&0&0 \\ \hline
-\end{tabular}
-\caption*{Transformata odległościowa}
-\end{minipage}
-\caption{Transformacja odległościowa - macierz binarna} \label{tab:distance_transform} 
-\end{table}
-
-\begin{figure}
-  \centering
-  \begin{subfigure}[b]{0.45\textwidth}
-    \includegraphics[width=\textwidth]{img/distance-transform-before}
-    \caption{Binarny obraz wejściowy}
-    \label{fig:distance_transform_before}
-  \end{subfigure}
-  ~
-  \begin{subfigure}[b]{0.45\textwidth}
-    \includegraphics[width=\textwidth]{img/distance-transform-after}
-    \caption{Transformata odległościowa}
-    \label{fig:distance_transform_after}
-  \end{subfigure}
-    \caption{Transformacja odległościowa - obraz binarny}
-    \label{fig:distance_transform}
-\end{figure}
-
 \subsubsection{Progowanie} \label{sssec:threshold}
 Progowanie polega na podziale pikseli obrazu na dwie grupy, poprzez wybranie określonej wartości progowej $t$. Każdy piksel jest porównywany z wartością progową, i w zależności od tego, czy wartość piksela jest większa od wartości progowej, czy mniejsza, w tej samej pozycji nowo powstałego obrazu, przypisuje się wartość $1$, lub $0$. Operację można opisać wzorem:
 \begin{gather*}
@@ -278,7 +183,7 @@ Rysunek~\ref{fig:lena_smooth} przedstawia zaszumiony obraz oraz wynik działania
   \caption{Wynik działania podstawowych operacji rozmycia na obrazie wejściowym}
   \label{fig:lena_smooth}
 \end{figure}
-\subsection{Dodawanie obrazów}
+\subsubsection{Dodawanie obrazów}
 Operacja dodawania obrazów definiowana jest następująco:
 \begin{gather*}
   I_{out}(x, y) = \displaystyle\sum_{i}^{C} I_i(x, y), \quad x \in <0; M>,  y \in <0; N>
@@ -289,7 +194,7 @@ Operacja dodawania obrazów definiowana jest następująco:
   \item $I_{out}$ - obraz wyjściowy
   \item M, N - rozmiar obrazu wyjściowego
 \end{itemize}
-\subsubsection{Dodawanie obrazów z wagami}
+\paragraph{Dodawanie obrazów z wagami} \mbox{}\\
 Dodawanie obrazów z wagami zdefiniowane jest wzorem:
 \begin{gather*}
   I_{out}(x, y) = \displaystyle\sum_{i}^{C} I_i(x, y) * w_i, \quad x \in <0; M>, y \in <0; N>
@@ -297,7 +202,7 @@ Dodawanie obrazów z wagami zdefiniowane jest wzorem:
 \begin{itemize}
   \item $w_i$ - wektor wag dla poszczególnych obrazów wejściowych
   \end{itemize}.
-\subsection{Wyostrzenie obrazu}
+\subsubsection{Wyostrzenie obrazu}
 W celu uzyskania efektu wyostrzonych krawędzi obrazu, należy wykonać na obrazie wejściowym operację rozmycia Gaussa, a następnie obraz wynikowy dodać do obrazu wejściowego z wagami:
 \begin{itemize}
   \item 1.5 dla obrazu wejściowego
@@ -317,6 +222,131 @@ W celu uzyskania efektu wyostrzonych krawędzi obrazu, należy wykonać na obraz
   \caption{Operacja wyostrzenia wykonana na obrazie jednokanałowym}
   \label{fig:image_sharpen}
 \end{figure}
+\subsubsection{Normalizacja obrazu}
+Operacja normalizacji służy do zmiany przedziału wartości pikseli występujących w obrazie. Algorytm można zapisać wzorem:
+\begin{gather*}
+  I_{out}(x, y) = (I_{in} - min_{in})*\frac{max_{out} - min_{out}}{max_{in} - min_{in}}+min_{in}, \quad x \in <0; M>,  y \in <0; N>
+\end{gather*}, gdzie:
+\begin{itemize}
+\item $I_{in}$, $I_{out}$ - funkcja obrazu wejściowego i wyjściowego
+\item $min_{in}$, $max_{in}$ - wartość minimalna i maksymalna na obrazie wejściowym
+\item $min_{out}$, $max_{out}$ - żądana wartość minimalna i maksymalna dla obrazu wyjściowego
+\item M, N - szerokość oraz wysokość obrazu
+\end{itemize}
+. Rysunek~\ref{fig:image_normalize} prezentuje działanie algorytmu normalizacji. Obraz wejściowy został wykonany w bardzo ciemnym otoczeniu, natomiast po wykonaniu operacji kontrast obrazu został poprawiony.
+\begin{figure}
+  \centering
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{img/image-normalize-before}
+    \label{fig:image_normalize_before}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{img/image-normalize-after}
+    \label{fig:image_normalize_after}
+  \end{subfigure}
+  \caption{Normalizacja obrazu}
+  \label{fig:image_normalize}
+\end{figure}
+\subsection{Operacje morfologiczne}
+Operacje morfologiczne na obrazach wykorzystywane są do filtracji morfologicznej oraz analizy kształtów obiektów na obrazie. Algorytmy morfologiczne są podstawą dla wielu bardziej złożonych algorytmów analizy wizji komputerowej.
+\subsubsection{Dylatacja obrazu}
+Dylatacja to rozszerzenie obrazu wykorzystując zadany element strukturalny. Operacja definiowana jest wzorem
+\begin{gather*}
+  A \oplus B \equiv \bigcup \limits_{b \in B} A_b
+\end{gather*}.
+Przykładowy wynik operacji dylatacji przedstawiony jest na rysunku~\ref{fig:dilate}.
+\begin{figure}
+  \centering
+  \includegraphics[width=15cm]{img/dilate}
+  \caption{Obraz binarny poddany procesowi dylatacji z zadanym elementem strukturalnym}
+  \label{fig:dilate}
+\end{figure}
+\subsubsection{Erozja obrazu} 
+Erozja obrazu polega na zwężaniu obrazu z wykorzystaniem zadanego elementu strukturalnego. Operacja definiowana jest wzorem
+\begin{gather*}
+  A \ominus B \equiv \bigcap \limits_{b \in B} A_{-b}
+\end{gather*}.
+Przykładowy wynik operacji erozji obrazu przedstawiony został na rysunku~\ref{fig:erode}.
+\begin{figure}
+  \centering
+  \includegraphics[width=15cm]{img/erode}
+  \caption{Obraz binarny poddany procesowi erozji z zadanym elementem strukturalnym}
+  \label{fig:erode}
+\end{figure}
+\subsubsection{Zamknięcie i otwarcie obrazu}
+Operacje zamknięcia i otwarcia obrazu to złożenie dwóch wyżej wymienionych operacji (dylatacji oraz erozji) w odpowiedni sposób.
+\begin{itemize}
+\item zamknięcie obrazu definiowane jest w następujący sposób:
+  \begin{gather*}
+    A \bullet B = (A \oplus B) \ominus B
+  \end{gather*}, czyli najpierw wykonywana jest operacja dylatacji obrazu, a następnie przekształcony obraz poddawany jest operacji erozji
+\item otwarcie obrazu definiowane jest wzorem:
+  \begin{gather*}
+    A \circ B = (A \ominus B) \oplus B
+  \end{gather*}. W przypadku algorytmu otwarcia obrazu, w pierwszej kolejności wykonywana jest operacja erozji, a następnie operacja dylatacji obrazu.
+\end{itemize}
+Na rysunku~\ref{fig:open_close} przedstawiony został wynik działania obydwu algorytmów na tym samym obrazie, z tym samym elementem strukturalnym.
+\begin{figure}
+  \centering
+  \includegraphics[width=15cm]{img/open-close}
+  \caption{Obraz binarny poddany operacji otwarcia oraz zamknięcia obrazu, dla takiego samego elementu strukturalnego}
+  \label{fig:open_close}
+\end{figure}
+\subsubsection{Transformata odległościowa}
+Transformata odległościowa, inaczej zwana funkcją odległości, służy do wyznaczania minimalnej odległości punktu o wartości 1 od punktu o wartości 0. Dla punktów o wartości 0 automatycznie przypisywana jest wartość 0. \\
+Tabela~\ref{tab:distance_transform} przedstawia wynik działania operacji na macierzy zawierającej obrazy binarne, natomiast rysunek~\ref{fig:distance_transform} prezentuje wynik działania tej samej operacji na obrazie. W celu podkreślenia wyniku operacji, obraz wyjściowy został poddany operacji normalizacji.
+
+\begin{table}
+\centering
+\begin{minipage}[b]{80mm}
+\centering
+\begin{tabular}{|l|l|l|l|l|l|l|l|}
+\hline
+0&0&0&0&0&0&0&0 \\ \hline
+0&1&1&1&1&1&1&0 \\ \hline
+0&1&1&1&1&1&1&0 \\ \hline
+0&1&1&1&1&1&1&0 \\ \hline
+0&1&1&1&1&1&1&0 \\ \hline
+0&1&1&1&1&1&1&0 \\ \hline
+0&0&0&0&0&0&0&0 \\ \hline
+\end{tabular}
+\caption*{Binarny obraz wejściowy}
+\end{minipage}
+\begin{minipage}[b]{70mm}
+\centering
+\begin{tabular}{|l|l|l|l|l|l|l|l|}
+\hline
+0&0&0&0&0&0&0&0 \\ \hline
+0&1&1&1&1&1&1&0 \\ \hline
+0&1&2&2&2&2&1&0 \\ \hline
+0&1&2&3&3&2&1&0 \\ \hline
+0&1&2&2&2&2&1&0 \\ \hline
+0&1&1&1&1&1&1&0 \\ \hline
+0&0&0&0&0&0&0&0 \\ \hline
+\end{tabular}
+\caption*{Transformata odległościowa}
+\end{minipage}
+\caption{Transformacja odległościowa - macierz binarna} \label{tab:distance_transform} 
+\end{table}
+
+\begin{figure}
+  \centering
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{img/distance-transform-before}
+    \caption{Binarny obraz wejściowy}
+    \label{fig:distance_transform_before}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{img/distance-transform-after}
+    \caption{Transformata odległościowa}
+    \label{fig:distance_transform_after}
+  \end{subfigure}
+    \caption{Transformacja odległościowa - obraz binarny}
+    \label{fig:distance_transform}
+\end{figure}
+
 \subsection{Operacje na histogramach}
 Bardzo często podczas analizy obrazu pod kątem znajdowania segmentów, wykorzystywana jest analiza histogramu. W celu ułatwienia analizy, a także poprawy jej wyników, przed jej rozpoczęciem można zastosować niżej wymienione algorytmy.
 \subsubsection{Histogram obrazu}
