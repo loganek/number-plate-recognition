@@ -83,28 +83,68 @@ Wyszukiwanie szczytów histogramu wykorzystywane jest do separacji tła od obiek
 \begin{gather*}
   T = \frac{p_1 + p_2}{2}
 \end{gather*}, gdzie $p_1$ jest pierwszą wartością szczytową w histogramie, a $p_2$ jest drugą wartością szczytową w histogramie. \\
-Powyższa wersja algorytmu ma jednak wadę, która powoduje, że algorytm nie może zostać użyty w rzeczywistych przypadkach. Bardzo często piksele tła oraz piksele obiektu pierwszoplanowego nie mają takich samych wartości dla całego obiektu, ale przyjmują wiele wartości oscylujących wokół jednej z nich. Przykład histogramu dla takiego obrazu został pokazany na rysunku~\ref{fig:histogram_peaks}. Histogram zawiera widoczne dwa skupiska wartości, natomiast obydwie największe wartości szczytowe w histogramie należą do jednego skupiska. Aby wyeliminować ten problem, należy założyć, że wartości szczytowe nie mogą znajdować się we wcześniej zdefiniowanym sąsiedztwie. 
-
+Powyższa wersja algorytmu ma jednak wadę, która powoduje, że algorytm nie może zostać użyty w rzeczywistych przypadkach. Bardzo często piksele tła oraz piksele obiektu pierwszoplanowego nie mają takich samych wartości dla całego obiektu, ale przyjmują wiele wartości oscylujących wokół jednej z nich. Przykład takiego obrazu został pokazany na rysunku~\ref{fig:histogram_peaks}. Histogram zawiera widoczne trzy skupiska wartości(na pozycjach: 8, 18 oraz 44), natomiast obydwie największe wartości szczytowe w histogramie należą do jednego skupiska. Aby wyeliminować ten problem, należy założyć, że wartości szczytowe nie mogą znajdować się we wcześniej zdefiniowanym sąsiedztwie. 
 \begin{figure}
   \centering
-% todo  \includegraphics[width=15cm]{img/histogram_peaks}
-  \caption{Obraz oraz jego histogram}
-  \label{fig:histogram_peaks}
+  \begin{subfigure}[b]{0.7\textwidth}
+    \includegraphics[width=\textwidth]{img/histogram-peaks-input}
+    \caption{Obraz wejściowy}
+    \label{fig:histogram_peaks_input}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{0.7\textwidth}
+    \includegraphics[width=\textwidth]{img/histogram-peaks-histogram}
+    \caption{Histogram obrazu wejściowego}
+    \label{fig:histogram_peaks_histogram}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{img/histogram-peaks-bad}
+    \caption{Obraz po operacji progowania, wartość progu: 13}
+    \label{fig:histogram_peaks_bad}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{img/histogram-peaks-good}
+    \caption{Obraz po operacji progowania, wartość progu: 26}
+    \label{fig:hitogram_peaks_good}
+  \end{subfigure}
+  \caption{Progowanie przez wyszukiwanie szczytów histogramu}\label{fig:histogram_peaks}
 \end{figure}
 
 \subsubsection{Wyszukiwanie minimum histogramu}
 Metoda wyszukiwania minimum histogramu jest bardzo podobna do metody omawianej w poprzednim akapicie. Na początku wyszukiwane są dwie wartości szczytowe, które powinny być odległe od siebie o pewną ustaloną wartość. Jednak w przeciwieństwie do omawianego wcześniej algorytmu, jako wartość progową przyjmuje się najmniejszą wartość pomiędzy dwoma szczytami w histogramie. \\
-Rysunek~\ref{fig:histogram_valleys} przedstawia histogram pewnego obrazu. Stosując metodę wyszukiwania szczytów histogramu, jako wartość progowa została by wybrana wartość 10. Stosując omawianą w tym akapicie metodę, jako wartość progowa zostanie wybrana liczba 14, co prawdopodobnie jest poprawnym wyborem dla danego obrazu.
+Rysunek~\ref{fig:histogram_valleys} przedstawia histogram pewnego obrazu. Stosując metodę wyszukiwania szczytów histogramu, jako wartość progowa została by wybrana wartość 102(szczyty histogramów znajdują się na pozycjach 48 i 155). Stosując omawianą w tym akapicie metodę, jako wartość progowa zostanie wybrana wartość 129, która jest minimalną wartością znajdującą się pomiędzy szczytami histogramu.
 
 \begin{figure}
   \centering
-% todo  \includegraphics[width=15cm]{img/histogram_valleys}
-  \caption{Obraz oraz jego histogram}
-  \label{fig:histogram_valleys}
+  \begin{subfigure}[b]{0.7\textwidth}
+    \includegraphics[width=\textwidth]{img/histogram-valleys-input}
+    \caption{Obraz wejściowy}
+    \label{fig:histogram_valleys_input}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{0.7\textwidth}
+    \includegraphics[width=\textwidth]{img/histogram-valleys-histogram}
+    \caption{Histogram obrazu wejściowego}
+    \label{fig:histogram_valleys_histogram}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{img/histogram-valleys-bad}
+    \caption{Obraz po operacji progowania, wartość progu: 102}
+    \label{fig:histogram_valleys_bad}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{img/histogram-valleys-good}
+    \caption{Obraz po operacji progowania, wartość progu: 129}
+    \label{fig:hitogram_valleys_good}
+  \end{subfigure}
+  \caption{Progowanie przez wyszukiwanie minimum pomiędzy szczytami histogramu}\label{fig:histogram_valleys}
 \end{figure}
-
 \subsection{Segmentacja przez rozrost obszarów}
-Metoda segmentacji przez rozrost obszarów polega na wyszukiwanie na obrazie elementów o podobnej jasności. Algorytm rozpoczyna działanie od punktów startowych, które mogą powinny zostać podane jako parametr algorytmu. Algorytm można opisać w następujący sposób:
+Metoda segmentacji przez rozrost obszarów polega na wyszukiwanie na obrazie elementów o podobnej jasności. Algorytm rozpoczyna działanie od punktów startowych, które powinny zostać podane jako parametr algorytmu. Algorytm można opisać w następujący sposób:
 \begin{enumerate}
   \item Nadaj każdemu punktowi startowemu etykietę.
   \item Dodaj punkty startowe do kolejki.
@@ -133,12 +173,22 @@ Kryterium podobieństwa może zostać określone na dwa sposoby, w zależności 
       \end{gather*}
       gdzie $I_{in}$ to funkcja zwracająca wartość piksela o współrzędnych przekazanych jako argument, \textit{seed} to współrzędne punktu wyjściowego, \textit{n} to współrzędne aktualnie przetwarzanego sąsiada, a $\epsilon$ to maksymalna różnica pomiędzy dwoma punktami, taka, że dwa punkty uznawane są za podobne. Stosując powyższe kryterium mamy pewność, że obiekt ze zmiennym natężeniem oświetlenia zostanie sklasyfikowany jako jeden obszar. Stosowanie tego kryterium może jednak spowodować, że do obszaru zostaną zaklasyfikowane elementy tła.
 \end{enumerate}
-Na rysunku~\ref{fig:region_growing} przedstawiony został wynik operacji segmentacji obrazu przez rozrost obszarów stosując dwa różne kryteria. Widać, że w tym wypadku, należało zastosować kryterium nr 1, aby dokonać poprawnej segmentacji obrazu.
+Na rysunku~\ref{fig:region_growing} przedstawiony został wynik operacji segmentacji obrazu przez rozrost obszarów stosując dwa różne kryteria.
 \begin{figure}
   \centering
-% todo  \includegraphics[width=15cm]{img/region_growing}
-  \caption{Porównanie wyników zastosowania algorytmu rozrostu obszarów z zastosowaniem różnych kryterium}
-  \label{fig:region_growing}
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{img/region-growing-relative}
+    \caption{Obraz wynikowy dla kryterium 1)}
+    \label{fig:region_growing_relative}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{img/region-growing-absolute}
+    \caption{Obraz wynikowy dla kryterium 2)}
+    \label{fig:region_growing_absolute}
+  \end{subfigure}
+  \caption{Porównanie wyników uruchomienia algorytmu rozrostu obszarów z zastosowaniem różnych kryterium}
+    \label{fig:region_growing}
 \end{figure}
 
 \subsection{Segmentacja przy użyciu rzutu jasności}
@@ -146,12 +196,12 @@ Algorytm rzutu jasności bardzo dobrze sprawdza się w lokalizacji obiektów na 
 \begin{gather*}
   P_x[i] = \sum\limits_{i=1}^h I_{in}(i, j) dla i = 0,1,2,...,w \\
   P_y[j] = \sum\limits_{j=1}^w I_{in}(i, j) dla j = 0,1,2,...,h
-\end{gather*}, gdzie $I_{in}$ to funkcja zwracająca wartość piksela o podanych współrzędnych, \textit{w} to szerokość obrazu, \textit{h} to wysokość obrazu, $P_x$ oraz $P_y$ to tablice rzutu jasności. Analizując tablice rzutu jasności, można zauważyć, że w miejscach na obrazie, gdzie występują obiekty, wartości w tablicy przyjmują wartości znacznie większe w przypadku, gdy kolor tła jest ciemniejszy od obiektu, lub znacznie mniejsze, w przypadku gdy kolor tła jest jaśniejszy od obiektu. Na podstawie tych informacji możliwe jest zlokalizowanie obiektów na obrazie. Rysunek~\ref{fig:rzut_jasnosci} przedstawia użycie metody segmentacji przy użyciu rzutu jasności dla przykładowej tablicy rejestracyjnej. Tablice rzutu jasności przedstawione zostały na wykresie. W miejscach, gdzie pojawiają się na obrazie litery, wartości na wykresie są znacznie mniejsze.
+\end{gather*}, gdzie $I_{in}$ to funkcja zwracająca wartość piksela o podanych współrzędnych, \textit{w} to szerokość obrazu, \textit{h} to wysokość obrazu, $P_x$ oraz $P_y$ to tablice rzutu jasności. Analizując tablice rzutu jasności można zauważyć, że w miejscach na obrazie, gdzie występują obiekty, wartości w tablicy przyjmują wartości znacznie większe w przypadku, gdy kolor tła jest ciemniejszy od obiektu, lub znacznie mniejsze, w przypadku gdy kolor tła jest jaśniejszy od obiektu. Na podstawie tych informacji możliwe jest zlokalizowanie obiektów na obrazie. Rysunek~\ref{fig:rzut_jasnosci} przedstawia użycie metody segmentacji przy użyciu rzutu jasności dla przykładowej tablicy rejestracyjnej. Tablice rzutu jasności przedstawione zostały w postaci histogramu. W miejscach, gdzie pojawiają się na obrazie litery, wartości histogramu są mniejsze.
 
 \begin{figure}
   \centering
-% todo  \includegraphics[width=15cm]{img/rzut_jasnosci}
-  \caption{Tablice rzutu jasności dla przykładowego obrazu przedstawione na wykresach}
+  \includegraphics[width=15cm]{img/rzut-jasnosci}
+  \caption{Histogramy dla obrazu wygenerowane przez algorytm rzutu jasności dla przykładowego obrazu}
   \label{fig:rzut_jasnosci}
 \end{figure}
 \subsection{Metoda Sauvola i Pietikainena}
