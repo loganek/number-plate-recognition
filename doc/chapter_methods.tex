@@ -191,7 +191,7 @@ Na rysunku~\ref{fig:region_growing} przedstawiony został wynik operacji segment
     \label{fig:region_growing}
 \end{figure}
 
-\subsection{Segmentacja przy użyciu rzutu jasności}
+\subsection{Segmentacja przy użyciu rzutu jasności} \nameref{ssection:rzut_jasnosci}
 Algorytm rzutu jasności bardzo dobrze sprawdza się w lokalizacji obiektów na obrazie, kiedy natężenie koloru obiektu znacząco różni się od koloru tła, a ponadto, obiekty zajmują znaczącą część powierzchni obrazu. Obraz rozpatrywany jest zarówno w poziomie, jak i w pionie. Dla każdego wiersza(kolumny) w obrazie, sumuje się wszystkie wartości pikseli należące dla danego wiersza(kolumny), otrzymując tablicę wartości:
 \begin{gather*}
   P_x[i] = \sum\limits_{i=1}^h I_{in}(i, j) dla i = 0,1,2,...,w \\
