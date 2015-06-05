@@ -1,0 +1,26 @@
+\section{Segmentacja tablic rejestracyjnych}
+\subsection{Wprowadzenie}
+Podczas pracy nad algorytmami segmentacji obrazu, przede wszystkim skupiłem się na problemie segmentacji tablic rejestracyjnych. Segmentacja jest kluczowym elementem procesu identyfikacji tablicy rejestracyjnej.\\
+Algorytmy rozpoznawania tablic rejestracyjnych wykorzystywane są bardzo często w rozwiązaniach przemysłowych, przez co wymagana jest wysoka jakość zwracanych wyników.\\
+Ze względu na różnorodność formatów tablic rejestracyjnych, jakie mogą wystąpić, oraz dodatkowych utrudnień związanych z niedoskonałością środowiska w którym wykonywany jest obraz, problem segmentacji tablic rejestracyjnych nie jest problemem łatwym do rozwiązania.
+\subsection{Problemy i propozycje rozwiązań segmentacji tablic rejestracyjnych}
+Obrazy tablic rejestracyjnych, ze względu na warunki w jakich są wykonywane, nie zawierają jedynie tekstu, który jest łatwy do analizy. Obrazy często zawierają artefakty, tablice mogą być zanieczyszczone, lub ze względu na warunki atmosferyczne, obraz może być niejednolicie oświetlony. Zostały opisane problemy, z jakimi spotkałem się, analizując zestaw danych testowych, wraz z proponowanymi przeze mnie możliwościami rozwiązania problemów.
+\subsubsection{Różne formaty zapisu danych}
+Numer rejestracyjny pojazdu może być zapisany jako jedna, lub jako dwie linie tekstu. Założeniem algorytmu rozpoznawania tablic rejestracyjnych jest możliwość rozpoznania oby dwóch formatów zapisu, dlatego przed przystąpieniem do dalszej analizy, należy określić liczbę linii tekstu. Znajomość liczby linii jest przydatna podczas oceny ostatecznego rozwiązania segmentacji obrazu, ponieważ znana jest wtedy przybliżona lokalizacja liter. \\
+Poniżej przedstawiłem propozycję dwóch rozwiązań problemu detekcji liczby linii wykorzystanych do zapisu numeru rejestracyjnego.
+\paragraph{Wykorzystanie rzutu jasności obrazu}\mbox{}\\
+Algorytm rzutu jasności obrazu opisywany był w podrozdziale~\ref{ssection:rzut_jasnosci}. Zauważyłem, że algorytm ten może również zostać wykorzystany do określenia liczby linii tekstu, wykorzystując do tego tylko poziomy rzut jasności dla obrazu. Na rysunku~\ref{fig:rzut_liczba_linii} zamieszczone zostały dwa obrazy przedstawiające rzuty jasności dla tablicy rejestracyjnej zawierającej jedną, oraz dwie linie tekstu. Można zauważyć, że w miejscach, gdzie nie znajduje się tekst, wykres rzutu jasności osiąga wyraźne ekstremum. Dla jednej linii tekstu, wykres rzutu jasności powinien zawierać tylko dwa takie ekstrema(nad, oraz pod tekstem), natomiast dla tablicy zawierającej dwie line tekstu, wystąpić powinny trzy ekstrema(dodatkowe ekstremum znajdujące się pomiędzy dwoma wierszami tekstu).\\
+W celu poprawnego znalezienia ekstremum, wykonałem operację wygładzania wykresu. Taki zabieg usunął skoki wartości w okolicach ekstremum. Następnie wyszukiwałem trzech największych maksimum lokalnych na wykresie rzutu jasności, przy założeniu, że nie mogą znajdować się w odległości mniejszej niż $\frac{1}{4}$ wysokości obrazu (aby uniknąć znalezienia dwóch ekstremum należących do jednej białej linii). Na końcu znalezione wartości maksymalne były porównywane z odchyleniem standardowym wyznaczonym z wartości rzutu jasności. Liczba linii tekstu jest równa linii liczbie maksimum o wartościach większych niż wartość odchylenia standardowego.
+
+\begin{figure}
+  \centering
+% todo  \includegraphics[width=10cm]{img/rzut-liczba-linii}
+  \caption{todo}
+  \label{fig:rzut_liczba_linii}
+\end{figure}
+
+
+\subsubsection{Różne kolory tablic rejestracyjnych}
+\subsubsection{Dodatkowe elementy na tablicach}
+\subsubsection{Niejednolita jasność obrazu}
+\subsubsection{Różne kąty wykonania obrazu}
