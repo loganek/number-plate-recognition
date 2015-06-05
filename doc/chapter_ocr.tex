@@ -4,11 +4,16 @@ Segmentacja obrazu prowadzi do wyodrębnienia z obrazu żądanych obiektów. Zwy
 W przypadku problemu rozpoznawania znaków, zadaniem algorytmu segmentacji jest określenie lokalizacji każdego znaku oraz binaryzacja fragmentów obrazu zawierającego tekst. Kolejnym krokiem jest dostarczenie serii wykadrowanych obrazów binarnych zawierających pojedyncze znaki do algorytmu rozpoznawania znaków. Zadaniem algorytmu rozpoznawania znaków jest określenie, jaki znak tekstu znajduje się na zadanym obrazie.
 \paragraph{}
 Poniżej zostanie opisanych kilka algorytmów rozpoznawania znaków.
-\subsection{Rozpoznawanie na podstawie cech}
-Cechy umożliwiają dopasowanie obiektu do danego wzorca, określając ich stopień podobieństwa. Cechami obiektu mogą być kształt czy kolor. Poniżej przedstawiono cechy, które mogą zostać użyte w celu identyfikacji znaku.
-\subsubsection{Cechy geometryczne}
-\subsubsection{Momenty geometryczne}
-\subsubsection{Rzut jasności obiektu}
+\subsection{Cechy geometryczne}
+Zestaw cech geometrycznych jest unikalny dla każdego znaku, dlatego sprawdzając odpowiednie warunki, można określić jego dokładne znaczenie. Poniżej znajduje się lista cech geometrycznych, które mogą być brane pod uwagę podczas rozpoznawania znaków.
+\begin{itemize}
+  \item wysokość oraz szerokość prostokąta otaczającego znak
+  \item stosunek liczby punktów należących do znaku do liczby punktów stanowiących tło
+  \item stosunek liczby punktów należących do znaku i znajdujących się w górnej połówce obrazu, do liczby punktów należących do znaku i znajdujących się w dolnej połówce obrazu
+    \item stosunek liczby punktów należących do znaku i znajdujących się w lewej połówce  obrazu, do liczby punktów należących do znaku i znajdujących się w prawej połówce obrazu
+    \item liczba pionowych oraz poziomych krawędzi znaku
+\end{itemize}
+\subsection{Rzut jasności obiektu}
 Metoda rzutu jasności obiektu została opisana w podrozdziale~\ref{ssection:rzut_jasnosci}. W pierwszej kolejności należy przeskalować obraz do rozmiarów obrazu wzorcowego, a następnie wykonać algorytm rzutu jasności zarówno w pionie, jak i w poziomie. Otrzymane rzuty zostają następnie poddane analizie podobieństwa z rzutami wykonanymi dla znaków wzorcowych. Analiza podobieństwa polega na porównaniu kształtu otrzymanych rzutów jasności. \\
 Na rysunku~\ref{fig:rzut_jasnosci_ocr} przedstawione zostały wzorce kilku znaków, oraz przykładowy obraz wejściowy.
 
@@ -32,4 +37,28 @@ Na rysunku~\ref{fig:rzut_jasnosci_ocr} przedstawione zostały wzorce kilku znak�
   \end{subfigure}
   \caption{Porównanie rzutu jasności dla wybranych znaków}
     \label{fig:rzut_jasnosci_ocr}
+\end{figure}
+
+\subsection{Sztuczne sieci neuronowe}
+Sztuczne sieci neuronowe(SSN) to struktury tworzone na podobieństwo biologicznych sieci neuronowych. SSN mają zdolność do uogólniania zdobytej wiedzy. Podobnie jak w przypadku biologicznych, w sztucznych sieciach neuronowych podstawowym elementem są neurony, które połączone są miedzy sobą za pomocą synaps. Każda synapsa posiada parametr zwany wagą, który jest modyfikowany w poszczególnych fazach uczenia sieci neuronowej. Sieci neuronowe zorganizowane są w strukturze wielowarstwowej:
+\begin{itemize}
+  \item warstwa wejściowa,
+  \item warstwy ukryte,
+  \item warstwa wyjściowa
+\end{itemize}. W zależności od złożoności problemu, sieć neuronowa może zawierać różną liczbę neuronów w każdej warstwie, oraz różną liczbę warstw ukrytych. Przykład SSN można znaleźć na rysunku~\ref{fig:ssn_example}. Wartość wyjściowa neuronu wyznaczana jest na podstawie sygnałów wejściowych oraz funkcji aktywacji. Dla każdego neuronu wartość wyjściowa wyznaczana jest za pomocą wzoru:
+\begin{gather*}
+  y = g(\sum_{i=1}^{N}w_ix_i+w_0)
+\end{gather*}, gdzie:
+\begin{itemize}
+  \item g - funkcja aktywacji,
+  \item N - liczba wejść poprzedniej warstwy,
+  \item $w_i$ - waga synapsy i-tego sygnału,
+  \item $x_i$ - wartość i-tego sygnału
+\end{itemize}. W zależności od wybranego algorytmu, sieć poddawana jest procesowi uczenia, podczas którego wartości wag $w_i$ są korygowane.\\
+Jako zestaw uczący, a następnie zestaw testowy, podawane mogą być obrazy ze znakami. Po wykonaniu procesu uczenia, sieć neuronowa powinna mieć zdolność do dopasowania obrazu do najlepszego wyuczonego wzorca. 
+\begin{figure}
+  \centering
+  \includegraphics[width=10cm]{img/ssn-example}
+  \caption{Przykładowa sieć neuronowa, zawierająca dwa neurony w warstwie wejściowej, dwie warstwy ukryte, oraz warstwę wejściową zawierającą trzy neurony.}
+  \label{fig:ssn_example}
 \end{figure}
