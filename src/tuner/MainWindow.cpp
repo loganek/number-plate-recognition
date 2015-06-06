@@ -59,8 +59,9 @@ MainWindow::MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>
 	builder->get_widget("algorithmViewport", algorithmViewport);
 
 	// todo temporary hack
-	dirEntry->set_text("/home/loganek/Dokumenty/plates_set/edited");
-	current_directory = "/home/loganek/Dokumenty/plates_set/edited";
+	current_directory = "/home/mkolny/Documents/plates_set/edited";
+	dirEntry->set_text(current_directory);
+
 	load_images_from_directory();
 }
 

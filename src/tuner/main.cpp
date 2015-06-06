@@ -20,7 +20,7 @@ int main(int argc, char** argv)
 	Glib::RefPtr<Gtk::Application> app = Gtk::Application::create(argc_t, argv, "number.plate.recognition");
 // todo relative path instead of absolute:
 	Glib::RefPtr<Gtk::Builder> builder =
-			Gtk::Builder::create_from_file("/home/loganek/Dokumenty/number-plate-recognition/src/tuner/ui/tuner.glade");
+			Gtk::Builder::create_from_file("/home/mkolny/Documents/number-plate-recognition/src/tuner/ui/tuner.glade");
 
 	std::initializer_list<std::shared_ptr<IAlgorithm>> list = {
 			std::make_shared<DummyAlgorithm>(),
@@ -28,6 +28,7 @@ int main(int argc, char** argv)
 			std::make_shared<SzczytyMinimum>(),
 			std::make_shared<SzczytySrednia>()
 	};
+
 	auto manager = std::make_shared<AlgorithmManager>(list);
 
 	MainWindow* wnd_handler;
