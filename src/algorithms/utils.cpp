@@ -220,3 +220,37 @@ cv::Rect pump_rectangle(const cv::Rect& rect, int e)
 
 	return r2;
 }
+
+void rotate_if_needed(cv::Mat& io)
+{
+	cv::Mat thr;
+	cv::imshow("input", io);
+	cv::threshold(io,thr,150,255,cv::THRESH_BINARY);
+	cv::Mat element = getStructuringElement( 0, cv::Size( 2*1 + 1, 2*1+1 ), cv::Point( 1, 1 ) );
+	morphologyEx( thr, thr, cv::MORPH_CLOSE, element );
+
+	std::vector<cv::Point> points;
+	cv::Mat_<uchar>::iterator it = thr.begin<uchar>();
+	cv::Mat_<uchar>::iterator end = thr.end<uchar>();
+	for (; it != end; ++it)
+		if (*it)
+			points.push_back(it.pos());
+
+	cv::RotatedRect box = cv::minAreaRect(cv::Mat(points));
+	double angle;
+	if (box.size.width > box.size.height)
+	{
+		angle = box.angle;
+	}
+	else
+	{
+		angle = box.angle+90;
+		std::swap(box.size.width, box.size.height);
+	}
+
+	cv::Mat rot_mat = cv::getRotationMatrix2D(box.center, angle, 1);
+	if (box.size.width < box.size.height)
+		std::swap(box.size.width, box.size.height);
+	cv::warpAffine(io, io, rot_mat, io.size(), cv::INTER_CUBIC);
+	cv::getRectSubPix(io, box.size, box.center, io);
+}

@@ -25,5 +25,6 @@ void convert_if_need(cv::Mat& mat);
 std::vector<int> find_ridges(const cv::Mat& mat, int pos, bool horizontal, int min_width, int threshold);
 std::vector<int> build_histogram(const cv::Mat& img);
 cv::Rect pump_rectangle(const cv::Rect& rect, int e);
+void rotate_if_needed(cv::Mat& io);
 
 #endif /* SRC_ALGORITHMS_UTILS_H_ */
