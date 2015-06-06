@@ -9,6 +9,7 @@
 #include "algorithms/rzut_jasnosci/RzutJasnosci.h"
 #include "algorithms/szczyty_histogramu/SzczytyMinimum.h"
 #include "algorithms/szczyty_histogramu/SzczytySrednia.h"
+#include "algorithms/counting_lines/CLRzutJasnosci.h"
 
 #include <gtkmm.h>
 
@@ -26,7 +27,8 @@ int main(int argc, char** argv)
 			std::make_shared<DummyAlgorithm>(),
 			std::make_shared<RzutJasnosci>(),
 			std::make_shared<SzczytyMinimum>(),
-			std::make_shared<SzczytySrednia>()
+			std::make_shared<SzczytySrednia>(),
+			std::make_shared<CLRzutJasnosci>()
 	};
 
 	auto manager = std::make_shared<AlgorithmManager>(list);
