@@ -124,6 +124,15 @@ Zazwyczaj operacji progowania poddawane są obrazy jednokanałowe. Istnieje jedn
 gdzie $C$ to liczba kanałów w obrazie.
 Algorytm progowania operujący na wielu kanałach może zostać wykorzystany, kiedy znana jest dokładna barwa badanego obiektu.
 
+\paragraph{Progowanie lokalne}\mbox{}\\
+Progowanie lokalne znajduje zastosowanie w przypadku gdy obraz jest niejednolicie oświetlony. Trudno jest dobrać globalny próg w taki sposób, aby wyekstrachować z obrazu nawet większość porządanych obiektów. Progowanie lokalne polega na wyznaczeniu danego progu w sąsiedztwie aktualnie przetwarzanego piksela. 
+\begin{gather*}
+  I_{out}(x, y) = \left\{\begin{matrix}
+  1, dla \: I_{in}(x, y) > T(x, y)\\
+  0, dla \: I_{in}(x, y) \leq T(x, y)
+  \end{matrix}\right. x=0,1,2,...,N-1; y=0,1,2,...,M-1
+\end{gather*}, gdzie funkcja T(x, y) to funkcja zwracająca próg w zadanym sąsiedztwie piksela o współrzędnych (x, y). Zwykle jako funkcję wyznaczania progu przyjmuje się wartość średnią lub sumą ważoną, wykorzystującą krzywą Gaussa.
+
 \subsubsection{Filtracja obrazu}
 Algorytmy filtracji mają na celu wykonanie zadanego przekształcenia matematycznego dla każdego piksela, generując tym samym nowy obraz. Filtrację obrazu stosuje się zwykle w celu wydobycia z obrazu żądanych informacji lub usunięcia szumu na obrazie. Poniżej wymienionych zostało kilka najczęściej używanych operacji filtrowania obrazu:
 \begin{itemize}

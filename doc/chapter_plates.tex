@@ -6,6 +6,33 @@ Ze względu na różnorodność formatów tablic rejestracyjnych, jakie mogą wy
 \subsection{Problemy i propozycje rozwiązań segmentacji tablic rejestracyjnych}
 Obrazy tablic rejestracyjnych, ze względu na warunki w jakich są wykonywane, nie zawierają jedynie tekstu, który jest łatwy do analizy. Obrazy często zawierają artefakty, tablice mogą być zanieczyszczone, lub ze względu na warunki atmosferyczne, obraz może być niejednolicie oświetlony. Zostały opisane problemy, z jakimi spotkałem się, analizując zestaw danych testowych, wraz z proponowanymi przeze mnie możliwościami rozwiązania problemów.
 \subsubsection{Różne kolory tablic rejestracyjnych}
+Algorytmy segmentacji tablic rejestracyjnych które zaprezentuję w dalszej części pracy, wymagają, aby tło tablic rejestracyjnych było jaśniejsze od tekstu. Dlatego musiałem opracować algorytm, który wykryje odwrotną sytuację, i w razie potrzeby, odwróci kolory obrazu.\\
+Pierwszym pomysłem było zastosowanie lokalnego progowania, a następnie policzenie czarnych oraz białych pikseli, i w zależności od tego, który kolor występuje częściej, określić tło tablicy rejestracyjnej. Metoda ta okazała się w większości przypadków skuteczna. Algorytm nie zwracał jednak poprawnych rezultatów w przypadku, gdy tablica rejestracyjna wykonana była pod kątem, i nie można było wykadrować obrazu w taki sposób, aby pozbyć się nieporządanych pikseli. Rysunek~\ref{fig:detect_bg_bad} przedstawia ten problem. Tablica rejestracyjna zajmuje większość obrazu, jednak pomimo tego, została sklasyfikowana przez algorytm jako tablica z czarnym tłem. Wynika to z faktu, iż na tablicy pozostały znaki, które również zajmują znaczącą powierzchnię obrazu. Następnie spróbowałem zastosować operację zamknięcia regionu, która poprawnie usunęła znaki z obrazu. Nie zadziałała jednak w przypadku białych znaków na czarnym tle. \\
+Zamiast operacji morfologicznej, zastosowałem rozmycie medianowe, które dało poprawny efekt zarówno dla czarnych znaków na białym tle, jak również dla białych znaków na czarnym tle. Na rysunku~\ref{fig:detect_bg_ok} przedstawiony został wynik eksperymentu dla obrazu wejściowego przedstawionego na rysunku~\ref{fig:detect_bg_bad}.
+
+\begin{figure}
+  \centering
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{img/detect-bg-bad-input}
+    \label{fig:detect_bg_bad_input}
+    \caption{}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{img/detect-bg-bad-output}
+    \label{fig:detect_bg_bad_output}
+    \caption{}
+  \end{subfigure}
+  \caption{Operacja progowania lokalnego}
+  \label{fig:detect_bg_bad}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=7cm]{img/detect-bg-ok-output}
+  \caption{Obraz po wykonaniu operacji usuwania znaków przez rozmycie medianowe}
+  \label{fig:detect_bg_ok}
+\end{figure}
 
 \subsubsection{Różne kąty wykonania obrazu}
 Bardzo często zdarza się, że obraz tablicy rejestracyjnej nie został wykonany idealnie na wprost obiektu. Efektem tego mogą być obrazy, których numery rejestracyjne są przekrzywione, co może powodować ich niepoprawną lokalizację oraz identyfikację.
@@ -101,9 +128,56 @@ Rysunek~\ref{fig:apriori_liczba_linii} przedstawia tablice rejestracyjne zawiera
     \caption{}
   \end{subfigure}
   \caption{Metoda rozpoznawania liczby linii tekstu dla obrazu: a) zawierającego jedną linię, b) zawierającego dwie linie tekstu.}
-  \label{fig:detect_image_angle}
+  \label{fig:apriori_liczba_linii}
 \end{figure}
 
-
 \subsubsection{Dodatkowe elementy na tablicach}
-\subsubsection{Niejednolita jasność obrazu}
+Tablice rejestracyjne zawierają bardzo często elementy, które nie są elementami numerów rejestracyjnych, ale mogą zostać sklasyfikowane jako element numeru, podczas procesu segmentacji. Poniżej przedstawiam metody, jakie zastosowałem w celu filtracji elementów nieporządanych. Weryfikacji podlega każdy znaleziony segment, sprawdzane są wszystkie poniższe warunki.
+\paragraph{Stosunek szerokości do wysokości znaku}\mbox{}\\
+Zauważyłem, że w każdym znaku pojawiającym się w numerze rejestracyjnym, szerokość znaku jest mniejsza od jego wysokości. Warunek ten spełniony był dla każdej czcionki pojawiającej się w dostępnych danych, dlatego mogłem wykluczyć wszystkie segmenty, które nie spełniają warunku:
+\begin{gather*}
+  segment.H > segment.W
+\end{gather*}, gdzie W i H to odpowiednio szerokość i wysokość segmentu.
+
+\paragraph{Minimalna wysokość znaku}\mbox{}\\
+Podczas obserwacji danych testowych zauważyłem, że wysokość znaku numeru rejestracyjnego zapisanego na tablicy nie osiąga wartości mniejszej niż $\frac{1}{4}$ wysokości tablicy rejestracyjnej. Dlatego odrzucić można segmenty niespełniające warunku:
+\begin{gather*}
+  segment.H > \frac{I.H}{4}
+\end{gather*}, gdzie segment.H to wysokość segmentu, a I.H to wysokość obrazu. Należy przyjąć, że wysokość obrazu pokrywa się z tablicą rejestracyjną.\\
+Na rysunku~\ref{fig:min_height_condition} można zauważyć, że litery napisu ,,CALIFORNIA'' nie został oznaczone jako poprawne segmenty dzięki zastosowaniu warunku o minimalnej wysokości znaku. Gdyby warunek nie został zastosowany, prawdopodobnie mniejszy napis zostałby rozpoznany jako numer rejestracyjny pojazdu.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=10cm]{img/min-height-condition-output}
+  \label{fig:detect_bg_bad_input}
+  \caption{Obraz tablicy rejestracyjnej po procesie segmentacji}
+  \label{fig:min_height_condition}
+\end{figure}
+
+\paragraph{Średnia wysokość znaku}\mbox{}\\
+Numer rejestracyjny zawiera zwykle od sześciu do dziesięciu znaków, natomiast liczba dodatkowych elementów na tablicy rejestracyjnej zwykle nie jest większa niż dwa. Zauważyłem, że wyznaczając średnią wysokość segmentów, a następnie obliczając odchylenie standardowe, można odrzucić elementy, które nie spełniają warunku:
+\begin{gather*}
+  abs(E-segment.H) < \sigma
+\end{gather*}, gdzie:
+\begin{itemize}
+  \item E - wartość średnia wysokości wszystkich znalezionych segmentów, 
+  \item segment.H - wysokość segmentu,
+  \item $\sigma$ - odchylenie standardowe w populacji wysokości segmentów
+\end{itemize}.\\
+Ten warunek pozwala na wyeliminowanie elementów, które kształtem przypominają znaki, natomiast ich wysokość wyróżnia się od innych znaków. Rysunek~\ref{fig:standard_deviation_condition} przedstawia dwa przykłady tablic rejestracyjnych, w których warunek ten uniemożliwił akceptację niepoprawnych elementów.
+\begin{figure}
+  \centering
+  \begin{subfigure}[b]{0.65\textwidth}
+    \includegraphics[width=\textwidth]{img/standard-deviation-condition-too-small}
+    \label{fig:standard_deviation_too_small}
+    \caption{}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{0.40\textwidth}
+    \includegraphics[width=\textwidth]{img/standard-deviation-condition-too-big}
+    \label{fig:standard_deviation_too_big}
+    \caption{}
+  \end{subfigure}
+  \caption{Usuwanie fałszywych pozytywów poprzez porównanie ze średnią wysokością znaku: a) fałszywy pozytyw niższy niż znaki numerów rejestracyjnych, b) fałszywy pozytyw o większej wysokości niż przeciętny znak numeru rejestracyjnego}
+  \label{fig:standard_deviation_condition}
+\end{figure}
