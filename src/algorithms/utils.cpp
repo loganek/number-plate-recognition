@@ -146,28 +146,21 @@ std::vector<int> smooth_histogram(const std::vector<int>& input, std::size_t eps
 	return output;
 }
 
-// todo another method should be used
 void convert_if_need(cv::Mat& mat)
 {
-	std::vector<int> bh;
-	for (int i = 0; i < mat.cols; i++)
-	{
-		bh.push_back(0);
-		for (int j = 0; j < mat.rows; j++)
-			bh.back() += mat.at<uchar>(j, i);
-	}
-	bh = smooth_histogram(bh, 3);
-	auto m = find_local_extremum(bh, ExtremumType::MAXIMUM, 4);
-	int maxes = 0;
-	for (std::size_t i = 0; i < m.size(); i++)
-		maxes += bh[m[i]]; maxes = maxes / m.size();
-	m = find_local_extremum(bh, ExtremumType::MINIMUM, 4);
-	int mins = 0;
-	for (std::size_t  i = 0; i < m.size(); i++)
-		mins += bh[m[i]];
-	mins = mins / m.size();
+	int x = mat.rows/3;
+	if (x % 2 == 0)x++;
+	cv::Mat tmp;
+	cv::adaptiveThreshold(mat, tmp, 255, cv::ADAPTIVE_THRESH_MEAN_C, cv::THRESH_BINARY, x, 0);
+	int a = mat.rows/7;
+	if (a%2==0)a++;
 
-	if ((double)mins / maxes < 0.5)
+	cv::medianBlur(tmp, tmp, a);
+
+	auto h = build_histogram(tmp);
+	double st = h[0] / (double)h[255];
+
+	if (st >= 1)
 		mat = cv::Scalar::all(255) - mat;
 }
 
