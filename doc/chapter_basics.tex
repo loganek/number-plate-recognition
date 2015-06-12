@@ -134,8 +134,8 @@ Zazwyczaj operacji progowania poddawane są obrazy jednokanałowe. Istnieje jedn
   f^{(out)}(x, y) = \left\{\begin{matrix}
   1, \; \text{jeżeli} \; \forall c \in C, \; f^{(in)}(x, y, c) > t(c),\\
   0, \; \text{jeżeli} \; \exists c \in C, \; f^{(in)}(x, y, c) \leq t(c),
-  \end{matrix}\right. \quad (x, y) \in P^{(in)}_{N,M} c=0,1,2,...,C
-\end{gather*},
+  \end{matrix}\right. \quad (x, y) \in P^{(in)}_{N,M} c=0,1,2,...,C,
+\end{gather*}
 gdzie $C$ to liczba kanałów w obrazie.
 Algorytm progowania operujący na wielu kanałach może zostać wykorzystany, kiedy znana jest dokładna barwa badanego obiektu.
 
@@ -159,9 +159,9 @@ Operacje filtracji mają na celu wykonanie zadanego przekształcenia matematyczn
   \end{gather*}
 \item filtr medianowy - wykorzystywany jest do usuwania zakłóceń na obrazie
   \begin{gather*}
-    f^{(out)}(x, y) = mediana(\{f^{(in)}(x, y), \;x \in \lceil M-\frac{k_x}{2}, M+\frac{k_x}{2}\rceil \\
-    \wedge\; y \in \lceil N-\frac{k_y}{2}, N+\frac{k_y,}{2}\rceil\}), \quad (x, y) \in P^{(in)}_{N,M},
-    \end{gather*}
+    f^{(out)}(x, y) = mediana(\{f^{(in)}(x, y), \;x \in \big< M-\frac{k_x}{2}, M+\frac{k_x}{2}\big> \\
+    \wedge\; y \in \big< N-\frac{k_y}{2}, N+\frac{k_y,}{2}\big>\}), \quad (x, y) \in P^{(in)}_{N,M},
+  \end{gather*}
 \item filtr Gaussa - podobnie jak filtr uśredniający, filtr Gaussa stosuje się do redukcji detali na obrazie poprzez jego rozmycie
   \begin{gather*}
     f^{(out)}(x, y) = \frac{1}{\sqrt{2 \pi \sigma}} e^{-\frac{x^2+y^2}{2 \sigma^2}}, \quad (x, y) \in P^{(in)}_{N,M}.
@@ -254,12 +254,13 @@ Rysunek~\ref{fig:image_normalize} prezentuje działanie algorytmu normalizacji. 
   \label{fig:image_normalize}
 \end{figure}
 \subsection{Operacje morfologiczne}
-Operacje morfologiczne na obrazach wykorzystywane są do filtracji morfologicznej oraz analizy kształtów obiektów na obrazie. Algorytmy morfologiczne są podstawą dla wielu bardziej złożonych algorytmów analizy wizji komputerowej.
+Operacje morfologiczne na obrazach wykorzystywane są do filtracji morfologicznej oraz analizy kształtów obiektów na obrazie. Definiują one zbiór punktów, jakie powinny pozostać na obrazie. W praktyce jest to realizowane poprzez ustawianie wartości jasności danego piksela na wartość 0 w przypadku nieistnienia danego punktu w zbiorze, lub wartości maksymalnej dla funkcji jasności, jeśli piksel o danych współrzędnych znajduje się w zbiorze. Przekształcenia morfologiczne są podstawą dla wielu bardziej złożonych algorytmów wizji komputerowej.\\
+Jako symbol $A$ będziemy oznaczali zbiór punktów w których obraz wejściowy posiada wartość jasności równą 1, symbol $B$ będzie reprezentował maskę dla operacji morfologicznej. Funkcja $translacja(a, b)$ definiuje przesunięcie elementu strukturalnego (maski) $a$ na pozycję określoną przez współrzędne $b$.
 \subsubsection{Dylatacja obrazu}
-Dylatacja to rozszerzenie obrazu wykorzystując zadany element strukturalny. Operacja definiowana jest wzorem
+Dylatacja to rozszerzenie obrazu wykorzystując zadaną maskę. Operacja definiowana jest wzorem
 \begin{gather*}
-  A \oplus B \equiv \bigcup \limits_{b \in B} A_b
-\end{gather*}.
+  A \oplus B \equiv \{ (x, y) \in A | A \cap translacja(B, (x, y)) \neq \emptyset \}.
+\end{gather*}
 Przykładowy wynik operacji dylatacji przedstawiony jest na rysunku~\ref{fig:dilate}.
 \begin{figure}
   \centering
@@ -270,8 +271,8 @@ Przykładowy wynik operacji dylatacji przedstawiony jest na rysunku~\ref{fig:dil
 \subsubsection{Erozja obrazu} 
 Erozja obrazu polega na zwężaniu obrazu z wykorzystaniem zadanego elementu strukturalnego. Operacja definiowana jest wzorem
 \begin{gather*}
-  A \ominus B \equiv \bigcap \limits_{b \in B} A_{-b}
-\end{gather*}.
+  A \ominus B \equiv \{ (x, y) \in A | translacja(B, (x, y) \subset A \}.
+\end{gather*}
 Przykładowy wynik operacji erozji obrazu przedstawiony został na rysunku~\ref{fig:erode}.
 \begin{figure}
   \centering
@@ -284,12 +285,14 @@ Operacje zamknięcia i otwarcia obrazu to złożenie dwóch wyżej wymienionych 
 \begin{itemize}
 \item zamknięcie obrazu definiowane jest w następujący sposób:
   \begin{gather*}
-    A \bullet B = (A \oplus B) \ominus B
-  \end{gather*}, czyli najpierw wykonywana jest operacja dylatacji obrazu, a następnie przekształcony obraz poddawany jest operacji erozji
+    A \bullet B = (A \oplus B) \ominus B,
+  \end{gather*} 
+czyli najpierw wykonywana jest operacja dylatacji obrazu, a następnie przekształcony obraz poddawany jest operacji erozji
 \item otwarcie obrazu definiowane jest wzorem:
   \begin{gather*}
-    A \circ B = (A \ominus B) \oplus B
-  \end{gather*}. W przypadku algorytmu otwarcia obrazu, w pierwszej kolejności wykonywana jest operacja erozji, a następnie operacja dylatacji obrazu.
+    A \circ B = (A \ominus B) \oplus B.
+  \end{gather*}
+W przypadku algorytmu otwarcia obrazu, w pierwszej kolejności wykonywana jest operacja erozji, a następnie operacja dylatacji obrazu.
 \end{itemize}
 Na rysunku~\ref{fig:open_close} przedstawiony został wynik działania obydwu algorytmów na tym samym obrazie, z tym samym elementem strukturalnym.
 \begin{figure}
@@ -354,7 +357,6 @@ Tabela~\ref{tab:distance_transform} przedstawia wynik działania operacji na mac
 
 \subsection{Operacje na histogramach}
 Bardzo często podczas analizy obrazu pod kątem znajdowania segmentów, wykorzystywana jest analiza histogramu. W celu ułatwienia analizy, a także poprawy jej wyników, przed jej rozpoczęciem można zastosować niżej wymienione algorytmy.
-\subsubsection{Histogram obrazu}
 \begin{figure}
   \centering
   \begin{subfigure}[b]{0.45\textwidth}
@@ -369,16 +371,20 @@ Bardzo często podczas analizy obrazu pod kątem znajdowania segmentów, wykorzy
   \caption{Jednokanałowy obraz oraz jego histogram}
   \label{fig:image_histogram_g}
 \end{figure}
-Histogram obrazu jest graficzną reprezentacją rozkładu częstości występowania danej wartości jasności w obrazie. Przykładowy obraz oraz jego histogram przedstawiony został na rysunku~\ref{fig:image_histogram_g}. Ponieważ obraz jest bardzo ciemny, większość wartości na histogramie jest bliska wartości 0(ta wartość reprezentuje kolor czarny).
+\textbf{Histogram obrazu} jest graficzną reprezentacją rozkładu częstości występowania danej wartości jasności w obrazie. Przykładowy obraz oraz jego histogram przedstawiony został na rysunku~\ref{fig:image_histogram_g}. Ponieważ obraz jest bardzo ciemny, większość wartości na histogramie jest bliska wartości 0 (ta wartość reprezentuje kolor czarny).\\
+Jako $H$ będziemy oznaczali funkcję zwracającą wartość histogramu w podanym punkcie. Poprzez symbol $H_{max}$ oznaczać będziemy funkcję zwracającą największy indeks $i$ znajdujący się w histogramie, taki że $H(i) \neq 0$. Symbolem $H_{in}$ oznaczać będziemy histogram wejściowy, a symbolem $H_{out}$ histogram wyjściowy.\\
+
 \subsubsection{Wyrównanie histogramu}
-Metoda wyrównywania histogramu ma na celu zmianę kontrastu obrazu. Algorytm wykorzystywany jest w przypadku, gdy zarówno tło, jak i pierwszy plan obrazu, są ciemne lub jasne. Wadą metody wyrównywania histogramu jest możliwe wzmocnienie zakłóceń występujących na obrazie, gdyż algorytm traktuje je jak sygnał opisujący prawidłowy obraz. Przed zastosowaniem tej metody, warto zatem zastosować jeden z algorytmów rozmycia obrazu, opisywany we wcześniejszej części tego rozdziału.\\
-Metoda wyrównania histogramu sprowadza się do wyznaczenia tablicy LUT(\textit{ang. Lookup table}), na podstawie której wyznaczone zostaną wartości poszczególnych pikseli obrazu wejściowego. W celu wyznaczenia tablicy LUT, należy wyznaczyć dystrybuantę rozkładu prawdopodobieństwa dla wartości pikseli obrazu:
+Metoda wyrównywania histogramu ma na celu zmianę kontrastu obrazu. Metoda wykorzystywany jest w przypadku, gdy zarówno tło, jak i pierwszy plan obrazu, są ciemne lub jasne. Wadą metody wyrównywania histogramu jest możliwe wzmocnienie zakłóceń występujących na obrazie, gdyż algorytm traktuje je jak sygnał opisujący prawidłowy obraz. Przed zastosowaniem tej metody, warto zatem zastosować jeden z algorytmów rozmycia obrazu, opisywany we wcześniejszej części tego rozdziału.\\
+Metoda wyrównania histogramu sprowadza się do wyznaczenia tablicy LUT (\textit{ang. Lookup table}), na podstawie której wyznaczone zostaną wartości poszczególnych pikseli obrazu wejściowego. W celu wyznaczenia tablicy LUT, należy wyznaczyć dystrybuantę rozkładu prawdopodobieństwa dla wartości pikseli obrazu:
 \begin{gather*}
-  D(i) = \sum\limits_{j=0}^i p(j)
-\end{gather*}, gdzie i jest wartością występującą na obrazie, a p(j) jest prawdopodobieństwem wystąpienia wartości j w obrazie. Wykorzystując wyznaczone wartości dystrybuanty, możemy opisać tablicę LUT za pomocą wzoru:
+  D(i) = \sum\limits_{j=0}^i p(j),
+\end{gather*}
+gdzie i jest wartością jasności występującą na obrazie, a p(j) jest prawdopodobieństwem wystąpienia wartości j w obrazie. Wykorzystując wyznaczone wartości dystrybuanty, możemy opisać tablicę LUT za pomocą wzoru:
 \begin{gather*}
-  LUT(i) = \frac{D(i)-D_0}{1-D_0}*K
-\end{gather*}, gdzie i to wartość składowej obrazu wejściowego, $D_0$ to pierwsza wartość dystrybuanty różna od zera, a K jest maksymalną wartością występującym w obrazie wejściowym.\\
+  LUT(i) = \frac{D(i)-D_0}{1-D_0} \cdot K,
+\end{gather*}
+gdzie i to wartość jasności składowej obrazu wejściowego, $D_0$ to pierwsza wartość dystrybuanty różna od zera, a K jest maksymalną wartością jasności występującym w obrazie wejściowym.\\
 Rysunek~\ref{fig:equalize_histogram} przedstawia efekt działania operacji wyrównania histogramu na przykładowym obrazie.
 \begin{figure}
   \centering
@@ -411,9 +417,9 @@ Rysunek~\ref{fig:equalize_histogram} przedstawia efekt działania operacji wyró
 \subsubsection{Wygładzenie histogramu}
 Często histogram obrazu zawiera w sobie nagłe skoki wartości, które utrudniają analizę histogramu, gdyż mogą reprezentować fałszywe ekstrema. Wygładzanie histogramu ma na celu usunięcie takich skoków, zachowując przy tym oryginalny kształt histogramu. Dla każdej wartości histogramu wejściowego \textit{$H_{in}$} należy zastosować następującą operację:
 \begin{gather*}
-  \vee i \in <H_{in}(0), H_{in}(H_{max})> H_{out}(i) = H_{in}(i-1) + H_{in}(i) + H_{in}(i+1)
-\end{gather*},
-gdzie \textit{$H_{out}$} jest histogramem wyjściowym, a $H_{max}$ największym indeksem w histogramie. Przykład działania algorytmu wygładzania histogramu przedstawiony został na rysunku~\ref{fig:histogram_smooth}
+  \forall_{i} \in \big< H_{in}(0), H_{in}(H_{max}(H_{in})) \big> :  H_{out}(i) = \frac{H_{in}(i-1) + H_{in}(i) + H_{in}(i+1)}{3}.
+\end{gather*}
+Przykład działania algorytmu wygładzania histogramu przedstawiony został na rysunku~\ref{fig:histogram_smooth}.
 \begin{figure}
   \centering
   \begin{subfigure}[b]{0.45\textwidth}
