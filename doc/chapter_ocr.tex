@@ -14,7 +14,7 @@ Zestaw cech geometrycznych jest unikalny dla każdego znaku, dlatego sprawdzają
     \item liczba pionowych oraz poziomych krawędzi znaku
 \end{itemize}
 \subsection{Rzut jasności obiektu}
-Metoda rzutu jasności obiektu została opisana w podrozdziale~\ref{ssection:rzut_jasnosci}. W pierwszej kolejności należy przeskalować obraz do rozmiarów obrazu wzorcowego, a następnie wykonać algorytm rzutu jasności zarówno w pionie, jak i w poziomie. Otrzymane rzuty zostają następnie poddane analizie podobieństwa z rzutami wykonanymi dla znaków wzorcowych. Analiza podobieństwa polega na porównaniu kształtu otrzymanych rzutów jasności. \\
+Metoda rzutu jasności obiektu została opisana w podrozdziale~\ref{ssec:rzut_jasnosci}. W pierwszej kolejności należy przeskalować obraz do rozmiarów obrazu wzorcowego, a następnie wykonać algorytm rzutu jasności zarówno w pionie, jak i w poziomie. Otrzymane rzuty zostają następnie poddane analizie podobieństwa z rzutami wykonanymi dla znaków wzorcowych. Analiza podobieństwa polega na porównaniu kształtu otrzymanych rzutów jasności. \\
 Na rysunku~\ref{fig:rzut_jasnosci_ocr} przedstawione zostały wzorce kilku znaków, oraz przykładowy obraz wejściowy.
 
 \begin{figure}
@@ -44,17 +44,18 @@ Sztuczne sieci neuronowe(SSN) to struktury tworzone na podobieństwo biologiczny
 \begin{itemize}
   \item warstwa wejściowa,
   \item warstwy ukryte,
-  \item warstwa wyjściowa
-\end{itemize}. W zależności od złożoności problemu, sieć neuronowa może zawierać różną liczbę neuronów w każdej warstwie, oraz różną liczbę warstw ukrytych. Przykład SSN można znaleźć na rysunku~\ref{fig:ssn_example}. Wartość wyjściowa neuronu wyznaczana jest na podstawie sygnałów wejściowych oraz funkcji aktywacji. Dla każdego neuronu wartość wyjściowa wyznaczana jest za pomocą wzoru:
+  \item warstwa wyjściowa.
+\end{itemize}
+W zależności od złożoności problemu, sieć neuronowa może zawierać różną liczbę neuronów w każdej warstwie, oraz różną liczbę warstw ukrytych. Przykład SSN można znaleźć na rysunku~\ref{fig:ssn_example}. Wartość wyjściowa neuronu wyznaczana jest na podstawie sygnałów wejściowych oraz funkcji aktywacji. Dla każdego neuronu wartość wyjściowa wyznaczana jest za pomocą wzoru:
 \begin{gather*}
-  y = g(\sum_{i=1}^{N}w_ix_i+w_0)
-\end{gather*}, gdzie:
-\begin{itemize}
-  \item g - funkcja aktywacji,
-  \item N - liczba wejść poprzedniej warstwy,
-  \item $w_i$ - waga synapsy i-tego sygnału,
-  \item $x_i$ - wartość i-tego sygnału
-\end{itemize}. W zależności od wybranego algorytmu, sieć poddawana jest procesowi uczenia, podczas którego wartości wag $w_i$ są korygowane.\\
+  y = g(\sum_{i=1}^{N}w_ix_i+w_0),
+\end{gather*}
+gdzie:\\
+$g$ - funkcja aktywacji,\\
+$N$ - liczba wejść poprzedniej warstwy,\\
+$w_i$ - waga synapsy i-tego sygnału,\\
+$x_i$ - wartość i-tego sygnału.\\
+W zależności od wybranego algorytmu, sieć poddawana jest procesowi uczenia, podczas którego wartości wag $w_i$ są korygowane.\\
 Jako zestaw uczący, a następnie zestaw testowy, podawane mogą być obrazy ze znakami. Po wykonaniu procesu uczenia, sieć neuronowa powinna mieć zdolność do dopasowania obrazu do najlepszego wyuczonego wzorca. 
 \begin{figure}
   \centering
