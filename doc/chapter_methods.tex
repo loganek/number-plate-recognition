@@ -118,13 +118,13 @@ gdzie $p_1$ jest pierwszą wartością szczytową w histogramie, a $p_2$ jest dr
 W rzeczywistych przypadkach bardzo często występuje sytuacja, w której piksele tła oraz piksele obiektu pierwszoplanowego nie mają takich samych wartości dla całego obiektu, ale przyjmują wiele wartości oscylujących wokół jednej z nich. Przykład takiego obrazu został pokazany na rysunku~\ref{fig:histogram_peaks}. Histogram zawiera widoczne trzy skupiska wartości (na pozycjach: 8, 18 oraz 44), natomiast obydwie największe wartości szczytowe w histogramie należą do jednego skupiska. Aby wyeliminować ten problem, należy zdefiniować minimalną odległość pomiędzy szczytami histogramu. Jeśli drugi szczyt będzie znajdował się zbyt blisko pierwszego, należy go odrzucić, i rozpocząć poszukiwanie kolejnego szczytu. Nie uwzględniając minimalnego odstępu pomiędzy szczytami, do wyznaczenia progu zostały by wybrane liczby 8 oraz 18, ponieważ są to dwie największe wartości w histogramie. Obydwie te wartości reprezentują tło, przez co segmentacja się nie powiodła (co można zobaczyć na rysunku~\ref{fig:histogram_peaks_bad}. Jeśli założymy, że szczyty nie mogą znajdować się od siebie bliżej niż wartość $\frac{1}{3}$ szerokości histogramu, do wyznaczenia progu zostanie użyta wartość 8 oraz 44. Wynikiem segmentacji natomiast będzie obraz przedstawiony na rysunku~\ref{fig:histogram_peaks_good}. Zwykle wartość minimalnej odległości pomiędzy szczytami dobiera się na podstawie przeprowadzonych wcześniej badań na danych testowych.
 \begin{figure}
   \centering
-  \begin{subfigure}[b]{0.7\textwidth}
+  \begin{subfigure}[b]{0.8\textwidth}
     \includegraphics[width=\textwidth]{img/histogram-peaks-input}
     \caption{Obraz wejściowy}
     \label{fig:histogram_peaks_input}
   \end{subfigure}
   ~
-  \begin{subfigure}[b]{0.7\textwidth}
+  \begin{subfigure}[b]{0.8\textwidth}
     \includegraphics[width=\textwidth]{img/histogram-peaks-histogram}
     \caption{Histogram obrazu wejściowego}
     \label{fig:histogram_peaks_histogram}
@@ -146,7 +146,7 @@ W rzeczywistych przypadkach bardzo często występuje sytuacja, w której piksel
 
 \subsubsection{Wyszukiwanie minimum histogramu}
 Metoda wyszukiwania minimum histogramu jest bardzo podobna do metody omawianej w poprzednim podpunkcie. Na początku wyszukiwane są dwie wartości szczytowe, które powinny być odległe od siebie o pewną ustaloną wartość. Jednak w przeciwieństwie do omawianego wcześniej algorytmu, jako wartość progową przyjmuje się najmniejszą wartość pomiędzy dwoma szczytami w histogramie. \\
-Rysunek~\ref{fig:histogram_valleys} przedstawia histogram pewnego obrazu. Stosując metodę wyszukiwania szczytów histogramu, jako wartość progowa wybralibyśmy wartość 102 (szczyty histogramów znajdują się na pozycjach 48 i 155). Stosując omawianą w tym podpunkcie metodę, jako wartość progowa zostanie wybrana wartość 129, która jest minimalną wartością znajdującą się pomiędzy szczytami histogramu.
+Rysunek~\ref{fig:histogram_valleys} przedstawia histogram pewnego obrazu. Stosując metodę wyszukiwania szczytów histogramu, jako wartość progowa wybralibyśmy wartość 102 (szczyty histogramów znajdują się na pozycjach 50 i 154). Stosując omawianą w tym podpunkcie metodę, jako wartość progowa zostanie wybrana wartość 129, która jest minimalną wartością znajdującą się pomiędzy szczytami histogramu.
 
 \begin{figure}
   \centering
@@ -247,6 +247,7 @@ $\mu$(x, y) - średnia wartości pikseli w zadanym otoczeniu piksela,\\
 $\sigma(x, y)$ - odchylenie standardowe w zadanym otoczeniu piksela,\\
 R - maksymalna wartość odchylenia standardowego(dla obrazu 8-bitowego jest to wartość 128),\\
 k - parametr algorytmu. \\
+Wyznaczenie rozmiaru oraz kształtu obszaru otoczenia wykonywane jest na podstawie badań danych testowych, najczęściej kształty obszaru otoczenia to kwadrat lub koło.
 \subsection{Segmentacja wododziałowa}
 Algorytm segmentacji wododziałowej polega na odnajdowaniu na obrazie krawędzi, będących granicami szukanych segmentów. Segmentacja wododziałowa wzorowana jest na naturalnym procesie hydrologicznym, polegającym na tworzeniu się zlewisk w lokalnie najniżej położonych obszarach geograficznych. \\
 \subsubsection{Podstawowe pojęcia}

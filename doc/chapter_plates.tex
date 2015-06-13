@@ -106,7 +106,7 @@ Algorytm określania liczby linii metodą porównywania liczby lokalizacji przed
     \begin{gather*}
       abs(tmp.y - c.y) < 0.2*avg\_h,
     \end{gather*}
-    gdzie $tmp$ to znak umieszczony w zmiennej tymczasowej, $c$ to znak pobrany z kolejki, a $avg\_h$ to średnia wysokość znaku. Jeśli warunek nie jest spełniony, numer rejestracyjny zapisany jest w dwóch liniach. Algorytm kończy działanie.
+    gdzie $tmp$ to znak umieszczony w zmiennej tymczasowej, $c$ to znak pobrany z kolejki, a $avg\_h$ to średnia wysokość znaku. Wartość współczynnika $0.2$ została wyznaczona empirycznie - dla tej wartości otrzymywałem najlepsze wyniki podczas wykonywania testów. Jeśli warunek nie jest spełniony, numer rejestracyjny zapisany jest w dwóch liniach. Algorytm kończy działanie.
   \item Zapisać do zmiennej tymczasowej znak pobrany z kolejki.
   \item Jeśli kolejka nie jest pusta, przejść do punktu 4).
   \item Numer rejestracyjny został zapisany w jednej linii. Algorytm kończy działanie.

@@ -18,13 +18,13 @@ Dla trybu skali szarości
 gdzie $b$ jest liczbą bitów potrzebnych do reprezentacji jasności, 0 oznacza kolor czarny, $2^b-1$ kolor biały, a pozostałe wartości opisują jasność koloru. Najczęściej wartość $b$ jest wielokrotnością liczby 8.\\
 Dla trybu kolorowego
 \begin{gather*}
-  I = I_1 \times I_2 \times ... \times I_n,
+  I = I_1 \times I_2 \times ... \times I_C,
 \end{gather*}
 gdzie
 \begin{gather*}
-  I_1 = I_2 = ... = I_n = \{0, 1, ..., 2^b-1\}
+  I_1 = I_2 = ... = I_C = \{0, 1, ..., 2^b-1\}
 \end{gather*}
-oraz $n\in \mathbb{N} \wedge n > 1$ jest liczbą kanałów z przestrzeni barw. \\
+oraz $C \in \mathbb{N} \wedge n > 1$ jest liczbą kanałów z przestrzeni barw. \\
 Dla przestrzeni barw RGB
 \begin{gather*}
   I = I_R \times I_G \times I_B
@@ -33,10 +33,10 @@ gdzie $I_R$, $I_G$, $I_B$ oznaczają odpowiednio jasność kolorów czerwonego, 
 \subsubsection{Obraz cyfrowy}
 Obraz cyfrowy definiujemy jako funkcję
 \begin{gather*}
-  f: \{0, 1, ..., N-1\} \times \{0, 1, ..., M-1\} \rightarrow I,
+  f: \{0, 1, ..., N-1\} \times \{0, 1, ..., M-1\} \times {1, 2, ..., C} \rightarrow I,
 \end{gather*}
-gdzie $M$, $N$ oznaczają odpowiednio szerokość i wysokość obrazu.\\
-Wartość funkcji $f(x, y)$ nazywamy \textbf{pikselem}.\\
+gdzie $M$, $N$ oznaczają odpowiednio szerokość i wysokość obrazu, natomiast $C$ oznacza liczbę kanałów w obrazie.\\
+Wartość funkcji $f(x, y, c)$ nazywamy \textbf{pikselem}. Trzeci argument może być pominięty dla obrazów jednokanałowych, ponieważ w takiej sytuacji zawsze przyjmuje wartość 1.\\
 Obrazy cyfrowe możemy podzielić ze względu na tryb opisu koloru:
 \begin{itemize}
   \item czarno-białe,
@@ -131,7 +131,7 @@ Na rysunku~\ref{fig:threshold_image} przedstawiony został wynik operacji progow
 \paragraph{Progowanie obrazów wielokanałowych}\mbox{}\\
 Zazwyczaj operacji progowania poddawane są obrazy jednokanałowe. Istnieje jednak możliwość wykonania operacji progowania dla obrazów wielokanałowych (np. dla obrazów RGB). Operacja ta definiowana jest następującym wzorem:
 \begin{gather*}
-  f^{(out)}(x, y) = \left\{\begin{matrix}
+  f^{(out)}(x, y, c) = \left\{\begin{matrix}
   1, \; \text{jeżeli} \; \forall c \in C, \; f^{(in)}(x, y, c) > t(c),\\
   0, \; \text{jeżeli} \; \exists c \in C, \; f^{(in)}(x, y, c) \leq t(c),
   \end{matrix}\right. \quad (x, y) \in P^{(in)}_{N,M} c=0,1,2,...,C,
@@ -211,6 +211,11 @@ definiowana jest wzorem:
 Dodawanie obrazów z wagami zdefiniowane jest wzorem:
 \begin{gather*}
   f^{(out)}(x, y) = \displaystyle\sum_{i=1}^{n} f^{(in)}_i(x, y) \cdot w_i, \quad (x, y) \in P^{(in)}_{N,M}.
+\end{gather*}
+\paragraph{Dodawanie obrazów wielokanałowych} \mbox{}\\
+W przypadku obrazów wielokanałowych, operację dodawania wykonujemy dla każdego kanału osobno:
+\begin{gather*}
+  f^{(out)}(x, y, c) = \displaystyle\sum_{i=1}^{n} f^{(i)}(x, y), \quad (x, y, c) \in P^{(in)}_{N,M},\ c \in \{1, 2, ..., C\}.
 \end{gather*}
 \subsubsection{Wyostrzenie obrazu}
 W celu uzyskania efektu wyostrzonych krawędzi obrazu, należy wykonać na obrazie wejściowym operację rozmycia Gaussa, a następnie obraz wynikowy dodać do obrazu wejściowego z wagami:
@@ -376,7 +381,7 @@ Jako $H$ będziemy oznaczali funkcję zwracającą wartość histogramu w podany
 
 \subsubsection{Wyrównanie histogramu}
 Metoda wyrównywania histogramu ma na celu zmianę kontrastu obrazu. Metoda ta wykorzystywany jest w przypadku, gdy zarówno tło, jak i pierwszy plan obrazu, są ciemne lub jasne. Wadą metody wyrównywania histogramu jest możliwe wzmocnienie zakłóceń występujących na obrazie, gdyż algorytm traktuje je jak sygnał opisujący prawidłowy obraz. Przed zastosowaniem tej metody, warto zatem zastosować jeden z algorytmów rozmycia obrazu, opisywany we wcześniejszej części tego rozdziału.\\
-Metoda wyrównania histogramu sprowadza się do wyznaczenia tablicy LUT (\textit{ang. Lookup table}), na podstawie której wyznaczone zostaną wartości poszczególnych pikseli obrazu wejściowego. W celu wyznaczenia tablicy LUT, należy wyznaczyć dystrybuantę rozkładu prawdopodobieństwa dla wartości pikseli obrazu:
+Metoda wyrównania histogramu sprowadza się do wyznaczenia tablicy LUT (\textit{ang. Lookup table}), na podstawie której wyznaczone zostaną wartości jasności poszczególnych pikseli obrazu wejściowego. W celu wyznaczenia tablicy LUT, należy wyznaczyć dystrybuantę rozkładu prawdopodobieństwa dla wartości pikseli obrazu:
 \begin{gather*}
   D(i) = \sum\limits_{j=0}^i p(j),
 \end{gather*}
