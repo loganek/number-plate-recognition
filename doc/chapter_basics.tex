@@ -7,7 +7,7 @@ Określenie sposobu reprezentacji kolorów w obrazach rastrowych nazywamy \textb
   \item skala szarości - oprócz koloru czarnego i białego, występuje cała gama jasności pośrednich,
   \item tryb kolorowy - piksele mają przyporządkowane kolory z przestrzeni barw.
 \end{itemize}
-Symbolem I będziemy oznaczać zbiór kolorów. Dla trybu czarno-białego
+Symbolem $I$ będziemy oznaczać zbiór kolorów. Dla trybu czarno-białego
 \begin{gather*}
   I = \{0, 1\}
 \end{gather*} gdzie 0 reprezentuje kolor czarny, a 1 kolor biały.\\
@@ -15,7 +15,7 @@ Dla trybu skali szarości
 \begin{gather*}
   I = \{0, 1, ..., 2^b-1\}
 \end{gather*}
-gdzie b jest liczbą bitów potrzebnych do reprezentacji jasności, 0 oznacza kolor czarny, $2^b-1$ kolor biały, a pozostałe wartości opisują jasność koloru. Najczęściej wartość b jest wielokrotnością liczby 8.\\
+gdzie $b$ jest liczbą bitów potrzebnych do reprezentacji jasności, 0 oznacza kolor czarny, $2^b-1$ kolor biały, a pozostałe wartości opisują jasność koloru. Najczęściej wartość $b$ jest wielokrotnością liczby 8.\\
 Dla trybu kolorowego
 \begin{gather*}
   I = I_1 \times I_2 \times ... \times I_n,
@@ -87,7 +87,7 @@ obraz wyjściowy.
 
 \subsubsection{Kadrowanie obrazu}
 Operacja kadrowania polega na pozostawieniu na obrazie wejściowym tylko tych pikseli, które znajdują się w zdefiniowanym prostokątnym obszarze. Obraz wyjściowy po operacji kadrowania przyjmuje rozmiar obszaru, do którego kadrowany był obraz wejściowy.\\
-Na rysunku ~\ref{fig:crop_image} przedstawiona została operacja kadrowania obrazu. Celem kadrowania jest usunięcie z obrazu informacji, które są zbędne podczas wykonywania analizy obrazu, ponieważ mogą negatywnie wpłynąć na czas oraz rezultaty wykonania algorytmów.
+Na rysunku~\ref{fig:crop_image} przedstawiona została operacja kadrowania obrazu. Celem kadrowania jest usunięcie z obrazu informacji, które są zbędne podczas wykonywania analizy obrazu, ponieważ mogą negatywnie wpłynąć na czas oraz rezultaty wykonania algorytmów.
 \begin{figure}
   \centering
   \begin{subfigure}[b]{0.45\textwidth}
@@ -111,7 +111,7 @@ Progowanie polega na podziale pikseli obrazu na dwie grupy, poprzez wybranie okr
   0, dla \: f^{(in)}(x, y) \leq t,
   \end{matrix}\right. \quad (x, y) \in P^{(in)}_{N,M}
 \end{gather*}
-Na rysunku ~\ref{fig:threshold_image} przedstawiony został wynik operacji progowania na przykładowym obrazie monochromatycznym.
+Na rysunku~\ref{fig:threshold_image} przedstawiony został wynik operacji progowania na przykładowym obrazie monochromatycznym.
 \begin{figure}
   \centering
   \begin{subfigure}[b]{0.45\textwidth}
@@ -356,7 +356,7 @@ Tabela~\ref{tab:distance_transform} przedstawia wynik działania operacji na mac
 \end{figure}
 
 \subsection{Operacje na histogramach}
-Bardzo często podczas analizy obrazu pod kątem znajdowania segmentów, wykorzystywana jest analiza histogramu. W celu ułatwienia analizy, a także poprawy jej wyników, przed jej rozpoczęciem można zastosować niżej wymienione algorytmy.
+Bardzo często podczas analizy obrazu pod kątem znajdowania segmentów, wykorzystywana jest analiza histogramu. W celu ułatwienia analizy, a także poprawy jej wyników, przed jej rozpoczęciem można zastosować niżej wymienione zabiegi.
 \begin{figure}
   \centering
   \begin{subfigure}[b]{0.45\textwidth}
@@ -375,7 +375,7 @@ Bardzo często podczas analizy obrazu pod kątem znajdowania segmentów, wykorzy
 Jako $H$ będziemy oznaczali funkcję zwracającą wartość histogramu w podanym punkcie. Poprzez symbol $H_{max}$ oznaczać będziemy funkcję zwracającą największy indeks $i$ znajdujący się w histogramie, taki że $H(i) \neq 0$. Symbolem $H_{in}$ oznaczać będziemy histogram wejściowy, a symbolem $H_{out}$ histogram wyjściowy.\\
 
 \subsubsection{Wyrównanie histogramu}
-Metoda wyrównywania histogramu ma na celu zmianę kontrastu obrazu. Metoda wykorzystywany jest w przypadku, gdy zarówno tło, jak i pierwszy plan obrazu, są ciemne lub jasne. Wadą metody wyrównywania histogramu jest możliwe wzmocnienie zakłóceń występujących na obrazie, gdyż algorytm traktuje je jak sygnał opisujący prawidłowy obraz. Przed zastosowaniem tej metody, warto zatem zastosować jeden z algorytmów rozmycia obrazu, opisywany we wcześniejszej części tego rozdziału.\\
+Metoda wyrównywania histogramu ma na celu zmianę kontrastu obrazu. Metoda ta wykorzystywany jest w przypadku, gdy zarówno tło, jak i pierwszy plan obrazu, są ciemne lub jasne. Wadą metody wyrównywania histogramu jest możliwe wzmocnienie zakłóceń występujących na obrazie, gdyż algorytm traktuje je jak sygnał opisujący prawidłowy obraz. Przed zastosowaniem tej metody, warto zatem zastosować jeden z algorytmów rozmycia obrazu, opisywany we wcześniejszej części tego rozdziału.\\
 Metoda wyrównania histogramu sprowadza się do wyznaczenia tablicy LUT (\textit{ang. Lookup table}), na podstawie której wyznaczone zostaną wartości poszczególnych pikseli obrazu wejściowego. W celu wyznaczenia tablicy LUT, należy wyznaczyć dystrybuantę rozkładu prawdopodobieństwa dla wartości pikseli obrazu:
 \begin{gather*}
   D(i) = \sum\limits_{j=0}^i p(j),

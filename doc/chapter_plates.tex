@@ -6,7 +6,7 @@ Ze względu na różnorodność formatów tablic rejestracyjnych, jakie mogą wy
 Obrazy tablic rejestracyjnych, ze względu na warunki w jakich są wykonywane, nie zawierają jedynie tekstu, który jest łatwy do analizy. Obrazy często zawierają artefakty, tablice mogą być zanieczyszczone, lub ze względu na warunki atmosferyczne, obraz może być niejednolicie oświetlony. Opisałem problemy, z jakimi spotkałem się, analizując zestaw danych testowych, wraz z proponowanymi przeze mnie możliwościami rozwiązania problemów.\\
 W tym rozdziale będę stosował wykorzystywał formę zapisu wzorów matematycznych stosowaną w języku programowania C++.
 \subsection{Różne kolory tablic rejestracyjnych}
-Algorytmy segmentacji tablic rejestracyjnych które zaprezentuję w dalszej części pracy, wymagają, aby tło tablic rejestracyjnych było jaśniejsze od tekstu. Dlatego musiałem opracować algorytm, który wykryje odwrotną sytuację, i w razie potrzeby, odwróci kolory obrazu.\\
+Algorytmy segmentacji tablic rejestracyjnych które zaprezentuję w dalszej części pracy, wymagają, aby tło tablic rejestracyjnych było jaśniejsze od tekstu. Dlatego opracowałem algorytm, który wykrywa odwrotną sytuację, i w razie potrzeby, odwróci kolory obrazu.\\
 Pierwszym pomysłem było zastosowanie lokalnego progowania, a następnie policzenie czarnych oraz białych pikseli, i w zależności od tego, który kolor występuje częściej, określić tło tablicy rejestracyjnej. Metoda ta okazała się w większości przypadków skuteczna. Algorytm nie zwracał jednak poprawnych rezultatów w przypadku, gdy tablica rejestracyjna wykonana była pod kątem, i nie można było wykadrować obrazu w taki sposób, aby pozbyć się nieporządanych pikseli. Rysunek~\ref{fig:detect_bg_bad} przedstawia ten problem. Tablica rejestracyjna zajmuje większą część obrazu, jednak pomimo tego, została sklasyfikowana przez algorytm jako tablica z czarnym tłem. Wynika to z faktu, iż na tablicy pozostały znaki, które również zajmują znaczącą powierzchnię obrazu. Następnie spróbowałem zastosować operację zamknięcia regionu, która poprawnie usunęła znaki z obrazu. Nie zadziałała jednak w przypadku białych znaków na czarnym tle. \\
 Zamiast operacji morfologicznej, zastosowałem rozmycie medianowe, które dało poprawny efekt zarówno dla czarnych znaków na białym tle, jak również dla białych znaków na czarnym tle. Na rysunku~\ref{fig:detect_bg_ok} przedstawiony został wynik eksperymentu dla obrazu wejściowego przedstawionego na rysunku~\ref{fig:detect_bg_bad}.
 
@@ -66,7 +66,7 @@ Poszczególne kroki działania algorytmu zostały przedstawione na rysunku~\ref{
 
 
 \subsection{Różne formaty zapisu danych}
-Numer rejestracyjny pojazdu może być zapisany jako jedna, lub jako dwie linie tekstu. Założeniem algorytmu rozpoznawania tablic rejestracyjnych jest możliwość rozpoznania oby dwóch formatów zapisu, dlatego przed przystąpieniem do dalszej analizy, należy określić liczbę linii tekstu. Znajomość liczby linii jest przydatna podczas oceny ostatecznego rozwiązania segmentacji obrazu, ponieważ znana jest wtedy przybliżona lokalizacja liter. Poniżej przedstawiam propozycję dwóch rozwiązań problemu detekcji liczby linii wykorzystanych do zapisu numeru rejestracyjnego.
+Numer rejestracyjny pojazdu może być zapisany jako jedna, lub jako dwie linie tekstu. Założeniem algorytmu rozpoznawania tablic rejestracyjnych jest możliwość rozpoznania obydwóch formatów zapisu, dlatego przed przystąpieniem do dalszej analizy, należy określić liczbę linii tekstu. Znajomość liczby linii jest przydatna podczas oceny ostatecznego rozwiązania segmentacji obrazu, ponieważ znana jest wtedy przybliżona lokalizacja liter. Poniżej przedstawiam propozycję dwóch rozwiązań problemu detekcji liczby linii wykorzystanych do zapisu numeru rejestracyjnego.
 \paragraph{Metoda rzutu jasności obrazu}\mbox{}\\
 Algorytm rzutu jasności obrazu opisywany był w podrozdziale~\ref{ssection:rzut_jasnosci}. Zauważyłem, że algorytm ten może również zostać wykorzystany do określenia liczby linii tekstu, wykorzystując do tego tylko poziomy rzut jasności dla obrazu. Na rysunku~\ref{fig:rzut_liczba_linii} zamieszczone zostały dwa obrazy przedstawiające rzuty jasności dla tablicy rejestracyjnej zawierającej jedną, oraz dwie linie tekstu. Można zauważyć, że w miejscach, gdzie nie znajduje się tekst, wykres rzutu jasności osiąga wyraźne ekstremum. Dla jednej linii tekstu, wykres rzutu jasności powinien zawierać tylko dwa takie ekstrema (nad, oraz pod tekstem), natomiast dla tablicy zawierającej dwie line tekstu, wystąpić powinny trzy ekstrema (dodatkowe ekstremum znajdujące się pomiędzy dwoma wierszami tekstu).\\
 Algorytm wyszukuje trzy największe maksimum lokalne na wykresie rzutu jasności, przy założeniu, że nie mogą znajdować się w odległości mniejszej niż $\frac{1}{3}$ wysokości obrazu (aby uniknąć znalezienia dwóch ekstremum należących do jednej białej linii). Na końcu sprawdzane były dwa warunki:
@@ -111,7 +111,7 @@ Algorytm określania liczby linii metodą porównywania liczby lokalizacji przed
   \item Jeśli kolejka nie jest pusta, przejść do punktu 4).
   \item Numer rejestracyjny został zapisany w jednej linii. Algorytm kończy działanie.
 \end{enumerate}
-Rysunek~\ref{fig:apriori_liczba_linii} przedstawia tablice rejestracyjne zawierające zapisane numery rejestracyjne zarówno w dwóch, jak i w jednej linii. Można zauważyć, że w przypadku tekstu zapisanego w jednej linii, pomimo pochylonego tekstu, algorytm powinien poradzić sobie z rozpoznaniem liczby linii, ponieważ każdy sąsiedni znak jest tylko nieznacznie przesunięty w górę względem znaku poprzedniego. W przypadku tekstu zapisanego w dwóch liniach, nawet jeśli tekst jest idealnie poziomo, algorytm rozpozna dwie linie tekstu, ponieważ maksymalna różnica pomiędzy początkami dwóch sąsiednich(pod względem odległości na linii poziomej) znaków na osi pionowej jest większa niż średnia wysokość znaku.
+Rysunek~\ref{fig:apriori_liczba_linii} przedstawia tablice rejestracyjne zawierające zapisane numery rejestracyjne zarówno w dwóch, jak i w jednej linii. Można zauważyć, że w przypadku tekstu zapisanego w jednej linii, pomimo pochylonego tekstu, algorytm powinien poradzić sobie z rozpoznaniem liczby linii, ponieważ każdy sąsiedni znak jest tylko nieznacznie przesunięty w górę względem znaku poprzedniego. W przypadku tekstu zapisanego w dwóch liniach, nawet jeśli tekst jest idealnie poziomo, algorytm rozpozna dwie linie tekstu, ponieważ maksymalna różnica pomiędzy początkami dwóch sąsiednich (pod względem odległości na linii poziomej) znaków na osi pionowej jest większa niż średnia wysokość znaku.
 
 \begin{figure}
   \centering
@@ -135,14 +135,16 @@ Tablice rejestracyjne zawierają bardzo często elementy, które nie są element
 \paragraph{Stosunek szerokości do wysokości znaku}\mbox{}\\
 Zauważyłem, że w każdym znaku pojawiającym się w numerze rejestracyjnym, szerokość znaku jest mniejsza od jego wysokości. Warunek ten spełniony był dla każdej czcionki pojawiającej się w dostępnych danych, dlatego mogłem wykluczyć wszystkie segmenty, które nie spełniają warunku:
 \begin{gather*}
-  segment.H > segment.W
-\end{gather*}, gdzie W i H to odpowiednio szerokość i wysokość segmentu.
+  segment.H > segment.W,
+\end{gather*}
+gdzie W i H to odpowiednio szerokość i wysokość segmentu.
 
 \paragraph{Minimalna wysokość znaku}\mbox{}\\
 Podczas obserwacji danych testowych zauważyłem, że wysokość znaku numeru rejestracyjnego zapisanego na tablicy nie osiąga wartości mniejszej niż $\frac{1}{4}$ wysokości tablicy rejestracyjnej. Dlatego odrzucić można segmenty niespełniające warunku:
 \begin{gather*}
-  segment.H > \frac{I.H}{4}
-\end{gather*}, gdzie segment.H to wysokość segmentu, a I.H to wysokość obrazu. Należy przyjąć, że wysokość obrazu pokrywa się z tablicą rejestracyjną.\\
+  segment.H > \frac{I.H}{4},
+\end{gather*}
+gdzie segment.H to wysokość segmentu, a I.H to wysokość obrazu. Należy przyjąć, że wysokość obrazu pokrywa się z tablicą rejestracyjną.\\
 Na rysunku~\ref{fig:min_height_condition} można zauważyć, że litery napisu ,,CALIFORNIA'' nie został oznaczone jako poprawne segmenty dzięki zastosowaniu warunku o minimalnej wysokości znaku. Gdyby warunek nie został zastosowany, prawdopodobnie mniejszy napis zostałby rozpoznany jako numer rejestracyjny pojazdu.
 
 \begin{figure}
