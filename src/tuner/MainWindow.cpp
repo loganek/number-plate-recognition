@@ -52,21 +52,15 @@ MainWindow::MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>
 
 	builder->get_widget("outputImage", outputImage);
 
-	builder->get_widget("batchInputImage", batchInputImage);
-
-	builder->get_widget("batchOutputImage", batchOutputImage);
-
 	builder->get_widget("mainStatusbar", mainStatusbar);
 
 	builder->get_widget("processingOutputLabel", processingOutputLabel);
 
 	builder->get_widget("algorithmViewport", algorithmViewport);
 
-	builder->get_widget("batchOutputTextLabel", batchOutputTextLabel);
-
-	builder->get_widget("mainNotebook", mainNotebook);
-
 	builder->get_widget("outputPathEntry", outputPathEntry);
+
+	builder->get_widget("browseModeCheckButton", browseModeCheckButton);
 
 	// todo temporary hack
 	current_directory = "/home/mkolny/Documents/plates_set/edited";
@@ -218,17 +212,10 @@ std::string MainWindow::get_selected_file_path() const
 
 void MainWindow::on_filesTreeView_row_activated(const Gtk::TreeModel::Path& path, Gtk::TreeViewColumn* column)
 {
-	switch (mainNotebook->get_current_page())
-	{
-	case 0:
-		load_input_file(get_selected_file_path());
-		break;
-	case 1:
+	if (browseModeCheckButton->get_active())
 		load_full_info(get_selected_filename());
-		break;
-	default:
-		break;
-	}
+	else
+		load_input_file(get_selected_file_path());
 }
 
 void MainWindow::load_input_file(const std::string& filename)
@@ -286,7 +273,7 @@ void MainWindow::load_full_info(const std::string& filename)
 	if (process_outputs.find(filename) == process_outputs.end())
 		return;
 
-	batchOutputTextLabel->set_text(process_outputs[filename]);
-	batchInputImage->set(get_full_file_path(current_directory, filename));
-	batchOutputImage->set(get_full_file_path(outputPathEntry->get_text(), filename));
+	processingOutputLabel->set_text(process_outputs[filename]);
+	inputImage->set(get_full_file_path(current_directory, filename));
+	outputImage->set(get_full_file_path(outputPathEntry->get_text(), filename));
 }

@@ -36,13 +36,10 @@ class MainWindow : public Gtk::Window
 	Gtk::Label *processingOutputLabel;
 	Gtk::Image *inputImage;
 	Gtk::Image *outputImage;
-	Gtk::Image *batchInputImage;
-	Gtk::Image *batchOutputImage;
 	Gtk::Statusbar *mainStatusbar;
 	Gtk::Viewport *algorithmViewport;
-	Gtk::Label *batchOutputTextLabel;
-	Gtk::Notebook *mainNotebook;
 	Gtk::Entry *outputPathEntry;
+	Gtk::CheckButton *browseModeCheckButton;
 
 	Gtk::Button *startForAllButton;
 
