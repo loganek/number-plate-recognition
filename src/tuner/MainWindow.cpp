@@ -42,7 +42,7 @@ MainWindow::MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>
 	builder->get_widget("filesTreeView", filesTreeView);
 	file_model = Gtk::ListStore::create(tree_columns);
 	filesTreeView->set_model(file_model);
-	filesTreeView->append_column("File Name", tree_columns.col_str_first);
+	filesTreeView->append_column("Pliki", tree_columns.col_str_first);
 	filesTreeView->signal_row_activated().connect(sigc::mem_fun(*this, &MainWindow::on_filesTreeView_row_activated));
 
 	builder->get_widget("algorithmComboBox", algorithmComboBox);
@@ -261,7 +261,7 @@ void MainWindow::set_current_directory(const std::string& dirpath)
 void MainWindow::process_all()
 {
 	int ok = 0, cnt = 0;
-	auto time = MEASURE_TIME(std::chrono::microseconds,
+	auto time = MEASURE_TIME(std::chrono::milliseconds,
 		auto children = filesTreeView->get_model()->children();
 		std::string input;
 		auto algorithm = get_selected_algorithm();
@@ -279,7 +279,7 @@ void MainWindow::process_all()
 		}
 	);
 	mainStatusbar->push("Czas wykonania: " + to_string_with_precision(time/1000.0, 3) +
-			" mikrosekund, poprawność: " + to_string_with_precision(ok*100.0/cnt, 2) + "% (" + std::to_string(ok) + "/"+std::to_string(cnt) + ")");
+			" milisekund, poprawność: " + to_string_with_precision(ok*100.0/cnt, 2) + "% (" + std::to_string(ok) + "/"+std::to_string(cnt) + ")");
 }
 
 void MainWindow::load_full_info(const std::string& filename)
