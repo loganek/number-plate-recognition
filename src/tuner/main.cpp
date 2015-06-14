@@ -5,11 +5,9 @@
  *      Author: loganek
  */
 #include "MainWindow.h"
+#include "algorithms/endpoints/SzczytyMinimum.h"
+#include "algorithms/endpoints/SzczytySrednia.h"
 #include "algorithms/dummy_algorithm/DummyAlgorithm.h"
-#include "algorithms/rzut_jasnosci/RzutJasnosci.h"
-#include "algorithms/szczyty_histogramu/SzczytyMinimum.h"
-#include "algorithms/szczyty_histogramu/SzczytySrednia.h"
-#include "algorithms/counting_lines/CLRzutJasnosci.h"
 
 #include <gtkmm.h>
 
@@ -24,11 +22,9 @@ int main(int argc, char** argv)
 			Gtk::Builder::create_from_file("/home/mkolny/Documents/number-plate-recognition/src/tuner/ui/tuner.glade");
 
 	std::initializer_list<std::shared_ptr<IAlgorithm>> list = {
-			std::make_shared<DummyAlgorithm>(),
-			std::make_shared<RzutJasnosci>(),
 			std::make_shared<SzczytyMinimum>(),
 			std::make_shared<SzczytySrednia>(),
-			std::make_shared<CLRzutJasnosci>()
+			std::make_shared<DummyAlgorithm>(),
 	};
 
 	auto manager = std::make_shared<AlgorithmManager>(list);

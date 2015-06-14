@@ -69,7 +69,7 @@ MainWindow::MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>
 	builder->get_widget("browseModeCheckButton", browseModeCheckButton);
 
 	// todo temporary hack
-	current_directory = "/home/mkolny/Documents/plates_set/edited";
+	current_directory = "/home/mkolny/Documents/plates_set/z_wasko_2";
 	dirEntry->set_text(current_directory);
 
 	outputPathEntry->set_text("/home/mkolny/output-plates");
@@ -275,7 +275,10 @@ void MainWindow::process_all()
 			auto out_img = algorithm->get_output_image();
 			cv::imwrite(get_full_file_path(outputPathEntry->get_text(), input), out_img);
 			cnt++;
-			if (std::rand() % 100 <85) ok++; // todo real verification
+			auto size = input.find('_');
+			if (size == algorithm->get_segment_count() || process_outputs[input].size() == size)
+				ok++; // todo real verification
+			LOG_D(cnt << " / " << children.size());
 		}
 	);
 	mainStatusbar->push("Czas wykonania: " + to_string_with_precision(time/1000.0, 3) +

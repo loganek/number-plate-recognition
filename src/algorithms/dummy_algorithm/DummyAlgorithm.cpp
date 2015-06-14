@@ -37,9 +37,11 @@ std::string DummyAlgorithm::get_name() const
 
 std::string DummyAlgorithm::process(const cv::Mat& mat)
 {
-	cv::cvtColor(mat, output, CV_BGR2GRAY);
-
-	cv::threshold(output, output, scale.get_value(), 255, 0);
+	cv::Mat mf;
+	cv::cvtColor(mat, mf, CV_BGR2GRAY);
+	cv::equalizeHist(output, output);
+	cv::GaussianBlur(mf, output, cv::Size(0, 0), 3);
+	cv::addWeighted(mf, 1.5, output, -0.5, 0, output);
 
 	cv::cvtColor(output, output, CV_GRAY2BGR);
 

@@ -10,6 +10,8 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
+#include <iostream>
+
 #define REGION_GROWING_RECURSIVE(OP_Y, OP_X) \
 		if (relative_threshold > input.at<uchar>(seed.y OP_Y, seed.x OP_X) && output.at<uchar>(seed.y OP_Y, seed.x OP_X) != 0) \
 		region_growing(input, output, cv::Point2i(seed.x OP_X, seed.y OP_Y), relative_threshold);
@@ -160,7 +162,10 @@ void convert_if_need(cv::Mat& mat)
 	double st = h[0] / (double)h[255];
 
 	if (st >= 1)
+	{
 		mat = cv::Scalar::all(255) - mat;
+		std::cout << "Conversion needed" << std::endl;
+	}
 }
 
 std::vector<int> find_ridges(const cv::Mat& mat, int pos, bool horizontal, int min_width, int threshold)
@@ -202,13 +207,13 @@ std::vector<int> build_histogram(const cv::Mat& img)
 	return histogram;
 }
 
-cv::Rect pump_rectangle(const cv::Rect& rect, int e)
+cv::Rect pump_rectangle(const cv::Rect& rect, int e, const cv::Mat& mat)
 {
 	cv::Rect r2 = rect;
-	r2.width += e;
-	r2.height += e;
-	r2.x -= e;
-	r2.y -= e;
+	r2.x = std::max(0, r2.x-e);
+	r2.y = std::max(0, r2.y-e);
+	r2.width = std::min(mat.cols - r2.x, e + r2.width);
+	r2.height = std::min(mat.rows - r2.y, e + r2.height);;
 
 	return r2;
 }
