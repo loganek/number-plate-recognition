@@ -52,17 +52,32 @@ MainWindow::MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>
 
 	builder->get_widget("outputImage", outputImage);
 
+	builder->get_widget("batchInputImage", batchInputImage);
+
+	builder->get_widget("batchOutputImage", batchOutputImage);
+
 	builder->get_widget("mainStatusbar", mainStatusbar);
 
 	builder->get_widget("processingOutputLabel", processingOutputLabel);
 
 	builder->get_widget("algorithmViewport", algorithmViewport);
 
+	builder->get_widget("batchOutputTextLabel", batchOutputTextLabel);
+
+	builder->get_widget("mainNotebook", mainNotebook);
+
+	builder->get_widget("outputPathEntry", outputPathEntry);
+
 	// todo temporary hack
 	current_directory = "/home/mkolny/Documents/plates_set/edited";
 	dirEntry->set_text(current_directory);
 
+	outputPathEntry->set_text("/home/mkolny/output-plates");
+
 	load_images_from_directory();
+
+	builder->get_widget("startForAllButton", startForAllButton);
+	startForAllButton->signal_clicked().connect([this] { process_all(); });
 }
 
 MainWindow::~MainWindow()
@@ -108,15 +123,20 @@ void MainWindow::run_processing()
 				Gtk::MESSAGE_ERROR);
 		return;
 	}
+	processingOutputLabel->set_text(run_algorithm(algorithm, get_selected_file_path()));
+	auto out_img = algorithm->get_output_image();
+	outputImage->set(Gdk::Pixbuf::create_from_data(out_img.data, Gdk::COLORSPACE_RGB, false, 8, out_img.cols, out_img.rows, out_img.step));
+	outputImage->queue_draw();
+}
 
-	std::string filename = get_selected_filename();
-
+std::string MainWindow::run_algorithm(const std::shared_ptr<IAlgorithm>& algorithm, const std::string& filename)
+{
 	if (filename.empty())
 	{
 		show_message("No image selected",
 				"Before running processing, an image has to be chosen",
 				Gtk::MESSAGE_ERROR);
-		return;
+		return "no image selected";
 	}
 	std::string output;
 	auto time = MEASURE_TIME(std::chrono::microseconds,
@@ -124,11 +144,7 @@ void MainWindow::run_processing()
 	);
 
 	mainStatusbar->push("Execution time: " + to_string_with_precision(time/1000.0, 3) + " microseconds");
-
-	processingOutputLabel->set_text(output);
-	auto out_img = algorithm->get_output_image();
-	outputImage->set(Gdk::Pixbuf::create_from_data(out_img.data, Gdk::COLORSPACE_RGB, false, 8, out_img.cols, out_img.rows, out_img.step));
-	outputImage->queue_draw();
+	return output;
 }
 
 void MainWindow::load_images_from_directory()
@@ -143,6 +159,8 @@ void MainWindow::load_images_from_directory()
 				Gtk::MESSAGE_ERROR);
 		return;
 	}
+
+	file_model->clear();
 
 	for(fs::directory_iterator dir_iter(dir) ; dir_iter != end_iter ; ++dir_iter)
 	{
@@ -172,6 +190,11 @@ std::shared_ptr<IAlgorithm> MainWindow::get_selected_algorithm() const
 	return manager->get_algorithm(name);
 }
 
+std::string MainWindow::get_full_file_path(const std::string &dirname, const std::string &filename) const
+{
+	return (fs::path(dirname) / fs::path(filename)).string();
+}
+
 std::string MainWindow::get_selected_filename() const
 {
 	std::string ret;
@@ -184,12 +207,28 @@ std::string MainWindow::get_selected_filename() const
 		return ret;
 
 	Glib::ustring f = iter->operator [](tree_columns.col_str_first);
-	return (fs::path(current_directory) / fs::path(f)).string();
+	return f;
+}
+
+std::string MainWindow::get_selected_file_path() const
+{
+
+	return get_full_file_path(current_directory, get_selected_filename());
 }
 
 void MainWindow::on_filesTreeView_row_activated(const Gtk::TreeModel::Path& path, Gtk::TreeViewColumn* column)
 {
-	load_input_file(get_selected_filename());
+	switch (mainNotebook->get_current_page())
+	{
+	case 0:
+		load_input_file(get_selected_file_path());
+		break;
+	case 1:
+		load_full_info(get_selected_filename());
+		break;
+	default:
+		break;
+	}
 }
 
 void MainWindow::load_input_file(const std::string& filename)
@@ -224,4 +263,30 @@ void MainWindow::set_current_directory(const std::string& dirpath)
 {
 	current_directory = dirpath;
 	load_images_from_directory();
+}
+
+void MainWindow::process_all()
+{
+	auto children = filesTreeView->get_model()->children();
+	std::string input;
+	auto algorithm = get_selected_algorithm();
+	for(auto iter = children.begin(); iter != children.end(); ++iter)
+	{
+		Gtk::TreeModel::Row row = *iter;
+		row.get_value(0, input);
+		auto path_input = get_full_file_path(current_directory, input);
+		process_outputs[input] = run_algorithm(algorithm, path_input);
+		auto out_img = algorithm->get_output_image();
+		cv::imwrite(get_full_file_path(outputPathEntry->get_text(), input), out_img);
+	}
+}
+
+void MainWindow::load_full_info(const std::string& filename)
+{
+	if (process_outputs.find(filename) == process_outputs.end())
+		return;
+
+	batchOutputTextLabel->set_text(process_outputs[filename]);
+	batchInputImage->set(get_full_file_path(current_directory, filename));
+	batchOutputImage->set(get_full_file_path(outputPathEntry->get_text(), filename));
 }
