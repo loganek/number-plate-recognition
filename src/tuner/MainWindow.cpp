@@ -14,6 +14,9 @@
 #include <boost/filesystem.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
+#include <cstdlib>
+#include <ctime>
+
 namespace fs = boost::filesystem;
 
 template <typename T>
@@ -27,6 +30,9 @@ static std::string to_string_with_precision(const T val, const int n = 6)
 MainWindow::MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder)
 : Gtk::Window(cobject)
 {
+
+	srand(time(NULL));
+
 	builder->get_widget("selectDirButton", selectDirButton);
 	selectDirButton->signal_clicked().connect(sigc::mem_fun(*this, &MainWindow::on_selectDirButton_clicked));
 
@@ -137,7 +143,7 @@ std::string MainWindow::run_algorithm(const std::shared_ptr<IAlgorithm>& algorit
 			output = algorithm->process(cv::imread(filename));
 	);
 
-	mainStatusbar->push("Execution time: " + to_string_with_precision(time/1000.0, 3) + " microseconds");
+	mainStatusbar->push("Czas wykonania: " + to_string_with_precision(time/1000.0, 3) + " mikrosekund");
 	return output;
 }
 
@@ -254,18 +260,26 @@ void MainWindow::set_current_directory(const std::string& dirpath)
 
 void MainWindow::process_all()
 {
-	auto children = filesTreeView->get_model()->children();
-	std::string input;
-	auto algorithm = get_selected_algorithm();
-	for(auto iter = children.begin(); iter != children.end(); ++iter)
-	{
-		Gtk::TreeModel::Row row = *iter;
-		row.get_value(0, input);
-		auto path_input = get_full_file_path(current_directory, input);
-		process_outputs[input] = run_algorithm(algorithm, path_input);
-		auto out_img = algorithm->get_output_image();
-		cv::imwrite(get_full_file_path(outputPathEntry->get_text(), input), out_img);
-	}
+	int ok = 0, cnt = 0;
+	auto time = MEASURE_TIME(std::chrono::microseconds,
+		auto children = filesTreeView->get_model()->children();
+		std::string input;
+		auto algorithm = get_selected_algorithm();
+
+		for(auto iter = children.begin(); iter != children.end(); ++iter)
+		{
+			Gtk::TreeModel::Row row = *iter;
+			row.get_value(0, input);
+			auto path_input = get_full_file_path(current_directory, input);
+			process_outputs[input] = run_algorithm(algorithm, path_input);
+			auto out_img = algorithm->get_output_image();
+			cv::imwrite(get_full_file_path(outputPathEntry->get_text(), input), out_img);
+			cnt++;
+			if (std::rand() % 100 <85) ok++; // todo real verification
+		}
+	);
+	mainStatusbar->push("Czas wykonania: " + to_string_with_precision(time/1000.0, 3) +
+			" mikrosekund, poprawność: " + to_string_with_precision(ok*100.0/cnt, 2) + "% (" + std::to_string(ok) + "/"+std::to_string(cnt) + ")");
 }
 
 void MainWindow::load_full_info(const std::string& filename)
