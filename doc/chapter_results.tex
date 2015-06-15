@@ -7,7 +7,6 @@ Jako skuteczność metody w tym rozdziale będziemy rozumieć stosunek procentow
 Zbadałem, jaki wpływ na rezultaty ma wyostrzenie obrazu przed faktycznym procesem segmentacji, oraz zmiana minimalnego dystansu pomiędzy szczytami histogramu. Wyniki przedstawione zostały w tabelach~\ref{tab:wyszukiwanie_szczytow_wyostrz} oraz~\ref{tab:wyszukiwanie_szczytow_dystans}. Jak można zauważyć, zastosowanie operacji wyostrzania obrazu powoduje prawie dwukrotny wzrost skuteczności algorytmu. \\
 Również parametr minimalnej odległości pomiędzy szczytami znacząco wpływa na rezultaty. W przypadku braku minimalnej odległości (wartość 1), algorytm uzyskuje bardzo słabe rezultaty. Wynika to zapewne z faktu, iż często najwyższe ekstrema lokalne w histogramie występują bardzo blisko siebie, co powoduje, że próg wyznaczany jest w ramach tego samego obiektu, a nie pomiędzy dwoma różnymi obiektami. Zastosowanie większych minimalnych odległości przyniosło spodziewane rezultaty.
 
-
 \begin {table}[H]
   \begin{center}
     \begin{tabular}{l | c}
@@ -36,6 +35,23 @@ Również parametr minimalnej odległości pomiędzy szczytami znacząco wpływa
   \end{center}
 \end {table}
 
+\subsubsection{Metoda wyszukiwania minimum histogramu}
+Jako parametr algorytmu, przyjąłem użycie omawianych w poprzednim rozdziale ulepszeń, polegających na wygładzeniu histogramu oraz zmiany sposobu wyszukiwania minimum. Zgodnie z moimi przewidywaniami, algorytm okazał się skuteczniejszy, w przypadku zastosowania moich poprawek. Różnica skuteczności metody bez ulepszeń, oraz po zastosowaniu poprawek, przedstawiona została w tabeli~\ref{tab:wyszukiwanie_minimum_histogramu_ulepszenia} \\
+Nie wykonywałem porównania wpływu zastosowania operacji wyostrzania obrazu na jakość rezultatu (takie testy wykonywałem dla metody wyszukiwania szczytów histogramu), jednak prawdopodobnie wpływ niezastosowania tej operacji również negatywnie wpłynie na skuteczność metody.
+
+\begin {table}[H]
+  \begin{center}
+    \begin{tabular}{l | c}
+      \space & Skuteczność \\
+      \hline
+      Segmentacja obrazu z ulepszeniami & 66\% \\
+      Segmentacja obrazu bez zastosowania ulepszeń & 53\%
+    \end{tabular}
+    \caption {Wpływ zastosowania poprawek na działania metody wyszukiwania minimum histogramu}
+    \label{tab:wyszukiwanie_minimum_histogramu_ulepszenia} 
+  \end{center}
+\end {table}
+
 \subsection{Porównanie różnych metod segmentacji obrazów}
 Tabela~\ref{tab:all_methods_comparision} przedstawia porównanie wszystkich testowanych przeze mnie metod. Algorytmy uruchamiane były z takimi parametrami, dla jakich zwracały najlepsze wyniki.
 
@@ -44,8 +60,8 @@ Tabela~\ref{tab:all_methods_comparision} przedstawia porównanie wszystkich test
     \begin{tabular}{l | c}
       Metoda & Skuteczność \\
       \hline
-      Wyszukiwanie szczytów histogramu & 49\%
-      
+      Wyszukiwanie szczytów histogramu & 49\% \\
+      Wyszukiwanie minimum histogramu & 66\%
     \end{tabular}
     \caption {Wyniki działania metod segmentacji obrazu na przykładowych danych testowych}
     \label{tab:all_methods_comparision} 

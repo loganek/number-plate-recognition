@@ -37,6 +37,25 @@ int SzczytyMinimum::get_threshold_value(int max_pos1, int max_pos2, const std::v
 	int min_value = 256;
 	int min_pos = 0;
 
+	/*int start1 = (max_pos2 - max_pos1)/2 +max_pos1;
+	int j = 0;
+
+	for (int i = start1; i < max_pos2; i++)
+	{
+		if (histogram[i] < min_value)
+		{
+			min_value = histogram[i];
+			min_pos = i;
+		}
+
+		if (histogram[start1-j] < min_value)
+		{
+			min_value = histogram[start1-j];
+			min_pos = start1-j;
+		}
+		j--;
+	}*/
+
 	for (int i = max_pos1; i < max_pos2; i++)
 	{
 		if (histogram[i] < min_value)
@@ -45,6 +64,7 @@ int SzczytyMinimum::get_threshold_value(int max_pos1, int max_pos2, const std::v
 			min_pos = i;
 		}
 	}
+
 	return min_pos;
 }
 
@@ -52,7 +72,7 @@ static std::pair<int, int> find_two_greatest_extrema(const std::vector<int>& his
 {
 	int m1 = -1, m2 = -1;
 	int m1i = 0, m2i = 0;
-	auto extrema = find_local_extremum(histogram, ExtremumType::MAXIMUM, 3);
+	auto extrema = find_local_extremum(histogram, ExtremumType::MAXIMUM, 1);
 	for (auto e : extrema)
 	{
 		if (histogram[e] > m1 && std::abs(e-m2i) > MIN_DISTANCE_BETWEEN_EXTREMA)
@@ -115,9 +135,9 @@ std::vector<cv::Rect> SzczytyHistogramu::internal_process()
 	cv::addWeighted(output, 1.5, mf, -0.5, 0, mf);
 	output = mf;
 	show_wnd("after preproc", output);
-	auto histogram = smooth_histogram(build_histogram(output), 8);
+	auto histogram = smooth_histogram(build_histogram(output), 28);
 #ifdef DEBUG_MODE
-	draw_plot(histogram, "histogram");
+	draw_plot(histogram, "histogram", true, true);
 #endif
 
 	auto greatest_extrema = find_two_greatest_extrema(histogram);
