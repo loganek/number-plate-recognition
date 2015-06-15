@@ -6,6 +6,7 @@ add_latex_document(main_document.tex
   chapter_ocr.tex
   chapter_plates.tex
   chapter_researches.tex
+  chapter_results.tex
   IMAGE_DIRS img
   BIBFILES main_document.bib
   DEFAULT_PDF

@@ -1,0 +1,63 @@
+\section{Rezultaty badań}
+Badania przeprowadzone zostały na zbiorze zawierającym kilkaset obrazów przedstawiających tablice rejestracyjne wykonane w różnych warunkach. Moim głównym celem było porównywanie metod segmentacji obrazu, a metody rozpoznawania znaków traktowałem tylko jako metody pomocnicze. Dlatego kiedy liczba segmentów zwracanych przez algorytm zgadzała się z liczbą znaków oczekiwanego wyniku, a wartości wyników się nie zgadzały, osobiście sprawdzałem czy niepoprawne rozpoznanie tekstu zapisanego na tablicy rejestracyjnej jest wynikiem niepoprawnego działania algorytmu segmentacji obrazu, czy algorytmu rozpoznawania znaków. \\
+Jako skuteczność metody w tym rozdziale będziemy rozumieć stosunek procentowy liczby poprawnie rozpoznanych przypadków testowych do liczby wszystkich przypadków testowych.
+
+\subsection{Wpływ parametrów metod na rezultaty}
+\subsubsection{Metoda wyszukiwania szczytów histogramu}
+Zbadałem, jaki wpływ na rezultaty ma wyostrzenie obrazu przed faktycznym procesem segmentacji, oraz zmiana minimalnego dystansu pomiędzy szczytami histogramu. Wyniki przedstawione zostały w tabelach~\ref{tab:wyszukiwanie_szczytow_wyostrz} oraz~\ref{tab:wyszukiwanie_szczytow_dystans}. Jak można zauważyć, zastosowanie operacji wyostrzania obrazu powoduje prawie dwukrotny wzrost skuteczności algorytmu. \\
+Również parametr minimalnej odległości pomiędzy szczytami znacząco wpływa na rezultaty. W przypadku braku minimalnej odległości (wartość 1), algorytm uzyskuje bardzo słabe rezultaty. Wynika to zapewne z faktu, iż często najwyższe ekstrema lokalne w histogramie występują bardzo blisko siebie, co powoduje, że próg wyznaczany jest w ramach tego samego obiektu, a nie pomiędzy dwoma różnymi obiektami. Zastosowanie większych minimalnych odległości przyniosło spodziewane rezultaty.
+
+
+\begin {table}[H]
+  \begin{center}
+    \begin{tabular}{l | c}
+      \space & Skuteczność \\
+      \hline
+      Segmentacja wyostrzonego obrazu & 49\% \\
+      Brak wyostrzenia obrazu & 26\%
+    \end{tabular}
+    \caption {Wpływ użycia algorytmu wyostrzenia obrazu na wynik działania metody wyszukiwania szczytów histogramu}
+    \label{tab:wyszukiwanie_szczytow_wyostrz} 
+  \end{center}
+\end {table}
+
+\begin {table}[H]
+  \begin{center}
+    \begin{tabular}{c | c}
+      Minimalna odległość od szczytów & Skuteczność \\
+      \hline
+      1 & 12\% \\
+      25 & 28\% \\
+      80 & 49\% \\
+      150 & 49\%
+    \end{tabular}
+    \caption {Wpływ zmiany parametru minimalnej odległości między szczytami na wynik działania metody wyszukiwania szczytów histogramu}
+    \label{tab:wyszukiwanie_szczytow_dystans} 
+  \end{center}
+\end {table}
+
+\subsection{Porównanie różnych metod segmentacji obrazów}
+Tabela~\ref{tab:all_methods_comparision} przedstawia porównanie wszystkich testowanych przeze mnie metod. Algorytmy uruchamiane były z takimi parametrami, dla jakich zwracały najlepsze wyniki.
+
+\begin {table}[H]
+  \begin{center}
+    \begin{tabular}{l | c}
+      Metoda & Skuteczność \\
+      \hline
+      Wyszukiwanie szczytów histogramu & 49\%
+      
+    \end{tabular}
+    \caption {Wyniki działania metod segmentacji obrazu na przykładowych danych testowych}
+    \label{tab:all_methods_comparision} 
+  \end{center}
+\end {table}
+
+\subsection{Analiza błędów segmentacji tablic rejestracyjnych}
+Jednym z częstszych błędów segmentacji były złączenia znaku z ramką tablicy rejestracyjnej. Powodowało to sklasyfikowanie danego znaku oraz ramki jako jednego obiektu, który nie odpowiadał np. kryterium stosunku wysokości do szerokości znaku. Przykład niepoprawnie wykonanej segmentacji obrazu spowodowanej złączeniem się znaku z ramką przedstawiony został na rysunku~\ref{fig:polaczone_krawedzie}. Widzimy, że litera \textit{P} oraz \textit{I} zostały połączone wraz z ciemnym obszarem u dołu obrazu, przez co nie mogły zostać sklasyfikowane jako znaki należące do tablicy rejestracyjnej. \\
+Innym podobnym problemem było występowanie znaków ze sobą połączonych. Na tablicach rejestracyjnych mógł pojawić się dodatkowy element, który znajdował się pomiędzy dwoma znakami. W takiej sytuacji dwa sąsiednie znaki sklasyfikowane zostały jako jeden obiekt. 
+\begin{figure}
+  \centering
+  \includegraphics[width=0.5\textwidth]{img/polaczone-krawedzie}
+  \caption{Przypadek niepoprawnego odrzucenia znaków - znaki połączone z obszarem nienależącym do tablicy rejestracyjnej}
+  \label{fig:polaczone_krawedzie}
+\end{figure}

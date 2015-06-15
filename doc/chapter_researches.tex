@@ -48,5 +48,7 @@ Poszczególne uruchomienia wyróżniały się tylko implementacją bloków \text
 \subsection{Porównywane metody segmentacji obrazu}
 Poniżej wymieniłem oraz scharakteryzowałem metody segmentacji, które porównywałem na zestawie obrazów tablic rejestracyjnych. Ponadto omówiłem też metody wstępnego przetwarzania obrazu, które dla danej metody segmentacji poprawiają rezultaty. Przedstawiłem też parametry poszczególnych metod, jakie mogą wpływać na działanie algorytmu.
 
-\textbf{Wyszukiwanie szczytów histogramu}
+\textbf{Wyszukiwanie szczytów histogramu}\\
+Zauważyłem, że metoda wyszukiwania szczytów histogramu zwraca o wiele lepsze wyniki, kiedy przed wykonaniem procesu wyszukiwania szczytów w histogramie, obraz zostanie wyostrzony. Operacja wyostrzenia spowoduje zniknięcie rozmytych krawędzi, dzięki czemu szczyty histogramów będą jednoznaczne. \\
+Parametrem dodatkowym algorytmu jest minimalna odległość od wartości szczytowych w histogramie. Przeprowadziłem badania dla różnych wartości minimalnej odległości.\\
 
