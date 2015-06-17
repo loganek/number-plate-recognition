@@ -6,6 +6,7 @@ add_library(algorithms
 	EndpointAlgorithm.cpp
 	endpoints/SzczytyHistogramu.cpp
 	endpoints/SauvolPietikainen.cpp
+	endpoints/RzutJasnosciRegionGrowing.cpp
 	utils.cpp)
 
 target_link_libraries(algorithms ${OpenCV_LIBS})

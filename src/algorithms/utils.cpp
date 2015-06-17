@@ -13,19 +13,37 @@
 #include <iostream>
 
 #define REGION_GROWING_RECURSIVE(OP_Y, OP_X) \
-		if (relative_threshold > input.at<uchar>(seed.y OP_Y, seed.x OP_X) && output.at<uchar>(seed.y OP_Y, seed.x OP_X) != 0) \
-		region_growing(input, output, cv::Point2i(seed.x OP_X, seed.y OP_Y), relative_threshold);
+		if (threshold > input.at<uchar>(seed.y OP_Y, seed.x OP_X) && \
+				output.at<uchar>(seed.y OP_Y, seed.x OP_X) != 0) \
+				region_growing(input, output, cv::Point2i(seed.x OP_X, seed.y OP_Y), threshold, relative_strategy);
 
-void region_growing(const cv::Mat& input, cv::Mat& output, const cv::Point2i& seed, int relative_threshold)
+#define REGION_GROWING_RECURSIVE_RELATIVE(OP_Y, OP_X) \
+		if (input.at<uchar>(seed) + threshold > input.at<uchar>(seed.y OP_Y, seed.x OP_X) && \
+				output.at<uchar>(seed.y OP_Y, seed.x OP_X) != 0) \
+				region_growing(input, output, cv::Point2i(seed.x OP_X, seed.y OP_Y), threshold, relative_strategy);
+
+
+void region_growing(const cv::Mat& input, cv::Mat& output, const cv::Point2i& seed, int threshold, bool relative_strategy)
 {
 	if (seed.y < 2 || seed.x < 2 || seed.y >= output.rows-2 || seed.x >= output.cols-2)
 		return;
 
 	output.at<uchar>(seed.y, seed.x) = 0;
-	REGION_GROWING_RECURSIVE(+0, -1)
-	REGION_GROWING_RECURSIVE(+0, +1)
-	REGION_GROWING_RECURSIVE(-1, +0)
-	REGION_GROWING_RECURSIVE(+1, +0)
+
+	if (relative_strategy)
+	{
+		REGION_GROWING_RECURSIVE_RELATIVE(+0, -1)
+		REGION_GROWING_RECURSIVE_RELATIVE(+0, +1)
+		REGION_GROWING_RECURSIVE_RELATIVE(-1, +0)
+		REGION_GROWING_RECURSIVE_RELATIVE(+1, +0)
+	}
+	else
+	{
+		REGION_GROWING_RECURSIVE(+0, -1)
+		REGION_GROWING_RECURSIVE(+0, +1)
+		REGION_GROWING_RECURSIVE(-1, +0)
+		REGION_GROWING_RECURSIVE(+1, +0)
+	}
 }
 
 #define REGION_BOUNDING_BOX_RECURSIVE(OP_Y, OP_X) \
@@ -234,6 +252,9 @@ void rotate_if_needed(cv::Mat& io)
 			points.push_back(it.pos());
 
 	cv::RotatedRect box = cv::minAreaRect(cv::Mat(points));
+
+	if (box.size.width < 10 || box.size.height < 10)
+		return;
 	double angle;
 	if (box.size.width > box.size.height)
 	{
