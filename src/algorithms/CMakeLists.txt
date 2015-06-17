@@ -5,6 +5,7 @@ add_library(algorithms
 #	counting_lines/CLRzutJasnosci.cpp
 	EndpointAlgorithm.cpp
 	endpoints/SzczytyHistogramu.cpp
+	endpoints/SauvolPietikainen.cpp
 	utils.cpp)
 
 target_link_libraries(algorithms ${OpenCV_LIBS})
