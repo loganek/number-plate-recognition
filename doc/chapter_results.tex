@@ -74,6 +74,48 @@ Nie wykonywałem porównania wpływu zastosowania operacji wyostrzania obrazu na
   \end{center}
 \end {table}
 
+\subsubsection{Metoda Sauvola i Pietikainena}
+Rezultaty badań przedstawione zostały w tabelach~\ref{tab:sauvol_pietikainen_dlugosc_boku} oraz~\ref{tab:sauvol_pietikainen_parametr_k}. Skuteczność przebadałem dla każdej kombinacji parametru $k$ oraz $S$. Jak można zauważyć w tabeli~\ref{tab:sauvol_pietikainen_parametr_k}, wartość parametru $k$ nie wpłynęła na zmianę skuteczności algorytmu dla problemu segmentacji tablic rejestracyjnych (dla przykładu zamieściłem w tabelach wyniki dla dwóch różnych wartości parametru $S$). Jak widać, niezależnie od wartości parametru $k$, skuteczność metody nie zmienia się dla stałego $S$. \\
+Znaczący wpływ ma natomiast wartość parametru $S$. Jeśli parametr ten nie zostanie w ogóle uwzględniony ($S = 1$), skuteczność metody jest bardzo niska. Najlepszy wynik został natomiast osiągnięty dla wartości 10\% wysokości obrazu.
+
+
+\begin {table}[H]
+  \begin{center}
+    \begin{tabular}{c | c | c}
+      Wartość parametru $k$ & Skuteczność ($S = 10\%$) & Skuteczność ($S = 50\%$)  \\
+      \hline
+      0.05\% & 72\% & 53\% \\
+      0.1\% & 72\% & 53\% \\
+      0.2\% & 72\% & 53\% \\
+      0.4\% & 72\% & 53\% \\
+      0.5\% & 72\% & 53\% \\
+      0.7\% & 72\% & 53\%
+    \end{tabular}
+    \caption {Wpływ zmiany wartości parametru k na skuteczność metody Sauvola i Pietikainena dla różnych wartości parametru $S$}
+    \label{tab:sauvol_pietikainen_parametr_k} 
+  \end{center}
+\end {table}
+
+\subsubsection{Metoda Sauvola i Pietikainena} 
+\begin {table}[H]
+  \begin{center}
+    \begin{tabular}{c | c}
+      Wartość parametru $S$ & Skuteczność \\
+      \hline
+      1\% & 5.4\% \\
+      5\% & 63\% \\
+      10\% & 72\% \\
+      20\% & 64\% \\
+      50\% & 53\% \\
+      70\% & 54\% \\
+      100\% & 50\%
+    \end{tabular}
+    \caption {Wpływ zmiany długości boku obszaru sąsiedztwa na skuteczność metody Sauvola i Pietikainena}
+    \label{tab:sauvol_pietikainen_dlugosc_boku} 
+  \end{center}
+\end {table}
+
+
 \subsection{Porównanie różnych metod segmentacji obrazów}
 Tabela~\ref{tab:all_methods_comparision} przedstawia porównanie wszystkich testowanych przeze mnie metod. Algorytmy uruchamiane były z takimi parametrami, dla jakich zwracały najlepsze wyniki.
 
@@ -83,7 +125,8 @@ Tabela~\ref{tab:all_methods_comparision} przedstawia porównanie wszystkich test
       Metoda & Skuteczność \\
       \hline
       Wyszukiwanie szczytów histogramu & 49\% \\
-      Wyszukiwanie minimum histogramu & 66\%
+      Wyszukiwanie minimum histogramu & 66\% \\
+      Metoda Sauvola i Pietikainena & 72\%
     \end{tabular}
     \caption {Wyniki działania metod segmentacji obrazu na przykładowych danych testowych}
     \label{tab:all_methods_comparision} 
@@ -99,3 +142,4 @@ Innym podobnym problemem było występowanie znaków ze sobą połączonych. Na 
   \caption{Przypadek niepoprawnego odrzucenia znaków - znaki połączone z obszarem nienależącym do tablicy rejestracyjnej}
   \label{fig:polaczone_krawedzie}
 \end{figure}
+
