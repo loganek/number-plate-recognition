@@ -7,6 +7,9 @@
 #include "MainWindow.h"
 #include "algorithms/endpoints/SzczytyMinimum.h"
 #include "algorithms/endpoints/SzczytySrednia.h"
+#include "algorithms/endpoints/SauvolPietikainen.h"
+#include "algorithms/endpoints/RzutJasnosciRegionGrowing.h"
+#include "algorithms/endpoints/Canny.h"
 #include "algorithms/dummy_algorithm/DummyAlgorithm.h"
 
 #include <gtkmm.h>
@@ -24,7 +27,10 @@ int main(int argc, char** argv)
 	std::initializer_list<std::shared_ptr<IAlgorithm>> list = {
 			std::make_shared<SzczytyMinimum>(),
 			std::make_shared<SzczytySrednia>(),
-			std::make_shared<DummyAlgorithm>(),
+			std::make_shared<SauvolPietikainen>(),
+			std::make_shared<RzutJasnosciRegionGrowing>(),
+			std::make_shared<Canny>(),
+			//std::make_shared<DummyAlgorithm>(),
 	};
 
 	auto manager = std::make_shared<AlgorithmManager>(list);
