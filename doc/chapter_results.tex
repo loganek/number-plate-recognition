@@ -194,7 +194,11 @@ Z badań wynika również, że metoda uzyskuje lepszą skuteczność, kiedy algo
 
 
 \subsection{Porównanie różnych metod segmentacji obrazów}
-Tabela~\ref{tab:all_methods_comparision} przedstawia porównanie wszystkich testowanych przeze mnie metod. Algorytmy uruchamiane były z takimi parametrami, dla jakich zwracały najlepsze wyniki.
+Tabela~\ref{tab:all_methods_comparision} przedstawia porównanie wszystkich testowanych przeze mnie metod. Algorytmy uruchamiane były z takimi parametrami, dla jakich zwracały najlepsze wyniki. \\
+Najskuteczniejsza okazała się metoda lokalnego progowania, metoda Sauvola i Pietikainena. Jako że rozważa ona tylko najbliższe sąsiedztwo przetwarzanego punktu, jest ona odporna na nierówne oświetlenie obrazu. Dość dużą skuteczność uzyskałem też korzystając z metody krawędziowej. \\
+Wykrywanie krawędzi również nie jest rozpatrywane w kontekście całego obrazu, dlatego algorytm również odporny jest na nierówne oświetlenie. Niestety krawędzie nie zawsze wykrywane są poprawnie, dlatego metoda ta nie uzyskała stuprocentowej skuteczności. \\
+Nadzwyczaj dobrze wypadła metoda globalnego progowania - wyszukiwania minimum histogramu. Oczekiwałem, że metoda ta uzyska dużo niższą skuteczność niż metody lokalne, ale jak się okazało, wartość progu była w większości przypadków bardzo skutecznie wyznaczana. Wyszukiwanie szczytów histogramu, jak można było spodziewać się po wstępie teoretycznym, wypadła gorzej niż metoda wyszukiwania minimum histogramu. \\
+Najgorszą metodą w kontekście segmentacji i rozpoznawania tablicy rejestracyjnej okazała się metoda rzutu jasności i rozrostu obszaru. Pomimo dość precyzyjnemu określeniu punktów startowych dla metody rozrostu obszaru, algorytm bardzo często przekraczał wartość jasności znaków, ,,wylewając'' się na tło, powodując, że obraz wyjściowy stawał się w większości czarny.
 
 \begin {table}[H]
   \begin{center}
@@ -213,6 +217,8 @@ Tabela~\ref{tab:all_methods_comparision} przedstawia porównanie wszystkich test
 \end {table}
 
 \subsection{Analiza błędów segmentacji tablic rejestracyjnych}
+Pomimo różnorodnego zbioru danych wejściowych, spośród niepoprawnie rozpoznanych tablic rejestracyjnych zauważyłem kilka klas problemów, dla jakich badane przeze mnie algorytmy nie zwracały poprawnego wyniku. Poniżej zaprezentowałem najczęściej występujące problemy.
+\paragraph{Złączenia segmentów}\mbox{} \\
 Jednym z częstszych błędów segmentacji były złączenia znaku z ramką tablicy rejestracyjnej. Powodowało to sklasyfikowanie danego znaku oraz ramki jako jednego obiektu, który nie odpowiadał np. kryterium stosunku wysokości do szerokości znaku. Przykład niepoprawnie wykonanej segmentacji obrazu spowodowanej złączeniem się znaku z ramką przedstawiony został na rysunku~\ref{fig:polaczone_krawedzie}. Widzimy, że litera \textit{P} oraz \textit{I} zostały połączone wraz z ciemnym obszarem u dołu obrazu, przez co nie mogły zostać sklasyfikowane jako znaki należące do tablicy rejestracyjnej. \\
 Innym podobnym problemem było występowanie znaków ze sobą połączonych. Na tablicach rejestracyjnych mógł pojawić się dodatkowy element, który znajdował się pomiędzy dwoma znakami. W takiej sytuacji dwa sąsiednie znaki sklasyfikowane zostały jako jeden obiekt. 
 \begin{figure}
@@ -222,3 +228,47 @@ Innym podobnym problemem było występowanie znaków ze sobą połączonych. Na 
   \label{fig:polaczone_krawedzie}
 \end{figure}
 
+\paragraph{Niepoprawnie klasyfikowane obiekty}\mbox{} \\
+Pomimo filtrowania segmentów niebędących znakami numeru rejestracyjnego, dla niektórych danych testowych algorytm zaklasyfikował niepożądane obiekty jako poprawny znak. Na rysunku~\ref{fig:result_euro} przedstawiona została omawiana sytuacja. Znajdujący się po lewej stronie identyfikator kraju rozmiarem i położeniem przypomina pozostałe znaki, dlatego algorytm niepoprawnie sklasyfikował go jako pierwszy znak numeru rejestracyjnego.
+
+\begin{figure}
+  \centering
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{img/result-euro-input}
+    \caption{Obraz wejściowy dla algorytmu segmentacji metodą szczytów histogramu}
+    \label{fig:result_euro_input}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{img/result-euro-bad}
+    \caption{Obraz po procesie segmentacji, z widocznym dodatkowym segmentem}
+    \label{fig:result_euro_bad}
+  \end{subfigure}
+\begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{img/result-euro-output}
+    \caption{Obraz z zaznaczonymi segmentami sklasyfikowanymi jako znaki}
+    \label{fig:result_euro_output}
+  \end{subfigure}
+  \caption{Niepoprawna klasyfikacja segmentu jako znaku numeru rejestracyjnego}
+  \label{fig:result_euro}
+\end{figure}
+
+\paragraph{Przerwy w pojedynczym znaku}\mbox{} \\
+Ten problem najczęściej występował dla metody rozrostu obszaru, ale pojawiał się również w innych algorytmach segmentacji. Kiedy w okolicach środka znaku jego wartości jasności przyjmują znacznie większe wartości (czyli obraz jest w tym miejscu o wiele jaśniejszy), algorytm może zaliczyć ten obszar jako tło, a nie jako obraz. Dlatego może wystąpić efekt przerwy w znaku, nie jest on ciągły. Z punktu widzenia algorytmu są to tak naprawdę dwa segmenty, dlatego mogą one zostać odrzucone, lub zaklasyfikowane jako dwa osobne znaki (w zależności od tego, gdzie występuje wspominana wcześniej przerwa w ciągłości). Rysunek~\ref{fig:result_przerwa} obrazuje ten problem. Można zauważyć, że litera $N$ zawiera przerwę, przez co została zrozumiana przez algorytm jako dwa znaki.
+
+\begin{figure}
+  \centering
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{img/result-przerwa-bad}
+    \caption{Obraz poddany procesowi segmentacji, zawierający przerwę w jednej z liter (litera N)}
+    \label{fig:result_euro_input}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{img/result-przerwa-output}
+    \caption{Klasyfikacja segmentów - jeden ze znaków z powodu przerwy, został rozpoznany jako dwa znaki}
+    \label{fig:result_euro_bad}
+  \end{subfigure}
+  \caption{Problem przerw w znakach }
+  \label{fig:result_przerwa}
+\end{figure}
