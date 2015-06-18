@@ -96,7 +96,6 @@ Znaczący wpływ ma natomiast wartość parametru $S$. Jeśli parametr ten nie z
   \end{center}
 \end {table}
 
-\subsubsection{Metoda Sauvola i Pietikainena} 
 \begin {table}[H]
   \begin{center}
     \begin{tabular}{c | c}
@@ -115,6 +114,84 @@ Znaczący wpływ ma natomiast wartość parametru $S$. Jeśli parametr ten nie z
   \end{center}
 \end {table}
 
+\subsubsection{Metoda rzutu jasności i rozrostu obszaru}
+Przeprowadziłem badania dla ośmiu różnych wartości parametru $r$. Wyniki zaprezentowane w tabeli~\ref{tab:rzut_jasnosci_rozrost_obszaru} pokazują, że wartość zmiennej $r$ ma duży wpływ na skuteczność metody. Najwyższa skuteczność metody osiągnięta została dla wartości 0.4, co jest uzasadnione działaniem metody - w przypadku zbyt małych wartości algorytm nie będzie klasyfikował punktów należących do znaku jako znaki, ale jako tło. Natomiast dla zbyt dużych wartości, obszary należące do tła, zostaną zaklasyfikowane jako część znaku. 
+\begin {table}[H]
+  \begin{center}
+    \begin{tabular}{c | c}
+      Wartość parametru $r$ & Skuteczność \\
+      \hline
+      0.1 & 29\% \\
+      0.2 & 36\% \\
+      0.4 & 42\% \\
+      0.6 & 41\% \\
+      0.8 & 34\% \\
+      1 & 19\% \\
+      1.2 & 1.4\%\\
+      1.5 & 0.45\%
+    \end{tabular}
+    \caption {Wpływ zmiany wartości parametru $r$ na skuteczność metody rzutu jasności i rozrostu obszaru}
+    \label{tab:rzut_jasnosci_rozrost_obszaru} 
+  \end{center}
+\end {table}
+
+\subsubsection{Metoda krawędziowa}
+Wyniki badań dla metody krawędziowej przedstawiłem w tabelach~\ref{tab:metoda_krawedziowa_param_s} oraz~\ref{tab:metoda_krawedziowa_sobel}. W przypadku rozmiaru maski dla algorytmu Sobel, skuteczność dla wartości 3 oraz 5 nie różni się znacząco, natomiast algorytm zupełnie nie działa dla wartości 7. Można się o tym przekonać, oglądając obraz wyjściowy dla algorytmu Canny'ego dla takiej maski. Na rysunku~\ref{fig:results_canny_sobel_compare} zamieściłem porównanie obrazów wyjściowych dla różnych rozmiarów maski dla tego samego obrazu wejściowego. Obraz wyjściowy dla parametru 7 jest bardzo zaszumiony, przez co praktycznie niemożliwe jest uzyskanie z niego żądanej informacji.\\
+Z badań wynika również, że metoda uzyskuje lepszą skuteczność, kiedy algorytm wygładzania będzie wykorzystywał do wyliczania nowej wartości punktu niewielki obszar sąsiedztwa. Najlepszą wartość uzyskałem dla wartości 2, czyli do wyliczania wygładzania wykorzystywane są tylko cztery najbliższe punkty (wliczając w to również punkt przetwarzany). Dla dużych wartości parametru $S$ skuteczność bardzo spada. Wynika to z tego, że duże rozmycia powodują zanik krawędzi, zamieniając je na płynne przejścia jasności pomiędzy znakiem a tłem obrazu.
+\begin {table}[H]
+  \begin{center}
+    \begin{tabular}{c | c}
+      Wartość parametru $S$ & Skuteczność \\
+      \hline
+      1 & 61\% \\
+      2 & 68\% \\
+      3 & 62\% \\
+      4 & 57\% \\
+      5 & 43\% \\
+      6 & 38\% 
+    \end{tabular}
+    \caption {Wpływ zmiany wartości parametru $S$ na skuteczność metody krawędziowej}
+    \label{tab:metoda_krawedziowa_param_s} 
+  \end{center}
+\end {table}
+
+\begin {table}[H]
+  \begin{center}
+    \begin{tabular}{c | c}
+      Rozmiar maski dla algorytmu Sobel & Skuteczność \\
+      \hline
+      3 & 68\% \\
+      5 & 64\% \\
+      7 & 0\% 
+    \end{tabular}
+    \caption {Wpływ zmiany rozmiaru maski dla algorytmu Sobel na skuteczność metody krawędziowej}
+    \label{tab:metoda_krawedziowa_sobel} 
+  \end{center}
+\end {table}
+
+\begin{figure}
+  \centering
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{img/results-canny-ok-sobel}
+    \caption{Obraz wyjściowy dla rozmiaru maski 3}
+    \label{fig:results_canny_ok_sobel}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{img/results-canny-bad-sobel}
+    \caption{Obraz wyjściowy dla rozmiaru maski 7}
+    \label{fig:results_canny_bad_sobel}
+  \end{subfigure}
+\begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{img/results-canny-input-sobel}
+    \caption{Obraz wejściowy}
+    \label{fig:results_canny_input_sobel}
+  \end{subfigure}
+
+  \caption{Porównanie obrazów wyjściowych algorytmu Canny'ego dla różnych wartości maski algorytmu Sobel}
+  \label{fig:results_canny_sobel_compare}
+\end{figure}
+
 
 \subsection{Porównanie różnych metod segmentacji obrazów}
 Tabela~\ref{tab:all_methods_comparision} przedstawia porównanie wszystkich testowanych przeze mnie metod. Algorytmy uruchamiane były z takimi parametrami, dla jakich zwracały najlepsze wyniki.
@@ -126,7 +203,9 @@ Tabela~\ref{tab:all_methods_comparision} przedstawia porównanie wszystkich test
       \hline
       Wyszukiwanie szczytów histogramu & 49\% \\
       Wyszukiwanie minimum histogramu & 66\% \\
-      Metoda Sauvola i Pietikainena & 72\%
+      Metoda Sauvola i Pietikainena & 72\% \\
+      Metoda rzutu jasności i rozrostu obszaru & 42\% \\
+      Metoda krawędziowa & 68\%
     \end{tabular}
     \caption {Wyniki działania metod segmentacji obrazu na przykładowych danych testowych}
     \label{tab:all_methods_comparision} 

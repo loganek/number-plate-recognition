@@ -88,7 +88,7 @@ Kierunek gradientu może zostać wyznaczony za pomocą wzoru:
 Algorytm Canny'ego składa się z czterech podstawowych kroków.
 \begin{enumerate}
 \item Wygładzanie obrazu \\
-  Celem tego kroku jest usunięcie z obrazu szumów mogących wystąpić na obrazie. Szumy mogą powodować detekcję fałszywych krawędzi, dlatego usunięcie ich przed faktycznym procesem wyszukiwania algorytmu powoduje poprawę jakości wyników algorytmu. W algorytmie Canny'ego do wygładzenia obrazu stosuje się filtr Gaussa. 
+  Celem tego kroku jest usunięcie z obrazu szumów mogących wystąpić na obrazie. Szumy mogą powodować detekcję fałszywych krawędzi, dlatego usunięcie ich przed faktycznym procesem wyszukiwania algorytmu powoduje poprawę jakości wyników algorytmu. W algorytmie Canny'ego do wygładzenia obrazu stosuje się zwykle filtr Gaussa lub filtr uśredniający. 
 \item Znajdowanie gradientu \\
   Do znajdowania gradientu obrazu wykorzystywany jest operator sobela, opisywany w podrozdziale \nameref{sssec:sobel}.
 \item Tłumienie sygnałów, które nie są maksymalne \\
