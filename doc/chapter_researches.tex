@@ -2,9 +2,9 @@
 Przeprowadzone przeze mnie badania miały na celu porównanie metod segmentacji obrazu, a także sprawdzenie, jak dobór parametrów dla poszczególnych metod wpływa na jakość uzyskiwanego rezultatu.
 
 \subsection{Narzędzia implementacja algorytmów}
-Opisane niżej algorytmy segmentacji obrazu zostały napisane w języku C++ i skompilowane w systemie operacyjnym Linux. Implementacja jest jednak niezależna od systemu operacyjnego, i dzięki uniwersalnemu systemowi budowania CMake, z powodzeniem można w łatwy sposób skompilować i uruchamiać algorytmy pod innymi popularnymi systemami operacyjnymi, takimi jak Windows czy Mac OSX.\\
-Ze względu na wykorzystanie w algorytmach segmentacji podstawowych operacji przetwarzania obrazu (takich jak dodawanie obrazu, operacje morfologiczne), zdecydowałem się użyć gotowej biblioteki OpenCV, udostępniającej wiele funkcji pomocnych przy implementacji złożonych algorytmów przetwarzania obrazów.\\
-Do rozpoznawania tekstu wykorzystałem bibliotekę Tesseract. Biblioteka Tesseract jest otwartym oprogramowaniem rozwijanym od 1985 roku. Służy do rozpoznawania znaków w obrazach cyfrowych.
+Opisane niżej algorytmy segmentacji obrazu zostały napisane w języku C++ i skompilowane w systemie operacyjnym Linux. Implementacja jest jednak niezależna od systemu operacyjnego, i dzięki uniwersalnemu systemowi budowania CMake \cite{cmake}, z powodzeniem można w łatwy sposób skompilować i uruchamiać algorytmy pod innymi popularnymi systemami operacyjnymi, takimi jak Windows czy Mac OSX.\\
+Ze względu na wykorzystanie w algorytmach segmentacji podstawowych operacji przetwarzania obrazu (takich jak dodawanie obrazu, operacje morfologiczne), zdecydowałem się użyć gotowej biblioteki OpenCV, udostępniającej wiele funkcji pomocnych przy implementacji złożonych algorytmów przetwarzania obrazów \cite{opencv}\cite{dawsonhowe14}.\\
+Do rozpoznawania tekstu wykorzystałem bibliotekę Tesseract \cite{tesseract}. Biblioteka Tesseract jest otwartym oprogramowaniem rozwijanym od 1985 roku. Służy do rozpoznawania znaków w obrazach cyfrowych.
 \subsection{Aplikacja testująca}
 Podczas implementacji algorytmów, bardzo często musiałem zmieniać wartości ich parametrów. Każdorazowe zmiany w kodzie źródłowym i ponowna kompilacja algorytmów była czasochłonna, dlatego napisałem aplikację, która umożliwi mi zmianę parametrów algorytmów bez konieczności zmieniania wartości w kodzie źródłowym, ale podczas działania aplikacji.\\
 Następnie do aplikacji dodałem możliwość uruchamiania testów automatycznych, których celem była szybka weryfikacja większej ilości danych testowych na raz, zwracając procentową wartość poprawnie rozpoznanych obrazów. Na rysunku~\ref{fig:tuner_screenshot} zamieszczone zostało okno główne aplikacji testującej.
@@ -94,7 +94,7 @@ Kolejnym ulepszeniem, które zastosowałem, jest zmiana sposobu wyszukiwania min
 Metoda Sauvola i Pietikainena wymaga do obliczeń zdefiniowania zbioru najbliższych punktów dla każdego piksela. Przyjąłem, że zbiorem najbliższych punktów będzie obszar o kształcie kwadratu, którego środkiem jest punkt dla którego aktualnie wyznaczana jest wartość progowa. Długość boku obszaru ustanowiłem jako jeden z dwóch parametrów algorytmu, i oznaczyłem go symbolem $S$. \\
 Kolejnym parametrem jest wartość zmiennej $k$, która powinna zostać dobrana w zależności od problemu.\\
 
-\textbf{Metoda rzutu jasności i rozrostu obszarów}\\
+\textbf{Metoda rzutu jasności i rozrostu obszarów.}\\
 W metodzie rozrostu obszarów konieczne jest podanie punktów startowych, od których będzie mogła rozpocząć działanie. Do wyszukiwania punktów użyłem metody rzutu jasności, której wynikiem są lokalizacje potencjalnych znaków. Jako że nie jest z góry znane oświetlenie obrazu wejściowego, $\varepsilon$ wyliczany jest ze wzoru:
 \begin{gather*}
   \varepsilon = srednia(f^{(in)}) + r,

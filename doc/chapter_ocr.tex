@@ -5,7 +5,7 @@ W przypadku problemu rozpoznawania znaków, zadaniem algorytmu segmentacji jest 
 \paragraph{}
 Poniżej zostanie opisanych kilka algorytmów rozpoznawania znaków.
 \subsection{Cechy geometryczne}
-Zestaw cech geometrycznych jest unikalny dla każdego znaku, dlatego sprawdzając odpowiednie warunki, można określić jego dokładne znaczenie. Poniżej znajduje się lista cech geometrycznych, które mogą być brane pod uwagę podczas rozpoznawania znaków.
+Zestaw cech geometrycznych jest unikalny dla każdego znaku, dlatego sprawdzając odpowiednie warunki, można określić jego dokładne znaczenie. Właściwości geometryczne znaków zostały obszernie opisane w publikacji \cite{frey91}. Poniżej znajduje się lista wybranych cech geometrycznych, które mogą być brane pod uwagę podczas rozpoznawania znaków.
 \begin{itemize}
   \item wysokość oraz szerokość prostokąta otaczającego znak
   \item stosunek liczby punktów należących do znaku do liczby punktów stanowiących tło
@@ -40,7 +40,7 @@ Na rysunku~\ref{fig:rzut_jasnosci_ocr} przedstawione zostały wzorce kilku znak�
 \end{figure}
 
 \subsection{Sztuczne sieci neuronowe}
-Sztuczne sieci neuronowe(SSN) to struktury tworzone na podobieństwo biologicznych sieci neuronowych. SSN mają zdolność do uogólniania zdobytej wiedzy. Podobnie jak w przypadku biologicznych, w sztucznych sieciach neuronowych podstawowym elementem są neurony, które połączone są miedzy sobą za pomocą synaps. Każda synapsa posiada parametr zwany wagą, który jest modyfikowany w poszczególnych fazach uczenia sieci neuronowej. Sieci neuronowe zorganizowane są w strukturze wielowarstwowej:
+Sztuczne sieci neuronowe(SSN) to struktury tworzone na podobieństwo biologicznych sieci neuronowych \cite{tadeusiewicz93}. SSN mają zdolność do uogólniania zdobytej wiedzy. Podobnie jak w przypadku biologicznych, w sztucznych sieciach neuronowych podstawowym elementem są neurony, które połączone są miedzy sobą za pomocą synaps. Każda synapsa posiada parametr zwany wagą, który jest modyfikowany w poszczególnych fazach uczenia sieci neuronowej. Sieci neuronowe zorganizowane są w strukturze wielowarstwowej:
 \begin{itemize}
   \item warstwa wejściowa,
   \item warstwy ukryte,

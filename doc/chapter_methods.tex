@@ -2,7 +2,7 @@
 Segmentacja obrazu jest procesem umożliwiającym podział obrazu na obszary, które pod względem zadanego kryterium różnią się miedzy sobą. W zależności od kryterium, podczas procesu segmentacji można wyodrębnić z obrazu obiekty posiadające określone kształty, kolory czy rozmiar. W wyniku segmentacji obrazu, uzyskujemy obraz, który nie zawiera zbędnych (z punktu widzenia dalszego przetwarzania) szczegółów.\\
 Przykładem zastosowania metod segmentacji obrazów może być problem liczenia wbitych gwoździ do elementu na taśmie produkcyjnej. Obraz wejściowy (przedstawiony na rysunku~\ref{fig:gwozdzie_input}) ze względu na różnorodne tło i jasność elementów, trudno przeanalizować pod kątem liczenia obiektów. Natomiast ten sam obraz poddany operacji segmentacji (rysunek~\ref{fig:gwozdzie_output}) zawiera w sobie tylko i wyłącznie elementy, które są interesujące z punktu widzenia problemu jaki trzeba rozwiązać. Na podstawie koloru oraz kształtu możliwe było wyeliminowanie obiektów, które nie były istotne w danym zadaniu.
 
-\begin{figure}
+\begin{figure}[H]
   \centering
   \begin{subfigure}[b]{0.48\textwidth}
     \includegraphics[width=\textwidth]{img/gwozdzie-input}
@@ -23,7 +23,7 @@ Najłatwiejszą metodą segmentacji obrazu jest wcześniej opisana \textbf{metod
 Celem algorytmów detekcji krawędzi jest znalezienie na obrazie zbioru punktów, które reprezentują obrysy poszukiwanych elementów. 
 
 \subsubsection{Algorytm Robertsa}
-Algorytm Robertsa do wykrywania krawędzi w obrazie jest jednym z pierwszych algorytmów w swojej kategorii. Cechuje się szybkością działania oraz stosunkowo niską odpornością na szumy. Działanie algorytmu wymaga zastosowaniu dla każdego piksela obrazu dwóch masek:
+Algorytm Robertsa do wykrywania krawędzi w obrazie jest jednym z pierwszych algorytmów w swojej kategorii \cite{roberts63}. Cechuje się szybkością działania oraz stosunkowo niską odpornością na szumy. Działanie algorytmu wymaga zastosowaniu dla każdego piksela obrazu dwóch masek:
 \begin{gather*}
   M_x = \begin{matrix}
     \begin{bmatrix}
@@ -51,7 +51,7 @@ Kierunek gradientu może zostać wyznaczony ze wzoru:
   \theta(x, y) = arctan(\frac{f_{y}(x, y)}{f_{x}(x, y)}).
 \end{gather*}
 \subsubsection{Sobel} \label{sssec:sobel}
-Algorytmu Sobel jest bardzo podobny do przedstawionego wcześniej algorytmu Robertsa. W przypadku tego algorytmu, dane są dwie maski o następującej postaci:
+Algorytmu Sobel jest bardzo podobny do przedstawionego wcześniej algorytmu Robertsa \cite{nixon08}. W przypadku tego algorytmu, dane są dwie maski o następującej postaci:
 \begin{gather*}
 \begin{matrix}
   M_x = \begin{bmatrix}
@@ -81,13 +81,13 @@ Algorytm jest znacznie bardziej odporny na szumy występujące na obrazie niż a
   \theta(x, y) = arctan(\frac{f_y(x, y)}{f_x(x, y)}).
 \end{gather*}
 \subsubsection{Algorytm Canny'ego}
-Algorytm Canny'ego składa się z czterech podstawowych kroków.
+Algorytm Canny'ego składa się z czterech podstawowych kroków \cite{canny86}.\\
 \textbf{Krok 1.} Wygładzanie obrazu. \\
   Celem tego kroku jest usunięcie z obrazu szumów mogących wystąpić na obrazie. Szumy mogą powodować detekcję fałszywych krawędzi, dlatego usunięcie ich przed faktycznym procesem wyszukiwania algorytmu powoduje poprawę jakości wyników algorytmu. W algorytmie Canny'ego do wygładzenia obrazu stosuje się zwykle filtr Gaussa lub filtr uśredniający. \\
 \textbf{Krok 2.} Znajdowanie gradientu. \\
 Do znajdowania gradientu obrazu wykorzystywany jest operator sobela, opisywany na stronie \pageref{sssec:sobel}.\\
 \textbf{Krok 3.} Tłumienie sygnałów, które nie są maksymalne. \\
-Po zastosowaniu operatora Sobel, krawędzie obrazu są rozmyte. W tym kroku następuje filtrowanie wszystkich lokalnych maksymalnych wartości w obrazie gradientowym, oraz usunięcie wartości nie-maksymalnych. Dla każdego piksela, kierunek gradientu zaokrąglany jest z dokładnością do 45 stopni, otrzymując w ten sposób 8 wartości kierunków. Dla każdego piksela pod uwagę brane są trzy wartości: wartość badanego piksela, najbliższy piksel wskazywany przez kierunek gradientu, oraz najbliższy piksel leżący w przeciwnym kierunku niż kierunek wskazywany przez gradient. Jeśli badany piksel ma wartość maksymalną spośród trzech podanych wartości, nie zostaje on usunięty. W przeciwnym razie, wartość piksela zostaje zastąpiona wartością zerową.
+Po zastosowaniu operatora Sobel, krawędzie obrazu są rozmyte. W tym kroku następuje filtrowanie wszystkich lokalnych maksymalnych wartości w obrazie gradientowym, oraz usunięcie wartości nie-maksymalnych. Dla każdego piksela, kierunek gradientu zaokrąglany jest z dokładnością do 45 stopni, otrzymując w ten sposób 8 wartości kierunków. Dla każdego piksela pod uwagę brane są trzy wartości: wartość badanego piksela, najbliższy piksel wskazywany przez kierunek gradientu, oraz najbliższy piksel leżący w przeciwnym kierunku niż kierunek wskazywany przez gradient. Jeśli badany piksel ma wartość maksymalną spośród trzech podanych wartości, nie zostaje on usunięty. W przeciwnym razie, wartość piksela zostaje zastąpiona wartością zerową.\\
 \textbf{Krok 4.} Podwójne progowanie(progowanie z histerezą).\\
   Pomimo zastosowania metody wygładzania w pierwszym etapie algorytmu, znalezienie niektórych krawędzi może być efektem zaszumionego obrazu. Dlatego w algorytmie Canny'ego stosuje się podwójne progowanie, z wartościami:\\
 $T_{high}$ - wartość wyższego progu,\\
@@ -99,7 +99,7 @@ będącymi w relacji:
 Piksele o wartościach większych niż $T_{high}$ klasyfikowane są jako \textit{krawędzie silne}. Piksele o wartościach pomiędzy $T_{low}$ i $T_{low}$ to tzw. \textit{krawędzie słabe}. Piksele o wartościach mniejszych niż $T_{low}$ są usuwane z obrazu.
 
 \subsection{Algorytmy wykorzystujące histogram}
-Algorytmy wykorzystujące analizę histogramu obrazu cechuje szybkość działania, ponieważ budowa histogramu wymaga tylko jednej iteracji przez wszystkie piksele w obrazie. Istnieje kilka technik segmentacji obrazu w oparciu o analizę histogramu. \\
+Algorytmy wykorzystujące analizę histogramu obrazu cechuje szybkość działania, ponieważ budowa histogramu wymaga tylko jednej iteracji przez wszystkie piksele w obrazie. Istnieje kilka technik segmentacji obrazu w oparciu o analizę histogramu \cite{phillips93}. \\
 Przed wykonaniem jednego z niżej omawianych algorytmów, w celu poprawy rezultatów, należy zastosować operację wyrównania histogramu, oraz operację wygładzenia histogramu.
 
 \subsubsection{Wyszukiwanie szczytów histogramu}
@@ -169,7 +169,7 @@ Rysunek~\ref{fig:histogram_valleys} przedstawia histogram pewnego obrazu. Stosuj
   \caption{Progowanie przez wyszukiwanie minimum pomiędzy szczytami histogramu}\label{fig:histogram_valleys}
 \end{figure}
 \subsection{Segmentacja przez rozrost obszarów}
-Metoda segmentacji przez rozrost obszarów polega na wyszukiwaniu na obrazie elementów o podobnej jasności. Algorytm rozpoczyna działanie od punktów startowych, które powinny zostać podane jako parametr algorytmu. Algorytm można opisać w następujący sposób:
+Metoda segmentacji przez rozrost obszarów polega na wyszukiwaniu na obrazie elementów o podobnej jasności \cite{ballard82}. Algorytm rozpoczyna działanie od punktów startowych, które powinny zostać podane jako parametr algorytmu. Algorytm można opisać w następujący sposób:
 \begin{enumerate}
   \item Nadaj każdemu punktowi startowemu etykietę.
   \item Dodaj punkty startowe do kolejki.
@@ -217,7 +217,7 @@ Na rysunku~\ref{fig:region_growing} przedstawiony został wynik operacji segment
 \end{figure}
 
 \subsection{Segmentacja przy użyciu rzutu jasności} \label{ssec:rzut_jasnosci}
-Algorytm rzutu jasności bardzo dobrze sprawdza się w lokalizacji obiektów na obrazie, kiedy natężenie koloru obiektu znacząco różni się od koloru tła, a ponadto, obiekty zajmują znaczącą część powierzchni obrazu. Obraz rozpatrywany jest zarówno w poziomie, jak i w pionie. Dla każdego wiersza(kolumny) w obrazie, sumuje się wszystkie wartości pikseli należące dla danego wiersza(kolumny), otrzymując tablicę wartości:
+Algorytm rzutu jasności bardzo dobrze sprawdza się w lokalizacji obiektów na obrazie, kiedy natężenie koloru obiektu znacząco różni się od koloru tła, a ponadto, obiekty zajmują znaczącą część powierzchni obrazu \cite{barroso97}. Obraz rozpatrywany jest zarówno w poziomie, jak i w pionie. Dla każdego wiersza(kolumny) w obrazie, sumuje się wszystkie wartości pikseli należące dla danego wiersza(kolumny), otrzymując tablicę wartości:
 \begin{gather*}
   G_x[i] = \sum\limits_{i=1}^M f^{(in)}(i, j) \; dla \; i = 0,1,2,...,M, \\
   G_y[j] = \sum\limits_{j=1}^N f^{(in)}(i, j) \; dla \; j = 0,1,2,...,N,
@@ -230,7 +230,7 @@ Algorytm rzutu jasności bardzo dobrze sprawdza się w lokalizacji obiektów na 
   \label{fig:rzut_jasnosci}
 \end{figure}
 \subsection{Metoda Sauvola i Pietikainena}
-Algorytm polega na znalezieniu progu dla każdego piksela, analizując jego najbliższe otoczenia. Otoczenie rozumiemy przez zbiór pikseli które znajdują się w zdefiniowanym obszarze, a piksel, dla którego w danym momencie wyznaczana jest wartość progu, znajduje się na środku tego obszaru. Wartość progu wyznaczana jest według wzoru:
+Algorytm polega na znalezieniu progu dla każdego piksela, analizując jego najbliższe otoczenia \cite{sauvola00}. Otoczenie rozumiemy przez zbiór pikseli które znajdują się w zdefiniowanym obszarze, a piksel, dla którego w danym momencie wyznaczana jest wartość progu, znajduje się na środku tego obszaru. Wartość progu wyznaczana jest według wzoru:
 \begin{gather*}
   T(x, y) = \mu(x, y)\Big[1+k\big(\frac{\sigma(x, y)}{R} - 1\big)\Big], \quad k > 0,
 \end{gather*}
@@ -258,7 +258,7 @@ Na rysunku~\ref{fig:watershed_graphic} graficznie przedstawione zostały omawian
 \end{figure}
 W kontekście przetwarzania obrazów, wysokość terenu reprezentowana jest przez funkcję amplitudy gradientu obrazu lub funkcję intensywności obrazu, natomiast wododziały to ekstrema lokalne tych funkcji.
 \subsubsection{Algorytm segmentacji wododziałowej}
-Omawiany niżej algorytm został zaproponowany przez F. Meyera.
+Omawiany niżej algorytm został zaproponowany przez F. Meyera \cite{beucher93}.
 \begin{enumerate}
   \item wybierane są punkty startowe, będące również etykietami poszczególnych segmentów obrazu,
   \item sąsiadujące z wybranymi w kroku 1) punktami piksele umieszczane są w kolejce priorytetowej, gdzie priorytet stanowi jasność piksela,
