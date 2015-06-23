@@ -150,20 +150,26 @@ Poniżej wymienionych zostało kilka najczęściej używanych operacji filtrowan
 \begin{itemize}
 \item filtr uśredniający - stosowany jest w celu rozmycia obrazu
   \begin{gather*}
-    f^{(out)}(x, y) = \frac{\sum\limits_{a=M-\frac{k_M}{2}}^{M+\frac{k_M}{2}} \sum\limits_{b=N-\frac{k_N}{2}}^{N+\frac{k_N}{2}} f^{(in)}(x + a, y + b)}{k_M \cdot k_N}, \quad (x, y) \in P^{(in)}_{N,M},
+    f^{(out)}(x, y) = \frac{\sum\limits_{a=-\frac{k_M}{2}}^{\frac{k_M}{2}} \sum\limits_{b=-\frac{k_N}{2}}^{\frac{k_N}{2}} f^{(in)}(x + a, y + b)}{k_M \cdot k_N}, \quad (x, y) \in P^{(in)}_{N,M},
   \end{gather*}
 \item filtr medianowy - wykorzystywany jest do usuwania zakłóceń na obrazie \cite{pratt75}
   \begin{gather*}
-    f^{(out)}(x, y) = mediana(\{f^{(in)}(a, b), \;a \in \big< x + M-\frac{k_M}{2}, x + M+\frac{k_N}{2}\big> \\
-    \wedge\; b \in \big< y + N-\frac{k_N}{2}, y + N+\frac{k_N,}{2}\big>\}), \quad (x, y) \in P^{(in)}_{N,M},
+    f^{(out)}(x, y) = mediana(\{f^{(in)}(a, b), \;a \in \big< x -\frac{k_M}{2}, x + \frac{k_N}{2}\big> \\
+    \wedge\; b \in \big< y - \frac{k_N}{2}, y + \frac{k_N,}{2}\big>\}), \quad (x, y) \in P^{(in)}_{N,M},
   \end{gather*}
-\item filtr Gaussa - podobnie jak filtr uśredniający, filtr Gaussa stosuje się do redukcji detali na obrazie poprzez jego rozmycie \cite{shapiro01}
+\item filtr Gaussa - podobnie jak filtr uśredniający, filtr Gaussa stosuje się do redukcji detali na obrazie poprzez jego rozmycie \cite{shapiro01}. Na początku definiujemy funkcję pomocniczą $K$, która pełni rolę maski dla filtra, oraz zmienną $sum$ przechowującą sumę wartości funkcji $K$ dla całej jej dziedziny:
   \begin{gather*}
-    f^{(out)}(x, y) = \frac{1}{\sqrt{2 \pi \sigma}} e^{-\frac{a^2+b^2}{2 \sigma^2}} \cdot f^{(in)}(x, y), \quad (x, y) \in P^{(in)}_{N,M}.
+    K(x, y) = \frac{1}{\sqrt{2 \pi \sigma}} e^{-\frac{x^2+y^2}{2 \sigma^2}}, \quad x \in \big< -\frac{k_M}{2}, \frac{k_M}{2} \big>, \; y \in \big< -\frac{k_N}{2}, \frac{k_N}{2} \big>, \\
+    sum = \sum\limits_{a=-\frac{k_M}{2}}^{\frac{k_M}{2}} \sum\limits_{b=-\frac{k_N}{2}}^{\frac{k_N}{2}} K(a, b),
+  \end{gather*} 
+  gdzie $\sigma$ jest oczekiwanym odchyleniem standardowym dla rozkładu Gaussa.
+  Następnie stosujemy zdefiniowaną maskę na obrazie wejściowym, otrzymując funkcję jasności obrazu wyjściowego:
+  \begin{gather*}
+    f^{(out)}(x, y) = \frac{\sum\limits_{a=-\frac{k_M}{2}}^{\frac{k_M}{2}} \sum\limits_{b=-\frac{k_N}{2}}^{\frac{k_N}{2}} K(a, b) \cdot f^{(in)}(x + a, y + b)}{sum}\quad (x, y) \in P^{(in)}_{N,M}.
   \end{gather*}
 \end{itemize}
 
-Rysunek~\ref{fig:lena_smooth} przedstawia zaszumiony obraz oraz wynik działania algorytmu rozmycia medianowego.
+Rysunek~\ref{fig:lena_smooth} przedstawia zaszumiony obraz oraz wynik działania wymienionych wyżej filtrów.
 \begin{figure}
   \centering
   \begin{subfigure}[b]{0.45\textwidth}
