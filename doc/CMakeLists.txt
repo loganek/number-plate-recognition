@@ -10,6 +10,6 @@ add_latex_document(main_document.tex
   chapter_results.tex
   chapter_summary.tex
   IMAGE_DIRS img
-  BIBFILES main_document.bib
+#  BIBFILES main_document.bib
   DEFAULT_PDF
 )
