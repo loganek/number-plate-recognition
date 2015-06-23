@@ -1,6 +1,5 @@
 \section{Analiza obrazu}
 \subsection{Podstawowe informacje dotyczące przetwarzania obrazów}
-\subsubsection{Tryb koloru}
 Określenie sposobu reprezentacji kolorów w obrazach rastrowych nazywamy \textbf{trybem koloru}. Wyróżniamy następujące tryby koloru:
 \begin{itemize}
   \item czarno-biały - w obrazie występują tylko kolory: biały i czarny,
@@ -11,12 +10,12 @@ Symbolem $I$ będziemy oznaczać zbiór kolorów. Dla trybu czarno-białego
 \begin{gather*}
   I = \{0, 1\}
 \end{gather*} gdzie 0 reprezentuje kolor czarny, a 1 kolor biały.\\
-Dla trybu skali szarości
+W przypadku skali szarości
 \begin{gather*}
   I = \{0, 1, ..., 2^b-1\}
 \end{gather*}
 gdzie $b$ jest liczbą bitów potrzebnych do reprezentacji jasności, 0 oznacza kolor czarny, $2^b-1$ kolor biały, a pozostałe wartości opisują jasność koloru. Najczęściej wartość $b$ jest wielokrotnością liczby 8.\\
-Dla trybu kolorowego
+W trybie kolorowym
 \begin{gather*}
   I = I_1 \times I_2 \times ... \times I_C,
 \end{gather*}
@@ -24,34 +23,31 @@ gdzie
 \begin{gather*}
   I_1 = I_2 = ... = I_C = \{0, 1, ..., 2^b-1\}
 \end{gather*}
-oraz $C \in \mathbb{N} \wedge n > 1$ jest liczbą kanałów z przestrzeni barw. \\
-Dla przestrzeni barw RGB
+oraz $C \in \mathbb{N} i n > 1$ jest liczbą kanałów z przestrzeni barw. \\
+Natomiast w przestrzeni barw RGB
 \begin{gather*}
   I = I_R \times I_G \times I_B
 \end{gather*}
-gdzie $I_R$, $I_G$, $I_B$ oznaczają odpowiednio jasność kolorów czerwonego, zielonego i niebieskiego. Przestrzeń RGB jest trzykanałowa.
-\subsubsection{Obraz cyfrowy}
-Obraz cyfrowy definiujemy jako funkcję
+gdzie $I_R$, $I_G$, $I_B$ oznaczają odpowiednio jasność kolorów czerwonego, zielonego i niebieskiego. Oczywiście, przestrzeń RGB jest trzykanałowa.
+\\
+\textbf{Obraz cyfrowy} definiujemy jako funkcję
 \begin{gather*}
-  f: \{0, 1, ..., N-1\} \times \{0, 1, ..., M-1\} \times {1, 2, ..., C} \rightarrow I,
+  f: \{0, 1, ..., N-1\} \times \{0, 1, ..., M-1\} \times \{1, 2, ..., C\} \rightarrow I,
 \end{gather*}
-gdzie $M$, $N$ oznaczają odpowiednio szerokość i wysokość obrazu, natomiast $C$ oznacza liczbę kanałów w obrazie.\\
-Wartość funkcji $f(x, y, c)$ nazywamy \textbf{pikselem}. Trzeci argument może być pominięty dla obrazów jednokanałowych, ponieważ w takiej sytuacji zawsze przyjmuje wartość 1.\\
+gdzie $M$, $N$ oznaczają odpowiednio szerokość i wysokość obrazu, natomiast $C$ oznacza liczbę kanałów w obrazie. W przypadku obrazów jednokanałowych, będziemy pomijać zbiór $\{1, 2, ..., C\}$.\\
+Wartość funkcji $f(x, y, c)$ nazywamy \textbf{pikselem}. Trzeci argument będziemy pomijać w przypadku obrazów jednokanałowych. \\
 Obrazy cyfrowe możemy podzielić ze względu na tryb opisu koloru:
 \begin{itemize}
   \item czarno-białe,
   \item jednokanałowe (monochromatyczne),
   \item wielokanałowe (kolorowe).
 \end{itemize}
-Na rysunku~\ref{fig:image_examples} przedstawione zostały obrazy w których zastosowano wyżej wymienione tryby opisu koloru.\\
+Rysunek~\ref{fig:image_examples} przedstawia trzy obrazy, w których zastosowano wyżej wymienione tryby opisu koloru.\\
 Symbolem $P_{N,M}$ będziemy oznaczać zbiór
 \begin{gather*}
   P_{N,M} = \{0, 1, ..., N-1\} \times \{0, 1, ..., M-1\}.
 \end{gather*}
-Każdy obraz cyfrowy $P = (P_{N,M}; f; I)$ opisuje trójka\\
-$P_{N,M}$ - zbiór współrzędnych punktów obrazu,\\
-$I$ - zbiór opisujący kolor obrazu,\\
-$f$ - funkcja przyporządkowująca punktowi kolor.
+Każdy obraz cyfrowy $P = (P_{N,M}; f; I)$ opisuje trójka, gdzie $P_{N,M}$ jest zbiorem współrzędnych punktów obrazu, $I$ zbiorem opisującym kolor obrazu, $f$ funkcją przyporządkowująca punktowi kolor.
 
 \begin{figure}
   \centering
@@ -79,11 +75,11 @@ Symbolem
 \begin{gather*}
   P^{(in)} = (P_{N,M}^{(in)}, f^{(in)}, I^{(in)})
 \end{gather*}
-oznaczamy obraz wejściowy, a 
+oznaczamy obraz wejściowy, natomiast
 \begin{gather*}
   P^{(out)} = (P_{N,M}^{(out)}, f^{(out)}, I^{(out)})
 \end{gather*}
-obraz wyjściowy.
+będzie oznaczał obraz wyjściowy.
 
 \subsubsection{Kadrowanie obrazu}
 Operacja kadrowania polega na pozostawieniu na obrazie wejściowym tylko tych pikseli, które znajdują się w zdefiniowanym prostokątnym obszarze. Obraz wyjściowy po operacji kadrowania przyjmuje rozmiar obszaru, do którego kadrowany był obraz wejściowy.\\
@@ -104,13 +100,14 @@ Na rysunku~\ref{fig:crop_image} przedstawiona została operacja kadrowania obraz
   \caption{Operacja kadrowania obrazu}\label{fig:crop_image}
 \end{figure}
 \subsubsection{Progowanie (binaryzacja)} \label{sssec:threshold}
-Progowanie polega na podziale pikseli obrazu na dwie grupy, poprzez wybranie określonej wartości progowej $t$. Każdy piksel jest porównywany z wartością progową, i w zależności od tego, czy wartość piksela jest większa od wartości progowej, czy mniejsza, w tej samej pozycji nowo powstałego obrazu, przypisuje się wartość $1$, lub $0$. Operację można opisać wzorem:
+W przypadku obrazów jednokanałowych, progowanie polega na podziale pikseli obrazu na dwie grupy, poprzez wybranie określonej wartości progowej $t$. Każdy piksel jest porównywany z wartością progową, i w zależności od tego, czy wartość piksela jest większa od wartości progowej, czy mniejsza, w tej samej pozycji nowo powstałego obrazu, przypisuje się wartość $1$, lub $0$. Zatem $I^{(out)} = \{0, 1\}$, natomiast $P^{(out)}_{N, M} = P^{(in)}_{N, M}$. Operację binaryzacji można opisać wzorem:
 \begin{gather*}
   f^{(out)}(x, y) = \left\{\begin{matrix}
   1, dla \: f^{(in)}(x, y) > t,\\
   0, dla \: f^{(in)}(x, y) \leq t,
-  \end{matrix}\right. \quad (x, y) \in P^{(in)}_{N,M}
+  \end{matrix}\right. \quad (x, y) \in P^{(in)}_{N,M}.
 \end{gather*}
+Obraz wyjściowy jest obrazem czarno-białym.
 Na rysunku~\ref{fig:threshold_image} przedstawiony został wynik operacji progowania na przykładowym obrazie monochromatycznym.
 \begin{figure}
   \centering
@@ -128,43 +125,41 @@ Na rysunku~\ref{fig:threshold_image} przedstawiony został wynik operacji progow
   \caption{Operacja progowania z wartością progu $t=128$ dla obrazu jednokanałowego}\label{fig:threshold_image}
 \end{figure}
 
-\paragraph{Progowanie obrazów wielokanałowych}\mbox{}\\
 Zazwyczaj operacji progowania poddawane są obrazy jednokanałowe. Istnieje jednak możliwość wykonania operacji progowania dla obrazów wielokanałowych (np. dla obrazów RGB). Operacja ta definiowana jest następującym wzorem:
 \begin{gather*}
   f^{(out)}(x, y, c) = \left\{\begin{matrix}
   1, \; \text{jeżeli} \; \forall c \in C, \; f^{(in)}(x, y, c) > t(c),\\
   0, \; \text{jeżeli} \; \exists c \in C, \; f^{(in)}(x, y, c) \leq t(c),
-  \end{matrix}\right. \quad (x, y) \in P^{(in)}_{N,M} c=0,1,2,...,C,
+  \end{matrix}\right. \quad (x, y) \in P^{(in)}_{N,M} \space c=1,2,...,C,
 \end{gather*}
-gdzie $C$ to liczba kanałów w obrazie.
-Algorytm progowania operujący na wielu kanałach może zostać wykorzystany, kiedy znana jest dokładna barwa badanego obiektu.
+gdzie $C$ to liczba kanałów w obrazie. \\
 
-\paragraph{Progowanie lokalne}\mbox{}\\
-Progowanie lokalne znajduje zastosowanie w przypadku gdy obraz jest niejednolicie oświetlony. Trudno jest dobrać globalny próg w taki sposób, aby wyekstrachować z obrazu nawet większość porządanych obiektów. Progowanie lokalne polega na wyznaczeniu danego progu w sąsiedztwie aktualnie przetwarzanego piksela. 
+\textbf{Progowanie lokalne} znajduje zastosowanie w przypadku gdy obraz jest niejednolicie oświetlony. Trudno jest dobrać globalny próg w taki sposób, aby wyekstrachować z obrazu nawet większość porządanych obiektów. Progowanie lokalne polega na wyznaczeniu danego progu w sąsiedztwie aktualnie przetwarzanego piksela. W przypadku obrazu jednokanałowego
 \begin{gather*}
   f^{(out)}(x, y) = \left\{\begin{matrix}
   1, dla \: f^{(in)}(x, y) > T(x, y),\\
   0, dla \: f^{(in)}(x, y) \leq T(x, y),
   \end{matrix}\right. \quad (x, y) \in P^{(in)}_{N,M},
 \end{gather*}
-gdzie $T(x, y)$ to funkcja zwracająca próg w zadanym sąsiedztwie piksela o współrzędnych $(x, y)$. Zwykle jako funkcję wyznaczania progu przyjmuje się wartość średnią lub sumą ważoną, wykorzystującą krzywą Gaussa.
+gdzie $T(x, y)$ to funkcja zwracająca próg w zadanym sąsiedztwie piksela o współrzędnych $(x, y)$. Zwykle jako funkcję wyznaczania progu przyjmuje się wartość średnią lub sumę ważoną, wykorzystującą krzywą Gaussa.
 
 \subsubsection{Filtracja obrazu}
+Operacje filtracji mają na celu wykonanie zadanego przekształcenia matematycznego dla każdego piksela, generując tym samym nowy obraz. Filtrację obrazu stosuje się zwykle w celu wydobycia z obrazu żądanych informacji lub usunięcia szumu. \\
 Poprzez \textbf{jądro (maskę)} w kontekscie przetwarzania obrazów rozumiemy kształt którym parametryzowana jest operacja filtracji obrazu. Symbolami $k_N$, $k_M$ będę oznaczał rozmiar jądra (kolejno wysokość oraz szerokość).\\
-Operacje filtracji mają na celu wykonanie zadanego przekształcenia matematycznego dla każdego piksela, generując tym samym nowy obraz. Filtrację obrazu stosuje się zwykle w celu wydobycia z obrazu żądanych informacji lub usunięcia szumu. Poniżej wymienionych zostało kilka najczęściej używanych operacji filtrowania obrazu:
+Poniżej wymienionych zostało kilka najczęściej używanych operacji filtrowania obrazu:
 \begin{itemize}
 \item filtr uśredniający - stosowany jest w celu rozmycia obrazu
   \begin{gather*}
-    f^{(out)}(x, y) = \frac{\sum\limits_{x=M-k_\frac{M}{2}}^{M+\frac{k_M}{2}} \sum\limits_{y=N-\frac{k_N}{2}}^{N+\frac{k_N}{2}} f^{(in)}(x, y)}{k_M \cdot k_N}, \quad (x, y) \in P^{(in)}_{N,M},
+    f^{(out)}(x, y) = \frac{\sum\limits_{a=M-\frac{k_M}{2}}^{M+\frac{k_M}{2}} \sum\limits_{b=N-\frac{k_N}{2}}^{N+\frac{k_N}{2}} f^{(in)}(x + a, y + b)}{k_M \cdot k_N}, \quad (x, y) \in P^{(in)}_{N,M},
   \end{gather*}
 \item filtr medianowy - wykorzystywany jest do usuwania zakłóceń na obrazie
   \begin{gather*}
-    f^{(out)}(x, y) = mediana(\{f^{(in)}(x, y), \;x \in \big< M-\frac{k_x}{2}, M+\frac{k_x}{2}\big> \\
-    \wedge\; y \in \big< N-\frac{k_y}{2}, N+\frac{k_y,}{2}\big>\}), \quad (x, y) \in P^{(in)}_{N,M},
+    f^{(out)}(x, y) = mediana(\{f^{(in)}(a, b), \;a \in \big< x + M-\frac{k_M}{2}, x + M+\frac{k_N}{2}\big> \\
+    \wedge\; b \in \big< y + N-\frac{k_N}{2}, y + N+\frac{k_N,}{2}\big>\}), \quad (x, y) \in P^{(in)}_{N,M},
   \end{gather*}
 \item filtr Gaussa - podobnie jak filtr uśredniający, filtr Gaussa stosuje się do redukcji detali na obrazie poprzez jego rozmycie
   \begin{gather*}
-    f^{(out)}(x, y) = \frac{1}{\sqrt{2 \pi \sigma}} e^{-\frac{x^2+y^2}{2 \sigma^2}}, \quad (x, y) \in P^{(in)}_{N,M}.
+    f^{(out)}(x, y) = \frac{1}{\sqrt{2 \pi \sigma}} e^{-\frac{a^2+b^2}{2 \sigma^2}} \cdot f^{(in)}(x, y), \quad (x, y) \in P^{(in)}_{N,M}.
   \end{gather*}
 \end{itemize}
 
@@ -198,25 +193,36 @@ Rysunek~\ref{fig:lena_smooth} przedstawia zaszumiony obraz oraz wynik działania
   \label{fig:lena_smooth}
 \end{figure}
 \subsubsection{Dodawanie obrazów}
-W tym podrozdziale, jako $n$ oznaczać będziemy liczbę obrazów wejściowych poddawanych operacji dodawania, jako $P^{(in)}_{i}$ będziemy rozumieć $i-ty$ obraz wejściowy, natomiast poprzez $f^{(in)}_i$ będziemy oznaczać funkcję $i-tego$ obrazu przyporządkowującą punktowi kolor. Symbolem $w_i$ będziemy oznaczać wagę przyporządkowaną do $i-tego$ obrazu wejściowego.\\
+W tym podrozdziale, jako $n$ oznaczać będziemy liczbę obrazów wejściowych poddawanych operacji dodawania, jako $P^{(in)}_{i}$ będziemy rozumieć $i-ty$ obraz wejściowy, natomiast poprzez $f^{(in)}_i$ będziemy oznaczać funkcję $i-tego$ obrazu przyporządkowującą punktowi kolor. Symbolem $w_i$ będziemy oznaczać wagę przyporządkowaną do $i-tego$ obrazu wejściowego. Zbiór wartości wag należy do zbioru musi spełniać warunki:
+\begin{gather*}
+  \displaystyle\sum_i w_i = 1\\
+  w_i \in \mathbb{R}: 0 \leqslant w_i \leqslant 1
+\end{gather*}
 Operacja dodawania obrazów 
 \begin{gather*}
 P^{(out)} = P_1^{(in)} + P_2^{(in)} + ... + P_n^{(in)}
 \end{gather*}
 definiowana jest wzorem:
 \begin{gather*}
-  f^{(out)}(x, y) = \displaystyle\sum_{i=1}^{n} f^{(i)}(x, y), \quad (x, y) \in P^{(in)}_{N,M}.
+  f^{(out)}(x, y) = min\big(\displaystyle\sum_{i=1}^{n} f^{(in)}_i(x, y), 2^b-1\big), \quad (x, y) \in P^{(in)}_{N,M},
+\end{gather*} gdzie funkcja $max$ definiowana jest wzorem
+\begin{gather*}
+  min(a, b) = \left\{\begin{matrix}
+  a, \; \text{jeżeli} \; a < b \\
+  b, \; \text{jeżeli} \; a \geqslant b
+  \end{matrix}\right. 
 \end{gather*}
 \paragraph{Dodawanie obrazów z wagami} \mbox{}\\
 Dodawanie obrazów z wagami zdefiniowane jest wzorem:
 \begin{gather*}
-  f^{(out)}(x, y) = \displaystyle\sum_{i=1}^{n} f^{(in)}_i(x, y) \cdot w_i, \quad (x, y) \in P^{(in)}_{N,M}.
+  f^{(out)}(x, y) = \big\lceil \displaystyle\sum_{i=1}^{n} f^{(in)}_i(x, y) \cdot w_i\big\rceil, \quad (x, y) \in P^{(in)}_{N,M}.
 \end{gather*}
 \paragraph{Dodawanie obrazów wielokanałowych} \mbox{}\\
 W przypadku obrazów wielokanałowych, operację dodawania wykonujemy dla każdego kanału osobno:
 \begin{gather*}
-  f^{(out)}(x, y, c) = \displaystyle\sum_{i=1}^{n} f^{(i)}(x, y), \quad (x, y, c) \in P^{(in)}_{N,M},\ c \in \{1, 2, ..., C\}.
+  f^{(out)}(x, y, c) = min\big(\displaystyle\sum_{i=1}^{n} f^{(i)}(x, y), 2^b-1\big), \quad (x, y, c) \in P^{(in)}_{N,M},
 \end{gather*}
+dla każdego $c \in \{1, 2, ..., C\}$.
 \subsubsection{Wyostrzenie obrazu}
 W celu uzyskania efektu wyostrzonych krawędzi obrazu, należy wykonać na obrazie wejściowym operację rozmycia Gaussa, a następnie obraz wynikowy dodać do obrazu wejściowego z wagami:
 \begin{itemize}
@@ -238,8 +244,7 @@ W celu uzyskania efektu wyostrzonych krawędzi obrazu, należy wykonać na obraz
   \label{fig:image_sharpen}
 \end{figure}
 \subsubsection{Normalizacja obrazu}
-W tym podrozdziale jako $\min_{in}$ oraz $max_{in}$ będziemy oznaczać minimalną i maksymalną wartość funkcji jasności obrazu wejściowego, natomiast jako $\min_{out}$ oraz $min_{out}$ będziemy oznaczać minimalną i maksymalną pożądaną wartość funkcji jasności obrazu wyjściowego. \\
-Operacja normalizacji służy do zmiany przedziału wartości pikseli występujących w obrazie, i definiowana jest wzorem:
+Operacja normalizacji służy do zmiany przedziału wartości jasności pikseli występujących w obrazie. Symbolem $\min_{in}$ oraz $max_{in}$ oznaczamy minimalną i maksymalną wartość funkcji jasności obrazu wejściowego, natomiast jako $\min_{out}$ oraz $min_{out}$ będziemy oznaczać minimalną i maksymalną pożądaną wartość funkcji jasności obrazu wyjściowego. Funkcję jasności obrazu wyjściowego opisujemy wzorem
 \begin{gather*}
   f^{(out)}(x, y) = (f^{(in)}(x, y) - min_{in}) \cdot \frac{max_{out} - min_{out}}{max_{in} - min_{in}}+min_{in}, \quad \quad (x, y) \in P^{(in)}_{N,M}.
 \end{gather*}
@@ -361,7 +366,7 @@ Tabela~\ref{tab:distance_transform} przedstawia wynik działania operacji na mac
 \end{figure}
 
 \subsection{Operacje na histogramach}
-Bardzo często podczas analizy obrazu pod kątem znajdowania segmentów, wykorzystywana jest analiza histogramu. W celu ułatwienia analizy, a także poprawy jej wyników, przed jej rozpoczęciem można zastosować niżej wymienione zabiegi.
+Bardzo często podczas analizy obrazu w celu jego segmentacji, wykorzystywana jest analiza histogramu. W celu ułatwienia analizy, a także poprawy jej wyników, przed jej rozpoczęciem można zastosować niżej wymienione zabiegi.
 \begin{figure}
   \centering
   \begin{subfigure}[b]{0.45\textwidth}
@@ -376,7 +381,7 @@ Bardzo często podczas analizy obrazu pod kątem znajdowania segmentów, wykorzy
   \caption{Jednokanałowy obraz oraz jego histogram}
   \label{fig:image_histogram_g}
 \end{figure}
-\textbf{Histogram obrazu} jest graficzną reprezentacją rozkładu częstości występowania danej wartości jasności w obrazie. Przykładowy obraz oraz jego histogram przedstawiony został na rysunku~\ref{fig:image_histogram_g}. Ponieważ obraz jest bardzo ciemny, większość wartości na histogramie jest bliska wartości 0 (ta wartość reprezentuje kolor czarny).\\
+\textbf{Histogram obrazu} jest reprezentacją rozkładu częstości występowania danej wartości jasności w obrazie. Przykładowy obraz oraz jego histogram przedstawiony został na rysunku~\ref{fig:image_histogram_g}. Ponieważ obraz jest bardzo ciemny, większość wartości na histogramie jest bliska wartości 0 (ta wartość reprezentuje kolor czarny).\\
 Jako $H$ będziemy oznaczali funkcję zwracającą wartość histogramu w podanym punkcie. Poprzez symbol $H_{max}$ oznaczać będziemy funkcję zwracającą największy indeks $i$ znajdujący się w histogramie, taki że $H(i) \neq 0$. Symbolem $H_{in}$ oznaczać będziemy histogram wejściowy, a symbolem $H_{out}$ histogram wyjściowy.\\
 
 \subsubsection{Wyrównanie histogramu}
@@ -385,11 +390,11 @@ Metoda wyrównania histogramu sprowadza się do wyznaczenia tablicy LUT (\textit
 \begin{gather*}
   D(i) = \sum\limits_{j=0}^i p(j),
 \end{gather*}
-gdzie i jest wartością jasności występującą na obrazie, a p(j) jest prawdopodobieństwem wystąpienia wartości j w obrazie. Wykorzystując wyznaczone wartości dystrybuanty, możemy opisać tablicę LUT za pomocą wzoru:
+gdzie $i$ jest wartością jasności występującą na obrazie, a $p(j)$ jest prawdopodobieństwem wystąpienia wartości $j$ w obrazie. Wykorzystując wyznaczone wartości dystrybuanty, możemy opisać tablicę LUT za pomocą wzoru:
 \begin{gather*}
   LUT(i) = \frac{D(i)-D_0}{1-D_0} \cdot K,
 \end{gather*}
-gdzie i to wartość jasności składowej obrazu wejściowego, $D_0$ to pierwsza wartość dystrybuanty różna od zera, a K jest maksymalną wartością jasności występującym w obrazie wejściowym.\\
+gdzie $i$ to wartość jasności składowej obrazu wejściowego, $D_0$ to pierwsza wartość dystrybuanty różna od zera, a $K$ jest maksymalną wartością jasności występującą w obrazie wejściowym.\\
 Rysunek~\ref{fig:equalize_histogram} przedstawia efekt działania operacji wyrównania histogramu na przykładowym obrazie.
 \begin{figure}
   \centering

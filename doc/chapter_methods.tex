@@ -1,5 +1,4 @@
 \section{Przegląd metod segmentacji obrazu}
-\subsection{Wstęp}
 Segmentacja obrazu jest procesem umożliwiającym podział obrazu na obszary, które pod względem zadanego kryterium różnią się miedzy sobą. W zależności od kryterium, podczas procesu segmentacji można wyodrębnić z obrazu obiekty posiadające określone kształty, kolory czy rozmiar. W wyniku segmentacji obrazu, uzyskujemy obraz, który nie zawiera zbędnych (z punktu widzenia dalszego przetwarzania) szczegółów.\\
 Przykładem zastosowania metod segmentacji obrazów może być problem liczenia wbitych gwoździ do elementu na taśmie produkcyjnej. Obraz wejściowy (przedstawiony na rysunku~\ref{fig:gwozdzie_input}) ze względu na różnorodne tło i jasność elementów, trudno przeanalizować pod kątem liczenia obiektów. Natomiast ten sam obraz poddany operacji segmentacji (rysunek~\ref{fig:gwozdzie_output}) zawiera w sobie tylko i wyłącznie elementy, które są interesujące z punktu widzenia problemu jaki trzeba rozwiązać. Na podstawie koloru oraz kształtu możliwe było wyeliminowanie obiektów, które nie były istotne w danym zadaniu.
 
@@ -19,9 +18,7 @@ Przykładem zastosowania metod segmentacji obrazów może być problem liczenia 
   \caption{Przykład zastosowania metody segmentacji obrazu}\label{fig:gwozdzie}
 \end{figure}
 
-\subsection{Progowanie}
-Najłatwiejszą metodą segmentacji obrazu jest metoda progowania, opisywana w podrozdziale \nameref{sssec:threshold}.
-
+Najłatwiejszą metodą segmentacji obrazu jest wcześniej opisana \textbf{metoda progowania}.
 \subsection{Detekcja krawędzi}
 Celem algorytmów detekcji krawędzi jest znalezienie na obrazie zbioru punktów, które reprezentują obrysy poszukiwanych elementów. 
 
@@ -42,8 +39,8 @@ Algorytm Robertsa do wykrywania krawędzi w obrazie jest jednym z pierwszych alg
 \end{gather*}
 Zdefiniujemy funkcje pomocnicze $f_x$ oraz $f_y$:
 \begin{gather*}
-  f_x(x, y) = M_x * f^{(in)} \\
-  f_x(x, y) = M_y * F^{(in)}.
+  f_x(x, y) = M_x * f^{(in)}(x, y) \\
+  f_y(x, y) = M_y * f^{(in)}(x, y).
 \end{gather*}
 Wartość jasności poszczególnych pikseli obrazu wyjściowego wyliczane są następującym wzorem:
 \begin{gather*}
@@ -72,28 +69,26 @@ Algorytmu Sobel jest bardzo podobny do przedstawionego wcześniej algorytmu Robe
 \end{gather*}
 Zdefiniujemy dwie funkcje pomocnicze $f_x$ oraz $f_y$:
 \begin{gather*}
-  f_x  = M_x * f^{(in)}, \\
-  f_y  = M_y * f^{(in)}.
+  f_x(x, y)  = M_x * f^{(in)}(x, y), \\
+  f_y(x, y)  = M_y * f^{(in)}(x, y).
 \end{gather*}
 Funkcję jasności obrazu wyjściowego możemy zdefiniować następująco:
 \begin{gather*}
   f^{(out)}(x, y) = \sqrt{f_x^2(x, y)+f_{y}^2(x, y)}.
 \end{gather*}
-Algorytm jest znacznie bardziej odporny na szumy występujące na obrazie niż algorytm Robertsa. \\
-Kierunek gradientu może zostać wyznaczony za pomocą wzoru:
+Algorytm jest znacznie bardziej odporny na szumy występujące na obrazie niż algorytm Robertsa. Kierunek gradientu może zostać wyznaczony za pomocą wzoru:
 \begin{gather*}
   \theta(x, y) = arctan(\frac{f_y(x, y)}{f_x(x, y)}).
 \end{gather*}
 \subsubsection{Algorytm Canny'ego}
 Algorytm Canny'ego składa się z czterech podstawowych kroków.
-\begin{enumerate}
-\item Wygładzanie obrazu \\
-  Celem tego kroku jest usunięcie z obrazu szumów mogących wystąpić na obrazie. Szumy mogą powodować detekcję fałszywych krawędzi, dlatego usunięcie ich przed faktycznym procesem wyszukiwania algorytmu powoduje poprawę jakości wyników algorytmu. W algorytmie Canny'ego do wygładzenia obrazu stosuje się zwykle filtr Gaussa lub filtr uśredniający. 
-\item Znajdowanie gradientu \\
-  Do znajdowania gradientu obrazu wykorzystywany jest operator sobela, opisywany w podrozdziale \nameref{sssec:sobel}.
-\item Tłumienie sygnałów, które nie są maksymalne \\
-  Po zastosowaniu operatora Sobel, krawędzie obrazu są rozmyte. W tym kroku następuje filtrowanie wszystkich lokalnych maksymalnych wartości w obrazie gradientowym, oraz usunięcie wartości nie-maksymalnych. Dla każdego piksela, kierunek gradientu zaokrąglany jest z dokładnością do 45 stopni, otrzymując w ten sposób 8 wartości kierunków. Dla każdego piksela pod uwagę brane są trzy wartości: wartość badanego piksela, najbliższy piksel wskazywany przez kierunek gradientu, oraz najbliższy piksel leżący w przeciwnym kierunku niż kierunek wskazywany przez gradient. Jeśli badany piksel ma wartość maksymalną spośród trzech podanych wartości, nie zostaje on usunięty. W przeciwnym razie, wartość piksela zostaje zastąpiona wartością zerową.
-\item Podwójne progowanie(progowanie z histerezą)
+\textbf{Krok 1.} Wygładzanie obrazu. \\
+  Celem tego kroku jest usunięcie z obrazu szumów mogących wystąpić na obrazie. Szumy mogą powodować detekcję fałszywych krawędzi, dlatego usunięcie ich przed faktycznym procesem wyszukiwania algorytmu powoduje poprawę jakości wyników algorytmu. W algorytmie Canny'ego do wygładzenia obrazu stosuje się zwykle filtr Gaussa lub filtr uśredniający. \\
+\textbf{Krok 2.} Znajdowanie gradientu. \\
+Do znajdowania gradientu obrazu wykorzystywany jest operator sobela, opisywany na stronie \pageref{sssec:sobel}.\\
+\textbf{Krok 3.} Tłumienie sygnałów, które nie są maksymalne. \\
+Po zastosowaniu operatora Sobel, krawędzie obrazu są rozmyte. W tym kroku następuje filtrowanie wszystkich lokalnych maksymalnych wartości w obrazie gradientowym, oraz usunięcie wartości nie-maksymalnych. Dla każdego piksela, kierunek gradientu zaokrąglany jest z dokładnością do 45 stopni, otrzymując w ten sposób 8 wartości kierunków. Dla każdego piksela pod uwagę brane są trzy wartości: wartość badanego piksela, najbliższy piksel wskazywany przez kierunek gradientu, oraz najbliższy piksel leżący w przeciwnym kierunku niż kierunek wskazywany przez gradient. Jeśli badany piksel ma wartość maksymalną spośród trzech podanych wartości, nie zostaje on usunięty. W przeciwnym razie, wartość piksela zostaje zastąpiona wartością zerową.
+\textbf{Krok 4.} Podwójne progowanie(progowanie z histerezą).\\
   Pomimo zastosowania metody wygładzania w pierwszym etapie algorytmu, znalezienie niektórych krawędzi może być efektem zaszumionego obrazu. Dlatego w algorytmie Canny'ego stosuje się podwójne progowanie, z wartościami:\\
 $T_{high}$ - wartość wyższego progu,\\
 $T_{low}$ - wartość niższego progu,\\
@@ -102,8 +97,6 @@ będącymi w relacji:
   T_{high} \geq T_{u'w}.
 \end{gather*}
 Piksele o wartościach większych niż $T_{high}$ klasyfikowane są jako \textit{krawędzie silne}. Piksele o wartościach pomiędzy $T_{low}$ i $T_{low}$ to tzw. \textit{krawędzie słabe}. Piksele o wartościach mniejszych niż $T_{low}$ są usuwane z obrazu.
-
-\end{enumerate}
 
 \subsection{Algorytmy wykorzystujące histogram}
 Algorytmy wykorzystujące analizę histogramu obrazu cechuje szybkość działania, ponieważ budowa histogramu wymaga tylko jednej iteracji przez wszystkie piksele w obrazie. Istnieje kilka technik segmentacji obrazu w oparciu o analizę histogramu. \\
@@ -115,7 +108,7 @@ Wyszukiwanie szczytów histogramu wykorzystywane jest do separacji tła od obiek
   T = \frac{p_1 + p_2}{2},
 \end{gather*}
 gdzie $p_1$ jest pierwszą wartością szczytową w histogramie, a $p_2$ jest drugą wartością szczytową w histogramie. \\
-W rzeczywistych przypadkach bardzo często występuje sytuacja, w której piksele tła oraz piksele obiektu pierwszoplanowego nie mają takich samych wartości dla całego obiektu, ale przyjmują wiele wartości oscylujących wokół jednej z nich. Przykład takiego obrazu został pokazany na rysunku~\ref{fig:histogram_peaks}. Histogram zawiera widoczne trzy skupiska wartości (na pozycjach: 8, 18 oraz 44), natomiast obydwie największe wartości szczytowe w histogramie należą do jednego skupiska. Aby wyeliminować ten problem, należy zdefiniować minimalną odległość pomiędzy szczytami histogramu. Jeśli drugi szczyt będzie znajdował się zbyt blisko pierwszego, należy go odrzucić, i rozpocząć poszukiwanie kolejnego szczytu. Nie uwzględniając minimalnego odstępu pomiędzy szczytami, do wyznaczenia progu zostały by wybrane liczby 8 oraz 18, ponieważ są to dwie największe wartości w histogramie. Obydwie te wartości reprezentują tło, przez co segmentacja się nie powiodła (co można zobaczyć na rysunku~\ref{fig:histogram_peaks_bad}. Jeśli założymy, że szczyty nie mogą znajdować się od siebie bliżej niż wartość $\frac{1}{3}$ szerokości histogramu, do wyznaczenia progu zostanie użyta wartość 8 oraz 44. Wynikiem segmentacji natomiast będzie obraz przedstawiony na rysunku~\ref{fig:histogram_peaks_good}. Zwykle wartość minimalnej odległości pomiędzy szczytami dobiera się na podstawie przeprowadzonych wcześniej badań na danych testowych.
+W rzeczywistych przypadkach bardzo często występuje sytuacja, w której piksele tła oraz piksele obiektu pierwszoplanowego nie mają takich samych wartości dla całego obiektu, ale przyjmują wiele wartości oscylujących wokół jednej z nich. Przykład takiego obrazu został pokazany na rysunku~\ref{fig:histogram_peaks}. Histogram zawiera widoczne trzy skupiska wartości (na pozycjach: 8, 18 oraz 44), natomiast obydwie największe wartości szczytowe w histogramie należą do jednego skupiska. Aby wyeliminować ten problem, należy zdefiniować minimalną odległość pomiędzy szczytami histogramu. Jeśli drugi szczyt będzie znajdował się zbyt blisko pierwszego, należy go odrzucić, i rozpocząć poszukiwanie kolejnego szczytu. Nie uwzględniając minimalnego odstępu pomiędzy szczytami, do wyznaczenia progu zostały by wybrane liczby 8 oraz 18, ponieważ są to dwie największe wartości w histogramie. Obydwie te wartości reprezentują tło, przez co segmentacja się nie powiodła (co można zobaczyć na rysunku~\ref{fig:histogram_peaks_bad}). Jeśli założymy, że szczyty nie mogą znajdować się od siebie bliżej niż wartość $\frac{1}{3}$ szerokości histogramu, do wyznaczenia progu zostanie użyta wartość 8 oraz 44. Wynikiem segmentacji natomiast będzie obraz przedstawiony na rysunku~\ref{fig:histogram_peaks_good}. Zwykle wartość minimalnej odległości pomiędzy szczytami dobiera się na podstawie przeprowadzonych wcześniej badań na danych testowych.
 \begin{figure}
   \centering
   \begin{subfigure}[b]{0.8\textwidth}
@@ -176,7 +169,7 @@ Rysunek~\ref{fig:histogram_valleys} przedstawia histogram pewnego obrazu. Stosuj
   \caption{Progowanie przez wyszukiwanie minimum pomiędzy szczytami histogramu}\label{fig:histogram_valleys}
 \end{figure}
 \subsection{Segmentacja przez rozrost obszarów}
-Metoda segmentacji przez rozrost obszarów polega na wyszukiwanie na obrazie elementów o podobnej jasności. Algorytm rozpoczyna działanie od punktów startowych, które powinny zostać podane jako parametr algorytmu. Algorytm można opisać w następujący sposób:
+Metoda segmentacji przez rozrost obszarów polega na wyszukiwaniu na obrazie elementów o podobnej jasności. Algorytm rozpoczyna działanie od punktów startowych, które powinny zostać podane jako parametr algorytmu. Algorytm można opisać w następujący sposób:
 \begin{enumerate}
   \item Nadaj każdemu punktowi startowemu etykietę.
   \item Dodaj punkty startowe do kolejki.

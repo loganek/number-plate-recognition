@@ -1,5 +1,5 @@
 \section{Rezultaty badań}
-Badania przeprowadzone zostały na zbiorze zawierającym kilkaset obrazów przedstawiających tablice rejestracyjne wykonane w różnych warunkach. Moim głównym celem było porównywanie metod segmentacji obrazu, a metody rozpoznawania znaków traktowałem tylko jako metody pomocnicze. Dlatego kiedy liczba segmentów zwracanych przez algorytm zgadzała się z liczbą znaków oczekiwanego wyniku, a wartości wyników się nie zgadzały, osobiście sprawdzałem czy niepoprawne rozpoznanie tekstu zapisanego na tablicy rejestracyjnej jest wynikiem niepoprawnego działania algorytmu segmentacji obrazu, czy algorytmu rozpoznawania znaków. \\
+Badania przeprowadzone zostały na zbiorze zawierającym kilkaset obrazów przedstawiających tablice rejestracyjne wykonane w różnych warunkach. Moim głównym celem było porównywanie metod segmentacji obrazu, a metody rozpoznawania znaków traktowałem tylko jako metody pomocnicze. Dlatego kiedy liczba segmentów zwracanych przez algorytm zgadzała się z liczbą znaków oczekiwanego wyniku, a wartości wyników się nie zgadzały, ręcznie sprawdzałem czy niepoprawne rozpoznanie tekstu zapisanego na tablicy rejestracyjnej jest wynikiem niepoprawnego działania algorytmu segmentacji obrazu, czy algorytmu rozpoznawania znaków. \\
 Jako skuteczność metody w tym rozdziale będziemy rozumieć stosunek procentowy liczby poprawnie rozpoznanych przypadków testowych do liczby wszystkich przypadków testowych.
 
 \subsection{Wpływ parametrów metod na rezultaty}
@@ -20,7 +20,7 @@ Również parametr minimalnej odległości pomiędzy szczytami znacząco wpływa
   \end{center}
 \end {table}
 
-\begin {table}[H]
+\begin {table}
   \begin{center}
     \begin{tabular}{c | c}
       Minimalna odległość od szczytów & Skuteczność \\
@@ -41,7 +41,7 @@ Jako kolejny parametr metody, przyjąłem użycie omawianych ulepszeń, polegaj�
 Nie wykonywałem porównania wpływu zastosowania operacji wyostrzania obrazu na jakość rezultatu (takie testy wykonywałem dla metody wyszukiwania szczytów histogramu), jednak prawdopodobnie wpływ niezastosowania tej operacji również negatywnie wpłynie na skuteczność metody.
 
 
-\begin {table}[H]
+\begin {table}
   \begin{center}
     \begin{tabular}{c | c}
       \begin{tabular}[x]{@{}c@{}}Liczba sąsiadów użyta\\w algorytmie wygładzania histogramu\end{tabular} & Skuteczność \\
@@ -61,7 +61,7 @@ Nie wykonywałem porównania wpływu zastosowania operacji wyostrzania obrazu na
 \end {table}
 
 
-\begin {table}[H]
+\begin {table}
   \begin{center}
     \begin{tabular}{l | c}
       \space & Skuteczność \\
@@ -79,7 +79,7 @@ Rezultaty badań przedstawione zostały w tabelach~\ref{tab:sauvol_pietikainen_d
 Znaczący wpływ ma natomiast wartość parametru $S$. Jeśli parametr ten nie zostanie w ogóle uwzględniony ($S = 1$), skuteczność metody jest bardzo niska. Najlepszy wynik został natomiast osiągnięty dla wartości 10\% wysokości obrazu.
 
 
-\begin {table}[H]
+\begin {table}
   \begin{center}
     \begin{tabular}{c | c | c}
       Wartość parametru $k$ & Skuteczność ($S = 10\%$) & Skuteczność ($S = 50\%$)  \\
@@ -96,7 +96,7 @@ Znaczący wpływ ma natomiast wartość parametru $S$. Jeśli parametr ten nie z
   \end{center}
 \end {table}
 
-\begin {table}[H]
+\begin {table}
   \begin{center}
     \begin{tabular}{c | c}
       Wartość parametru $S$ & Skuteczność \\
@@ -116,7 +116,7 @@ Znaczący wpływ ma natomiast wartość parametru $S$. Jeśli parametr ten nie z
 
 \subsubsection{Metoda rzutu jasności i rozrostu obszaru}
 Przeprowadziłem badania dla ośmiu różnych wartości parametru $r$. Wyniki zaprezentowane w tabeli~\ref{tab:rzut_jasnosci_rozrost_obszaru} pokazują, że wartość zmiennej $r$ ma duży wpływ na skuteczność metody. Najwyższa skuteczność metody osiągnięta została dla wartości 0.4, co jest uzasadnione działaniem metody - w przypadku zbyt małych wartości algorytm nie będzie klasyfikował punktów należących do znaku jako znaki, ale jako tło. Natomiast dla zbyt dużych wartości, obszary należące do tła, zostaną zaklasyfikowane jako część znaku. 
-\begin {table}[H]
+\begin {table}
   \begin{center}
     \begin{tabular}{c | c}
       Wartość parametru $r$ & Skuteczność \\
@@ -138,7 +138,7 @@ Przeprowadziłem badania dla ośmiu różnych wartości parametru $r$. Wyniki za
 \subsubsection{Metoda krawędziowa}
 Wyniki badań dla metody krawędziowej przedstawiłem w tabelach~\ref{tab:metoda_krawedziowa_param_s} oraz~\ref{tab:metoda_krawedziowa_sobel}. W przypadku rozmiaru maski dla algorytmu Sobel, skuteczność dla wartości 3 oraz 5 nie różni się znacząco, natomiast algorytm zupełnie nie działa dla wartości 7. Można się o tym przekonać, oglądając obraz wyjściowy dla algorytmu Canny'ego dla takiej maski. Na rysunku~\ref{fig:results_canny_sobel_compare} zamieściłem porównanie obrazów wyjściowych dla różnych rozmiarów maski dla tego samego obrazu wejściowego. Obraz wyjściowy dla parametru 7 jest bardzo zaszumiony, przez co praktycznie niemożliwe jest uzyskanie z niego żądanej informacji.\\
 Z badań wynika również, że metoda uzyskuje lepszą skuteczność, kiedy algorytm wygładzania będzie wykorzystywał do wyliczania nowej wartości punktu niewielki obszar sąsiedztwa. Najlepszą wartość uzyskałem dla wartości 2, czyli do wyliczania wygładzania wykorzystywane są tylko cztery najbliższe punkty (wliczając w to również punkt przetwarzany). Dla dużych wartości parametru $S$ skuteczność bardzo spada. Wynika to z tego, że duże rozmycia powodują zanik krawędzi, zamieniając je na płynne przejścia jasności pomiędzy znakiem a tłem obrazu.
-\begin {table}[H]
+\begin {table}
   \begin{center}
     \begin{tabular}{c | c}
       Wartość parametru $S$ & Skuteczność \\
@@ -155,7 +155,7 @@ Z badań wynika również, że metoda uzyskuje lepszą skuteczność, kiedy algo
   \end{center}
 \end {table}
 
-\begin {table}[H]
+\begin {table}
   \begin{center}
     \begin{tabular}{c | c}
       Rozmiar maski dla algorytmu Sobel & Skuteczność \\
@@ -200,7 +200,7 @@ Wykrywanie krawędzi również nie jest rozpatrywane w kontekście całego obraz
 Nadzwyczaj dobrze wypadła metoda globalnego progowania - wyszukiwania minimum histogramu. Oczekiwałem, że metoda ta uzyska dużo niższą skuteczność niż metody lokalne, ale jak się okazało, wartość progu była w większości przypadków bardzo skutecznie wyznaczana. Wyszukiwanie szczytów histogramu, jak można było spodziewać się po wstępie teoretycznym, wypadła gorzej niż metoda wyszukiwania minimum histogramu. \\
 Najgorszą metodą w kontekście segmentacji i rozpoznawania tablicy rejestracyjnej okazała się metoda rzutu jasności i rozrostu obszaru. Pomimo dość precyzyjnemu określeniu punktów startowych dla metody rozrostu obszaru, algorytm bardzo często przekraczał wartość jasności znaków, ,,wylewając'' się na tło, powodując, że obraz wyjściowy stawał się w większości czarny.
 
-\begin {table}[H]
+\begin {table}
   \begin{center}
     \begin{tabular}{l | c}
       Metoda & Skuteczność \\

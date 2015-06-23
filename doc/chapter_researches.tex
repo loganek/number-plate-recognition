@@ -94,12 +94,12 @@ Kolejnym ulepszeniem, które zastosowałem, jest zmiana sposobu wyszukiwania min
 Metoda Sauvola i Pietikainena wymaga do obliczeń zdefiniowania zbioru najbliższych punktów dla każdego piksela. Przyjąłem, że zbiorem najbliższych punktów będzie obszar o kształcie kwadratu, którego środkiem jest punkt dla którego aktualnie wyznaczana jest wartość progowa. Długość boku obszaru ustanowiłem jako jeden z dwóch parametrów algorytmu, i oznaczyłem go symbolem $S$. \\
 Kolejnym parametrem jest wartość zmiennej $k$, która powinna zostać dobrana w zależności od problemu.\\
 
-\textbf{Metoda rzutu jasności i rozrostu obszarów}
+\textbf{Metoda rzutu jasności i rozrostu obszarów}\\
 W metodzie rozrostu obszarów konieczne jest podanie punktów startowych, od których będzie mogła rozpocząć działanie. Do wyszukiwania punktów użyłem metody rzutu jasności, której wynikiem są lokalizacje potencjalnych znaków. Jako że nie jest z góry znane oświetlenie obrazu wejściowego, $\varepsilon$ wyliczany jest ze wzoru:
 \begin{gather*}
   \varepsilon = srednia(f^{(in)}) + r,
 \end{gather*}
-gdzie funkcja $srednia$ zwraca średnią wartość jasności obrazu, a zmienna $r$ jest parametrem metody, którego wartość modyfikowałem podczas badań. \\
+gdzie funkcja $srednia$ z argumentem $f^{(in)}$ zwraca średnią arytmetyczną wartości jasności obrazu wejściowego, a zmienna $r$ jest parametrem metody, którego wartość modyfikowałem podczas badań. \\
 
 \textbf{Metoda krawędziowa}\\
 W badaniach ująłem też jedną metodę krawędziową. Do znajdowania krawędzi na obrazie wykorzystałem algorytm Canny'ego. Po otrzymaniu binarnego obrazu, użyłem algorytmu do znajdowania konturów, opracowanego przez Satoshi Suzuki oraz Keiichi Abe. Dla każdego znalezionego konturu wyznaczyłem jego położenie.\\

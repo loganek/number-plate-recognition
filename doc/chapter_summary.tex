@@ -5,4 +5,11 @@ Oprócz wykonanych porównań pomiędzy różnymi metodami segmentacji tekstu, s
 \paragraph{}
 Niestety, żaden z przetestowanych przeze mnie algorytmów, nie uzyskał skuteczności bliskiej 100\%. Istnieje wiele problemów, dla których bardzo ciężko znaleźć skuteczne oraz uniwersalne rozwiązanie. Pomimo licznych problemów, jakie udało mi się rozwiązać, pozostało jeszcze wiele zagadnień które trzeba rozważyć, oczekując od algorytmu stu procentowej dokładności. Niestety wzięcie pod uwagę wszystkich sytuacji jest niemalże niemożliwe.
 \paragraph{}
-Uważam, że bardzo trudne jest uzyskanie pewności wyniku pomiaru, bazując tylko i wyłącznie na obrazie tablicy rejestracyjnej. Mimo to uważam, że wyniki, jakie udało mi się osiągnąć podczas badań były zadowalające, i spełniły moje założenia sprzed przystąpienia do realizacji pracy.
+Skuteczność działania algorytmów segmentacji tablic rejestracyjnych można poprawić, stosując metodę hybrydową, czyli połączenie kilku omawianych w tej pracy metod. Należałoby jednak opracować algorytm rozstrzygania, która metoda zwróciła poprawny wynik. Porównanie rezultatów różnych metod mogłoby się odbywać na kilka sposobów.
+\begin{itemize}
+  \item Wybór rozwiązania, które wystąpiło najczęściej. Zakładając, że korzystamy z kilku metod segmentacji, możemy wybrać ten rezultat, który pojawia się najczęściej. Ta metoda nie sprawdza się jednak w sytuacji, kiedy każdy algorytm zwrócił inne rozwiązanie.
+    \item Sprawdzanie wiarygodności rozwiązania. Przewidujemy, jak powinien wyglądać ostateczny rezultat (znamy na przykład minimalną oraz maksymalną liczbę znaków na tablicy rejestracyjnej, znamy liczbę linii w których zapisany jest numer, wiemy jakie jest wzajemne położenie liter), możemy oszacować, czy dane rozwiązanie ma szansę bycia rozwiązaniem poprawnym. Stosowanie takiej metody wymaga jednak wiedzy na temat rozkładu znaków w tablicy rejestracyjnej.
+\end{itemize}
+Przed zastosowaniem metod hybrydowych w rzeczywistych systemach, należałoby wykonać liczne testy, które mogłyby potwierdzić skuteczność takich metod.
+\paragraph{}
+Uważam, że bardzo trudne jest uzyskanie pewności wyniku pomiaru, bazując tylko i wyłącznie na obrazie tablicy rejestracyjnej. Mimo to sądzę, że wyniki, jakie udało mi się osiągnąć podczas badań były zadowalające, i spełniły moje założenia sprzed przystąpienia do realizacji pracy.
