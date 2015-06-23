@@ -271,24 +271,36 @@ Dylatacja to rozszerzenie obrazu wykorzystując zadaną maskę. Operacja definio
 \begin{gather*}
   A \oplus B \equiv \{ (x, y) \in A | A \cap translacja(B, (x, y)) \neq \emptyset \}.
 \end{gather*}
-Przykładowy wynik operacji dylatacji przedstawiony jest na rysunku~\ref{fig:dilate}.
+Przykładowy wynik operacji dylatacji przedstawiony jest na rysunku~\ref{fig:dilate}. Proces nakładania maski na obraz wejściowy został zobrazowany na rysunku~\ref{fig:dilate_better_example}. Na czarno zaznaczony został obraz wejściowy, natomiast na fioletowo, obraz wyjściowy (obraz wejściowy zakrywa część obrazu wyjściowego). Maska została oznaczona kolorem szarym (jako maska użyty został wypełniony kwadrat). Rysunek przedstawia zastosowanie maski dla dwóch pikseli (zaznaczonych na czerwono).
 \begin{figure}
   \centering
   \includegraphics[width=15cm]{img/dilate}
   \caption{Obraz binarny poddany procesowi dylatacji z zadanym elementem strukturalnym}
   \label{fig:dilate}
 \end{figure}
+\begin{figure}
+  \centering
+  \includegraphics[width=5cm]{img/dilate-better-example}
+  \caption{Proces dylatacji obrazu z zastosowaniem elementu strukturalnego - wypełnionego kwadratu}
+  \label{fig:dilate_better_example}
+\end{figure}
 \subsubsection{Erozja obrazu} 
 Erozja obrazu polega na zwężaniu obrazu z wykorzystaniem zadanego elementu strukturalnego. Operacja definiowana jest wzorem
 \begin{gather*}
   A \ominus B \equiv \{ (x, y) \in A | translacja(B, (x, y) \subset A \}.
 \end{gather*}
-Przykładowy wynik operacji erozji obrazu przedstawiony został na rysunku~\ref{fig:erode}.
+Przykładowy wynik operacji erozji obrazu przedstawiony został na rysunku~\ref{fig:erode}. Rysunek~\ref{fig:erode_better_example} przedstawia proces erozji dla dwóch pikseli (zaznaczonych na czerwono). Obraz wejściowy zaznaczony jest kolorem czarnym, a obraz wyjściowy, kolorem fioletowym (obraz wyjściowy zakrywa część obrazu wejściowego). Kolorem szarym wypełniony został element strukturalny (w kształcie kwadratu). Rysunek przedstawia zastosowanie maski dla dwóch pikseli (zaznaczonych na czerwono).
 \begin{figure}
   \centering
   \includegraphics[width=15cm]{img/erode}
   \caption{Obraz binarny poddany procesowi erozji z zadanym elementem strukturalnym}
   \label{fig:erode}
+\end{figure}
+\begin{figure}
+  \centering
+  \includegraphics[width=5cm]{img/erode-better-example}
+  \caption{Proces erozji obrazu z użyciem elementu strukturalnego - wypełnionego kwadratu}
+  \label{fig:erode_better_example}
 \end{figure}
 \subsubsection{Zamknięcie i otwarcie obrazu}
 Operacje zamknięcia i otwarcia obrazu to złożenie dwóch wyżej wymienionych operacji (dylatacji oraz erozji) w odpowiedni sposób.
