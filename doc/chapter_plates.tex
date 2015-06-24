@@ -1,14 +1,14 @@
 \section{Segmentacja tablic rejestracyjnych}
 Podczas pracy nad algorytmami segmentacji obrazu, przede wszystkim skupiłem się na problemie segmentacji tablic rejestracyjnych. Segmentacja jest kluczowym elementem procesu identyfikacji tablicy rejestracyjnej.\\
 Algorytmy rozpoznawania tablic rejestracyjnych wykorzystywane są bardzo często w rozwiązaniach przemysłowych, przez co wymagana jest wysoka jakość zwracanych wyników.\\
-Ze względu na różnorodność formatów tablic rejestracyjnych, jakie mogą wystąpić, oraz dodatkowych utrudnień związanych z niedoskonałością środowiska w którym wykonywany jest obraz, problem segmentacji tablic rejestracyjnych nie jest problemem łatwym do rozwiązania.
+Ze względu na różnorodność formatów tablic rejestracyjnych, jakie mogą wystąpić, oraz dodatkowych utrudnień związanych z niedoskonałością środowiska, w którym wykonywany jest obraz, problem segmentacji tablic rejestracyjnych nie jest problemem łatwym do rozwiązania.
 \paragraph{}
 Obrazy tablic rejestracyjnych, ze względu na warunki w jakich są wykonywane, nie zawierają jedynie tekstu, który jest łatwy do analizy. Obrazy często zawierają artefakty, tablice mogą być zanieczyszczone, lub ze względu na warunki atmosferyczne, obraz może być niejednolicie oświetlony. Opisałem problemy, z jakimi spotkałem się, analizując zestaw danych testowych, wraz z proponowanymi przeze mnie możliwościami rozwiązania problemów.\\
-W tym rozdziale będę stosował wykorzystywał formę zapisu wzorów matematycznych stosowaną w języku programowania C++.
+W tym rozdziale będę stosował formę zapisu wzorów matematycznych stosowaną w języku programowania C++.
 \subsection{Różne kolory tablic rejestracyjnych}\label{ssec:different_backgrounds}
-Algorytmy segmentacji tablic rejestracyjnych które zaprezentuję w dalszej części pracy, wymagają, aby tło tablic rejestracyjnych było jaśniejsze od tekstu. Dlatego opracowałem algorytm, który wykrywa odwrotną sytuację, i w razie potrzeby, odwróci kolory obrazu.\\
-Pierwszym pomysłem było zastosowanie lokalnego progowania, a następnie policzenie czarnych oraz białych pikseli, i w zależności od tego, który kolor występuje częściej, określić tło tablicy rejestracyjnej. Metoda ta okazała się w większości przypadków skuteczna. Algorytm nie zwracał jednak poprawnych rezultatów w przypadku, gdy tablica rejestracyjna wykonana była pod kątem, i nie można było wykadrować obrazu w taki sposób, aby pozbyć się nieporządanych pikseli. Rysunek~\ref{fig:detect_bg_bad} przedstawia ten problem. Tablica rejestracyjna zajmuje większą część obrazu, jednak pomimo tego, została sklasyfikowana przez algorytm jako tablica z czarnym tłem. Wynika to z faktu, iż na tablicy pozostały znaki, które również zajmują znaczącą powierzchnię obrazu. Następnie spróbowałem zastosować operację zamknięcia regionu, która poprawnie usunęła znaki z obrazu. Nie zadziałała jednak w przypadku białych znaków na czarnym tle. \\
-Zamiast operacji morfologicznej, zastosowałem rozmycie medianowe, które dało poprawny efekt zarówno dla czarnych znaków na białym tle, jak również dla białych znaków na czarnym tle. Na rysunku~\ref{fig:detect_bg_ok} przedstawiony został wynik eksperymentu dla obrazu wejściowego przedstawionego na rysunku~\ref{fig:detect_bg_bad}.
+Algorytmy segmentacji tablic rejestracyjnych, które zaprezentuję w dalszej części pracy, wymagają, aby tło tablic rejestracyjnych było jaśniejsze od tekstu. Dlatego opracowałem algorytm, który wykrywa odwrotną sytuację (kiedy tło jest ciemniejsze od znaków), i w razie potrzeby, odwróci kolory obrazu.\\
+Pierwszym pomysłem było zastosowanie lokalnego progowania, a następnie policzenie czarnych oraz białych pikseli, aby w zależności od tego, który kolor występuje częściej, określić tło tablicy rejestracyjnej. Metoda ta okazała się w większości przypadków skuteczna. Algorytm nie zwracał jednak poprawnych rezultatów w przypadku, gdy obraz tablicy rejestracyjnej wykonany był pod kątem, i nie można było wykadrować obrazu w taki sposób, aby pozbyć się niepożądanych pikseli. Rysunek~\ref{fig:detect_bg_bad} przedstawia ten problem. Tablica rejestracyjna zajmuje większą część obrazu, jednak pomimo tego, została sklasyfikowana przez algorytm jako tablica z czarnym tłem. Wynika to z faktu, iż na tablicy pozostały znaki, które również zajmują znaczącą powierzchnię obrazu. Następnie spróbowałem zastosować operację zamknięcia regionu, która poprawnie usunęła znaki z obrazu. Nie zadziałała jednak w przypadku białych znaków na czarnym tle. \\
+Zamiast operacji morfologicznej, zastosowałem rozmycie medianowe, które dało poprawny efekt zarówno dla czarnych znaków na białym tle, jak również dla białych znaków na czarnym tle. Na rysunku~\ref{fig:detect_bg_ok} przedstawiony został wynik eksperymentu dla obrazu wejściowego przedstawionego na rysunku~\ref{fig:detect_bg_bad}. Jak można zauważyć, algorytm usunął zawartość tablicy rejestracyjnej, pozostawiając jedynie tło tablicy. Zwiększyło to tym samym ilość znaków tła, przez co algorytm poprawnie rozpoznał kolor tła jako biały.
 
 \begin{figure}
   \centering
@@ -34,11 +34,11 @@ Zamiast operacji morfologicznej, zastosowałem rozmycie medianowe, które dało 
   \label{fig:detect_bg_ok}
 \end{figure}
 
-\subsection{Różne kąty wykonania obrazu}
+\subsection{Obrazy wykonane pod różnymi kątami}
 Bardzo często zdarza się, że obraz tablicy rejestracyjnej nie został wykonany idealnie na wprost obiektu. Efektem tego mogą być obrazy, których numery rejestracyjne są pochylone, co może powodować ich niepoprawną lokalizację oraz identyfikację. \\
 \textbf{Algorytm detekcji kąta obrotu}. W tym szczególnym przypadku udało mi się rozwiązać ten problem w niżej opisany sposób. Wymaga on założenia, że tło tablicy rejestracyjnej jest jaśniejsze od pozostałych obiektów znajdujących się na obrazie, natomiast jeśli wcześniej zostanie zastosowany algorytm unifikacji tła tablicy rejestracyjnej, omawiany w poprzednim podrozdziale, warunek ten będzie spełniony.
 \paragraph{}
-Na początku, obraz poddajemy działaniu jednego z algorytmów progowania. Wynik tego progowania nie musi dawać nam bardzo dobrego rezultatu jeśli chodzi o rozdzielenie znaków od tła, ważne jest tylko, aby wyraźnie zostało zaznaczone tło. Można zastosować jeden z algorytmów progowania dynamicznego, lub progowania globalnego z wysokim progiem. Po zastosowaniu algorytmu progowania, znajdujemy największy spójny biały obszar, a następnie wyznaczamy najmniejszy prostokąt otaczający ten obszar. Kąt, pod jakim znajduje się prostokąt, jest kątem, o jaki obrócony został obraz podczas jego tworzenia.\\
+Na początku, obraz poddajemy działaniu jednego z algorytmów progowania. Wynik tego progowania nie musi dawać nam bardzo dobrego rezultatu, jeśli chodzi o rozdzielenie znaków od tła, ważne jest tylko, aby wyraźnie zostało zaznaczone tło. Można zastosować jeden z algorytmów progowania dynamicznego, lub progowania globalnego z wysokim progiem. Po zastosowaniu algorytmu progowania, znajdujemy największy spójny biały obszar, a następnie wyznaczamy najmniejszy prostokąt otaczający ten obszar. Kąt, pod jakim znajduje się prostokąt, jest kątem, o jaki obrócony został obraz podczas jego tworzenia.\\
 Poszczególne kroki działania algorytmu zostały przedstawione na rysunku~\ref{fig:detect_image_angle}.
 
 \begin{figure}
@@ -128,7 +128,7 @@ Rysunek~\ref{fig:apriori_liczba_linii} przedstawia tablice rejestracyjne zawiera
 \end{figure}
 
 \subsection{Dodatkowe elementy na tablicach}\label{ssec:additional_elements}
-Tablice rejestracyjne zawierają bardzo często elementy, które nie są elementami numerów rejestracyjnych, ale mogą zostać sklasyfikowane jako element numeru, podczas procesu segmentacji. Poniżej przedstawiam metody, jakie zastosowałem w celu filtracji elementów nieporządanych. Weryfikacji podlega każdy znaleziony segment, sprawdzane są wszystkie poniższe warunki.
+Tablice rejestracyjne zawierają bardzo często elementy, które nie są elementami numerów rejestracyjnych, ale mogą zostać sklasyfikowane jako element numeru, podczas procesu segmentacji. Poniżej przedstawiam metody, jakie zastosowałem w celu filtracji elementów niepożądanych. Weryfikacji podlega każdy znaleziony segment, sprawdzane są wszystkie poniższe warunki.
 \paragraph{Stosunek szerokości do wysokości znaku}\mbox{}\\
 Zauważyłem, że w każdym znaku pojawiającym się w numerze rejestracyjnym, szerokość znaku jest mniejsza od jego wysokości. Warunek ten spełniony był dla każdej czcionki pojawiającej się w dostępnych danych, dlatego mogłem wykluczyć wszystkie segmenty, które nie spełniają warunku:
 \begin{gather*}
@@ -167,14 +167,14 @@ Ten warunek pozwala na wyeliminowanie elementów, które kształtem przypominaj�
   \begin{subfigure}[b]{0.65\textwidth}
     \includegraphics[width=\textwidth]{img/standard-deviation-condition-too-small}
     \label{fig:standard_deviation_too_small}
-    \caption{}
+    \caption{Fałszywy pozytyw niższy niż znaki numerów rejestracyjnych}
   \end{subfigure}
   ~
   \begin{subfigure}[b]{0.40\textwidth}
     \includegraphics[width=\textwidth]{img/standard-deviation-condition-too-big}
     \label{fig:standard_deviation_too_big}
-    \caption{}
+    \caption{Fałszywy pozytyw o większej wysokości niż przeciętny znak numeru rejestracyjnego}
   \end{subfigure}
-  \caption{Usuwanie fałszywych pozytywów poprzez porównanie ze średnią wysokością znaku: a) fałszywy pozytyw niższy niż znaki numerów rejestracyjnych, b) fałszywy pozytyw o większej wysokości niż przeciętny znak numeru rejestracyjnego}
+  \caption{Usuwanie fałszywych pozytywów poprzez porównanie ze średnią wysokością znaku. Czarną ramką oznaczony został obiekt zaklasyfikowany jako poprawny znak, natomiast czerwoną ramką zaznaczone zostały obiekty, które mogłyby zostać sklasyfikowane jako znaki, natomiast ze względu na zastosowanie kryterium średniej wysokości znaku, zostały odrzucone}
   \label{fig:standard_deviation_condition}
 \end{figure}

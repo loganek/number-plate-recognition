@@ -134,7 +134,7 @@ Zazwyczaj operacji progowania poddawane są obrazy jednokanałowe. Istnieje jedn
 \end{gather*}
 gdzie $C$ to liczba kanałów w obrazie. \\
 
-\textbf{Progowanie lokalne} znajduje zastosowanie w przypadku gdy obraz jest niejednolicie oświetlony. Trudno jest dobrać globalny próg w taki sposób, aby wyekstrachować z obrazu nawet większość porządanych obiektów. Progowanie lokalne polega na wyznaczeniu danego progu w sąsiedztwie aktualnie przetwarzanego piksela. W przypadku obrazu jednokanałowego
+\textbf{Progowanie lokalne} znajduje zastosowanie w przypadku gdy obraz jest niejednolicie oświetlony. Trudno jest dobrać globalny próg w taki sposób, aby wyekstrachować z obrazu nawet większość pożądanych obiektów. Progowanie lokalne polega na wyznaczeniu danego progu w sąsiedztwie aktualnie przetwarzanego piksela. W przypadku obrazu jednokanałowego
 \begin{gather*}
   f^{(out)}(x, y) = \left\{\begin{matrix}
   1, dla \: f^{(in)}(x, y) > T(x, y),\\
@@ -402,7 +402,7 @@ Bardzo często podczas analizy obrazu w celu jego segmentacji, wykorzystywana je
 \textbf{Histogram obrazu} jest reprezentacją rozkładu częstości występowania danej wartości jasności w obrazie. Przykładowy obraz oraz jego histogram przedstawiony został na rysunku~\ref{fig:image_histogram_g}. Ponieważ obraz jest bardzo ciemny, większość wartości na histogramie jest bliska wartości 0 (ta wartość reprezentuje kolor czarny).\\
 Jako $H$ będziemy oznaczali funkcję zwracającą wartość histogramu w podanym punkcie. Poprzez symbol $H_{max}$ oznaczać będziemy funkcję zwracającą największy indeks $i$ znajdujący się w histogramie, taki że $H(i) \neq 0$. Symbolem $H_{in}$ oznaczać będziemy histogram wejściowy, a symbolem $H_{out}$ histogram wyjściowy.\\
 
-\subsubsection{Wyrównanie histogramu}
+\subsubsection{Wyrównanie histogramu}\label{sssec:histogram_eq}
 Metoda wyrównywania histogramu ma na celu zmianę kontrastu obrazu \cite{acharya05}. Metoda ta wykorzystywany jest w przypadku, gdy zarówno tło, jak i pierwszy plan obrazu, są ciemne lub jasne. Wadą metody wyrównywania histogramu jest możliwe wzmocnienie zakłóceń występujących na obrazie, gdyż algorytm traktuje je jak sygnał opisujący prawidłowy obraz. Przed zastosowaniem tej metody, warto zatem zastosować jeden z algorytmów rozmycia obrazu, opisywany we wcześniejszej części tego rozdziału.\\
 Metoda wyrównania histogramu sprowadza się do wyznaczenia tablicy LUT (\textit{ang. Lookup table}), na podstawie której wyznaczone zostaną wartości jasności poszczególnych pikseli obrazu wejściowego. W celu wyznaczenia tablicy LUT, należy wyznaczyć dystrybuantę rozkładu prawdopodobieństwa dla wartości pikseli obrazu:
 \begin{gather*}

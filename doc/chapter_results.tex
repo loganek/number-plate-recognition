@@ -1,19 +1,19 @@
 \section{Rezultaty badań}
-Badania przeprowadzone zostały na zbiorze zawierającym kilkaset obrazów przedstawiających tablice rejestracyjne wykonane w różnych warunkach. Moim głównym celem było porównywanie metod segmentacji obrazu, a metody rozpoznawania znaków traktowałem tylko jako metody pomocnicze. Dlatego kiedy liczba segmentów zwracanych przez algorytm zgadzała się z liczbą znaków oczekiwanego wyniku, a wartości wyników się nie zgadzały, ręcznie sprawdzałem czy niepoprawne rozpoznanie tekstu zapisanego na tablicy rejestracyjnej jest wynikiem niepoprawnego działania algorytmu segmentacji obrazu, czy algorytmu rozpoznawania znaków. \\
+Badania przeprowadzone zostały na zbiorze zawierającym kilkaset obrazów przedstawiających tablice rejestracyjne, wykonanych w różnych warunkach. Moim głównym celem było porównywanie metod segmentacji obrazu, a metody rozpoznawania znaków traktowałem tylko jako metody pomocnicze. Dlatego kiedy liczba segmentów zwracanych przez algorytm zgadzała się z liczbą znaków oczekiwanego wyniku, a wartości wyników się nie zgadzały, ręcznie sprawdzałem czy niepoprawne rozpoznanie tekstu zapisanego na tablicy rejestracyjnej jest wynikiem niepoprawnego działania algorytmu segmentacji obrazu, czy algorytmu rozpoznawania znaków. \\
 Jako skuteczność metody w tym rozdziale będziemy rozumieć stosunek procentowy liczby poprawnie rozpoznanych przypadków testowych do liczby wszystkich przypadków testowych.
 
 \subsection{Wpływ parametrów metod na rezultaty}
-\subsubsection{Metoda wyszukiwania szczytów histogramu}
+\subsubsection{Metoda wyszukiwania szczytów histogramu}\label{sssec:histogram_peaks_results}
 Zbadałem, jaki wpływ na rezultaty ma wyostrzenie obrazu przed faktycznym procesem segmentacji, oraz zmiana minimalnego dystansu pomiędzy szczytami histogramu. Wyniki przedstawione zostały w tabelach~\ref{tab:wyszukiwanie_szczytow_wyostrz} oraz~\ref{tab:wyszukiwanie_szczytow_dystans}. Jak można zauważyć, zastosowanie operacji wyostrzania obrazu powoduje prawie dwukrotny wzrost skuteczności algorytmu. \\
-Również parametr minimalnej odległości pomiędzy szczytami znacząco wpływa na rezultaty. W przypadku braku minimalnej odległości (wartość 1), algorytm uzyskuje bardzo słabe rezultaty. Wynika to zapewne z faktu, iż często najwyższe ekstrema lokalne w histogramie występują bardzo blisko siebie, co powoduje, że próg wyznaczany jest w ramach tego samego obiektu, a nie pomiędzy dwoma różnymi obiektami. Zastosowanie większych minimalnych odległości przyniosło spodziewane rezultaty.
+Również parametr minimalnej odległości pomiędzy szczytami znacząco wpływa na rezultaty. W przypadku braku minimalnej odległości (wartość 1), algorytm uzyskuje bardzo słabe rezultaty. Wynika to zapewne z faktu, iż często najwyższe ekstrema lokalne w histogramie występują bardzo blisko siebie, co powoduje, że próg wyznaczany jest w ramach tego samego obiektu, a nie pomiędzy dwoma różnymi obiektami. Zastosowanie większych minimalnych odległości przyniosło spodziewane rezultaty. 
 
 \begin {table}[H]
   \begin{center}
     \begin{tabular}{l | c}
       \space & Skuteczność \\
       \hline
-      Segmentacja wyostrzonego obrazu & 49\% \\
-      Brak wyostrzenia obrazu & 26\%
+      Brak wyostrzenia obrazu & 26\% \\
+      Segmentacja wyostrzonego obrazu & 49\%
     \end{tabular}
     \caption {Wpływ użycia algorytmu wyostrzenia obrazu na wynik działania metody wyszukiwania szczytów histogramu}
     \label{tab:wyszukiwanie_szczytow_wyostrz} 
@@ -28,7 +28,8 @@ Również parametr minimalnej odległości pomiędzy szczytami znacząco wpływa
       1 & 12\% \\
       25 & 28\% \\
       80 & 49\% \\
-      150 & 49\%
+      150 & 49\% \\
+      200 & 49\%
     \end{tabular}
     \caption {Wpływ zmiany parametru minimalnej odległości między szczytami na wynik działania metody wyszukiwania szczytów histogramu}
     \label{tab:wyszukiwanie_szczytow_dystans} 
@@ -37,7 +38,7 @@ Również parametr minimalnej odległości pomiędzy szczytami znacząco wpływa
 
 \subsubsection{Metoda wyszukiwania minimum histogramu}
 Parametrem tej metody była liczba sąsiednich punktów jakie zostały użyte do obliczenia nowej wartości dla danego punktu w histogramie (przy założeniu, że zostały zastosowane omawiane w poprzednim rozdziale ulepszenia). Tabela~\ref{tab:wyszukiwanie_minimum_histogramu_sasiady} przedstawia uzyskane przeze mnie wyniki. Można zauważyć, że wraz ze wzrostem liczby sąsiednich punktów, rosła skuteczność metody. Maksymalna wartość została osiągnięta dla liczby 56. Dla kolejnych wartości skuteczność spadła o kilka procent, jednak nadal była stosunkowo wysoka. Na podstawie wyników można więc stwierdzić, że użycie większej liczby sąsiadów w operacji wygładzania histogramu, zwiększa skuteczność algorytmu. \\
-Jako kolejny parametr metody, przyjąłem użycie omawianych ulepszeń, polegających na wygładzeniu histogramu oraz zmiany sposobu wyszukiwania minimum. Zgodnie z moimi przewidywaniami, algorytm okazał się skuteczniejszy, w przypadku zastosowania moich poprawek. Różnica skuteczności metody bez ulepszeń, oraz po zastosowaniu poprawek, przedstawiona została w tabeli~\ref{tab:wyszukiwanie_minimum_histogramu_ulepszenia} \\
+Jako kolejny parametr metody przyjąłem użycie omawianych ulepszeń, polegających na wygładzeniu histogramu oraz zmiany sposobu wyszukiwania minimum. Zgodnie z moimi przewidywaniami, algorytm okazał się skuteczniejszy, w przypadku zastosowania moich poprawek. Różnica skuteczności metody bez ulepszeń, oraz po zastosowaniu poprawek, przedstawiona została w tabeli~\ref{tab:wyszukiwanie_minimum_histogramu_ulepszenia}. \\
 Nie wykonywałem porównania wpływu zastosowania operacji wyostrzania obrazu na jakość rezultatu (takie testy wykonywałem dla metody wyszukiwania szczytów histogramu), jednak prawdopodobnie wpływ niezastosowania tej operacji również negatywnie wpłynie na skuteczność metody.
 
 
@@ -69,7 +70,7 @@ Nie wykonywałem porównania wpływu zastosowania operacji wyostrzania obrazu na
       Segmentacja obrazu z ulepszeniami & 66\% \\
       Segmentacja obrazu bez zastosowania ulepszeń & 53\%
     \end{tabular}
-    \caption {Wpływ zastosowania poprawek na działania metody wyszukiwania minimum histogramu}
+    \caption {Wpływ zastosowania poprawek (zmiana liczby sąsiadów dla algorytmu wygładzania histogramu oraz zmiana sposobu wyszukiwania minimum histogramu) na działania metody wyszukiwania minimum histogramu}
     \label{tab:wyszukiwanie_minimum_histogramu_ulepszenia} 
   \end{center}
 \end {table}
@@ -82,7 +83,9 @@ Znaczący wpływ ma natomiast wartość parametru $S$. Jeśli parametr ten nie z
 \begin {table}
   \begin{center}
     \begin{tabular}{c | c | c}
-      Wartość parametru $k$ & Skuteczność ($S = 10\%$) & Skuteczność ($S = 50\%$)  \\
+      Wartość parametru $k$ & \multicolumn{2}{c}{Skuteczność} \\
+      \cline{2-3}
+      & $S = 10\%$ & $S = 50\%$ \\
       \hline
       0.05\% & 72\% & 53\% \\
       0.1\% & 72\% & 53\% \\
@@ -103,7 +106,12 @@ Znaczący wpływ ma natomiast wartość parametru $S$. Jeśli parametr ten nie z
       \hline
       1\% & 5.4\% \\
       5\% & 63\% \\
+      8\% & 68\% \\
+      9\% & 69\% \\
       10\% & 72\% \\
+      11\% & 70\% \\
+      12\% & 70\% \\
+      15\% & 68\% \\
       20\% & 64\% \\
       50\% & 53\% \\
       70\% & 54\% \\
@@ -136,7 +144,7 @@ Przeprowadziłem badania dla ośmiu różnych wartości parametru $r$. Wyniki za
 \end {table}
 
 \subsubsection{Metoda krawędziowa}
-Wyniki badań dla metody krawędziowej przedstawiłem w tabelach~\ref{tab:metoda_krawedziowa_param_s} oraz~\ref{tab:metoda_krawedziowa_sobel}. W przypadku rozmiaru maski dla algorytmu Sobel, skuteczność dla wartości 3 oraz 5 nie różni się znacząco, natomiast algorytm zupełnie nie działa dla wartości 7. Można się o tym przekonać, oglądając obraz wyjściowy dla algorytmu Canny'ego dla takiej maski. Na rysunku~\ref{fig:results_canny_sobel_compare} zamieściłem porównanie obrazów wyjściowych dla różnych rozmiarów maski dla tego samego obrazu wejściowego. Obraz wyjściowy dla parametru 7 jest bardzo zaszumiony, przez co praktycznie niemożliwe jest uzyskanie z niego żądanej informacji.\\
+Wyniki badań dla metody krawędziowej przedstawiłem w tabelach~\ref{tab:metoda_krawedziowa_param_s} oraz~\ref{tab:metoda_krawedziowa_sobel}. W przypadku rozmiaru maski dla algorytmu Sobel, skuteczność dla wartości 3 oraz 5 nie różni się znacząco, natomiast algorytm zupełnie nie działa dla wartości 7. Zbiór badanych wartości został określony w dokumentacji biblioteki OpenCV \cite{opencv}. Można się o tym przekonać, oglądając obraz wyjściowy dla algorytmu Canny'ego dla takiej maski. Na rysunku~\ref{fig:results_canny_sobel_compare} zamieściłem porównanie obrazów wyjściowych dla różnych rozmiarów maski dla tego samego obrazu wejściowego. Obraz wyjściowy dla parametru 7 jest bardzo zaszumiony, przez co praktycznie niemożliwe jest uzyskanie z niego żądanej informacji. \\
 Z badań wynika również, że metoda uzyskuje lepszą skuteczność, kiedy algorytm wygładzania będzie wykorzystywał do wyliczania nowej wartości punktu niewielki obszar sąsiedztwa. Najlepszą wartość uzyskałem dla wartości 2, czyli do wyliczania wygładzania wykorzystywane są tylko cztery najbliższe punkty (wliczając w to również punkt przetwarzany). Dla dużych wartości parametru $S$ skuteczność bardzo spada. Wynika to z tego, że duże rozmycia powodują zanik krawędzi, zamieniając je na płynne przejścia jasności pomiędzy znakiem a tłem obrazu.
 \begin {table}
   \begin{center}

@@ -1,4 +1,4 @@
-\section{Algorytm rozpoznawania znaków}
+\section{Algorytm rozpoznawania znaków}\label{sec:ocr}
 Segmentacja obrazu prowadzi do wyodrębnienia z obrazu żądanych obiektów. Zwykle jest ona pierwszym etapem analizy całego obrazu. Odnalezione obiekty bardzo często poddawane są analizie w celu identyfikacji lub podjęcia decyzji.
 \paragraph{}
 W przypadku problemu rozpoznawania znaków, zadaniem algorytmu segmentacji jest określenie lokalizacji każdego znaku oraz binaryzacja fragmentów obrazu zawierającego tekst. Kolejnym krokiem jest dostarczenie serii wykadrowanych obrazów binarnych zawierających pojedyncze znaki do algorytmu rozpoznawania znaków. Zadaniem algorytmu rozpoznawania znaków jest określenie, jaki znak tekstu znajduje się na zadanym obrazie.
@@ -14,7 +14,7 @@ Zestaw cech geometrycznych jest unikalny dla każdego znaku, dlatego sprawdzają
     \item liczba pionowych oraz poziomych krawędzi znaku
 \end{itemize}
 \subsection{Rzut jasności obiektu}
-Metoda rzutu jasności obiektu została opisana na stronie~\pageref{ssec:rzut_jasnosci}. W pierwszej kolejności należy przeskalować obraz do rozmiarów obrazu wzorcowego, a następnie wykonać algorytm rzutu jasności zarówno w pionie, jak i w poziomie. Otrzymane rzuty zostają następnie poddane analizie podobieństwa z rzutami wykonanymi dla znaków wzorcowych. Analiza podobieństwa polega na porównaniu kształtu otrzymanych rzutów jasności. \\
+Metoda rzutu jasności obiektu została opisana na stronie~\pageref{ssec:rzut_jasnosci}. W pierwszej kolejności należy przeskalować obraz do rozmiarów obrazu wzorcowego, a następnie wykonać algorytm rzutu jasności zarówno w pionie, jak i w poziomie. Otrzymane rzuty zostają następnie poddane analizie podobieństwa z rzutami wykonanymi dla znaków wzorcowych. Analiza podobieństwa polega na porównaniu wartości tablic rzutu jasności na poszczególnych indeksach dla obrazu wzorcowego oraz dla obrazu badanego. \\
 Na rysunku~\ref{fig:rzut_jasnosci_ocr} przedstawione zostały wzorce kilku znaków, oraz przykładowy obraz wejściowy.
 
 \begin{figure}
@@ -46,20 +46,6 @@ Sztuczne sieci neuronowe(SSN) to struktury tworzone na podobieństwo biologiczny
   \item warstwy ukryte,
   \item warstwa wyjściowa.
 \end{itemize}
-W zależności od złożoności problemu, sieć neuronowa może zawierać różną liczbę neuronów w każdej warstwie, oraz różną liczbę warstw ukrytych. Przykład SSN można znaleźć na rysunku~\ref{fig:ssn_example}. Wartość wyjściowa neuronu wyznaczana jest na podstawie sygnałów wejściowych oraz funkcji aktywacji. Dla każdego neuronu wartość wyjściowa wyznaczana jest za pomocą wzoru:
-\begin{gather*}
-  y = g(\sum_{i=1}^{N}w_ix_i+w_0),
-\end{gather*}
-gdzie:\\
-$g$ - funkcja aktywacji,\\
-$N$ - liczba wejść poprzedniej warstwy,\\
-$w_i$ - waga synapsy i-tego sygnału,\\
-$x_i$ - wartość i-tego sygnału.\\
-W zależności od wybranego algorytmu, sieć poddawana jest procesowi uczenia, podczas którego wartości wag $w_i$ są korygowane.\\
-Jako zestaw uczący, a następnie zestaw testowy, podawane mogą być obrazy ze znakami. Po wykonaniu procesu uczenia, sieć neuronowa powinna mieć zdolność do dopasowania obrazu do najlepszego wyuczonego wzorca. 
-\begin{figure}
-  \centering
-  \includegraphics[width=10cm]{img/ssn-example}
-  \caption{Przykładowa sieć neuronowa, zawierająca dwa neurony w warstwie wejściowej, dwie warstwy ukryte, oraz warstwę wejściową zawierającą trzy neurony.}
-  \label{fig:ssn_example}
-\end{figure}
+W zależności od złożoności problemu, sieć neuronowa może zawierać różną liczbę neuronów w każdej warstwie, oraz różną liczbę warstw ukrytych. \\
+Sztuczne sieci neuronowe można wykorzystać do rozwiązywania problemu rozpoznawania znaków, wykonując najpierw proces uczenia sieci, czyli zadawania na wejście sieci danych uczących wraz z podawaniem poprawnych odpowiedzi. Sieć automatycznie poprawia wagi poszczególnych synaps w taki sposób, aby następna iteracja uczenia zwróciła lepszy wynik. W zależności od struktury sieci, proces ten może wymagać wielu iteracji. Po wykonaniu procesu uczenia, sieć powinna być zdolna samodzielnie rozpoznawać znaki zadane na wejściu.
+
