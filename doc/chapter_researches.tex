@@ -1,27 +1,27 @@
 \section{Wykonanie badań metod segmentacji obrazu}
-Przeprowadzone przeze mnie badania miały na celu porównanie metod segmentacji obrazu, a także sprawdzenie, jak dobór parametrów dla poszczególnych metod wpływa na jakość uzyskiwanego rezultatu.
+Przeprowadzone przeze mnie badania miały na celu porównanie metod segmentacji obrazu, a~także sprawdzenie, jak dobór parametrów dla poszczególnych metod wpływa na jakość uzyskiwanego rezultatu.
 
 \subsection{Algorytm rozpoznawania znaków na tablicy rejestracyjnej}
-Podczas testowania różnych metod segmentacji obrazów, korzystałem zawsze z takiego samego algorytmu. Schemat blokowy tego algorytmu został przedstawiony na rysunku~\ref{fig:main_flowchart}. Poniżej omówiłem poszczególne bloki schematu.
+Podczas testowania różnych metod segmentacji obrazów, korzystałem zawsze z~takiego samego algorytmu. Schemat blokowy tego algorytmu został przedstawiony na rysunku~\ref{fig:main_flowchart}. Poniżej omówiłem poszczególne bloki schematu.
 \begin{enumerate}
   \item \textbf{Konwersja do skali szarości}\\
-    Wszystkie operacje, jakich używam w swoim programie, wykorzystują obrazy w skali szarości, dlatego pierwszą czynnością, jaką wykonuje program, jest zmiana obrazu wejściowego na obraz monochromatyczny (jeśli zachodzi taka potrzeba).
+    Wszystkie operacje, jakich używam w~swoim programie, wykorzystują obrazy w~skali szarości, dlatego pierwszą czynnością, jaką wykonuje program, jest zmiana obrazu wejściowego na obraz monochromatyczny (jeśli zachodzi taka potrzeba).
   \item \textbf{Wyrównanie histogramu}\\
-    Wyrównanie histogramu poprawia kontrast w obrazie, dzięki czemu różnice jasności pomiędzy tłem i znakami są wyraźniejsze, dzięki temu kolejne operacje mogą operować na szerszym zakresie wartości jasności. Operacja wyrównania histogramu została na stronie~\pageref{sssec:histogram_eq}.
-  \item \textbf{Detekcja jasności tła i odwrócenie kolorów} \\
-    Wszystkie metody segmentacji jakich użyłem zakładają, że tło obrazu jest jaśniejsze od znaków. Dlatego przed wykonywaniem operacji segmentacji następuje detekcja jasności tła, i jeśli zachodzi taka potrzeba, odwrócenie kolorów. Metodę użytą w tej operacji opisałem szczegółowo w akapicie~\ref{ssec:different_backgrounds}.
+    Wyrównanie histogramu poprawia kontrast w~obrazie, dzięki czemu różnice jasności pomiędzy tłem i~znakami są wyraźniejsze, dzięki temu kolejne operacje mogą operować na szerszym zakresie wartości jasności. Operacja wyrównania histogramu została na stronie~\pageref{sssec:histogram_eq}.
+  \item \textbf{Detekcja jasności tła i~odwrócenie kolorów} \\
+    Wszystkie metody segmentacji jakich użyłem zakładają, że tło obrazu jest jaśniejsze od znaków. Dlatego przed wykonywaniem operacji segmentacji następuje detekcja jasności tła, i~jeśli zachodzi taka potrzeba, odwrócenie kolorów. Metodę użytą w~tej operacji opisałem szczegółowo w~akapicie~\ref{ssec:different_backgrounds}.
   \item \textbf{Preprocessing}\\
-    Prawie każda metoda segmentacji wymaga wcześniejszego przygotowania obrazu w taki sposób, aby rezultaty były jak najlepsze. W niektórych przypadkach jest to rozmycie obrazu, dla innych metod są to operacje morfologiczne czy operacje działające na histogramie obrazu (np. wyrównanie histogramu).
+    Prawie każda metoda segmentacji wymaga wcześniejszego przygotowania obrazu w~taki sposób, aby rezultaty były jak najlepsze. W~niektórych przypadkach jest to rozmycie obrazu, dla innych metod są to operacje morfologiczne czy operacje działające na histogramie obrazu (np. wyrównanie histogramu).
   \item \textbf{Segmentacja obrazu}\\
-    Blok ten reprezentuje implementację jednej metody segmentacji obrazu. Wszystkie badane metody segmentacji obrazu zostały wymienione i opisane w dalszej części tego rozdziału.
+    Blok ten reprezentuje implementację jednej metody segmentacji obrazu. Wszystkie badane metody segmentacji obrazu zostały wymienione i~opisane w~dalszej części tego rozdziału.
     \item \textbf{Określenie warunków poprawnych segmentów}\\
-      Na podstawie wyników segmentacji algorytm definiuje kryteria, jakie powinien spełnić segment, aby zostać sklasyfikowany jako znak. Metody określania warunków zostały opisane w podpunkcie~\ref{ssec:different_formats} i~\ref{ssec:additional_elements}.
+      Na podstawie wyników segmentacji algorytm definiuje kryteria, jakie powinien spełnić segment, aby zostać sklasyfikowany jako znak. Metody określania warunków zostały opisane w~podpunkcie~\ref{ssec:different_formats} i~\ref{ssec:additional_elements}.
     \item \textbf{Odrzucenie niepoprawnych segmentów}\\
-      Na tym etapie algorytm sprawdza wszystkie warunki określone w poprzednim punkcie, i usuwa ze zbioru segmentów te, które nie spełniają określonych wcześniej kryteriów.
+      Na tym etapie algorytm sprawdza wszystkie warunki określone w~poprzednim punkcie, i~usuwa ze zbioru segmentów te, które nie spełniają określonych wcześniej kryteriów.
     \item \textbf{OCR}\\
-      Obraz jest kadrowany dla każdego segmentu osobno. Seria wykadrowanych obrazów przekazywana jest do algorytmu rozpoznawania znaków, którego zadaniem jest zwrócenie jednej wartości znaku, który zapisany jest w obrazie. Metody rozpoznawania znaków zostały opisane w rozdziale~\ref{sec:ocr}.
+      Obraz jest kadrowany dla każdego segmentu osobno. Seria wykadrowanych obrazów przekazywana jest do algorytmu rozpoznawania znaków, którego zadaniem jest zwrócenie jednej wartości znaku, który zapisany jest w~obrazie. Metody rozpoznawania znaków zostały opisane w~rozdziale~\ref{sec:ocr}.
     \item \textbf{Weryfikacja poprawności}\\
-      Ostatni etap nie jest już elementem algorytmu rozpoznawania tablic rejestracyjnych, ale został wprowadzony w mojej aplikacji w celu weryfikacji poprawności operacji segmentacji oraz rozpoznawania znaków. Program sprawdza, czy ciąg znaków zwrócony w poprzednim podpunkcie jest taki sam, jak oczekiwany. Wartości oczekiwane wyznaczane były przez człowieka patrzącego na obraz.
+      Ostatni etap nie jest już elementem algorytmu rozpoznawania tablic rejestracyjnych, ale został wprowadzony w~mojej aplikacji w~celu weryfikacji poprawności operacji segmentacji oraz rozpoznawania znaków. Program sprawdza, czy ciąg znaków zwrócony w~poprzednim podpunkcie jest taki sam, jak oczekiwany. Wartości oczekiwane wyznaczane były przez człowieka patrzącego na obraz.
 \end{enumerate}
 Podczas testowania, dla każdej metody segmentacji obrazu zamieniałem tylko implementacje bloków \textbf{preprocessing} oraz \textbf{segmentacja obrazu}.
 \begin{figure}
@@ -32,17 +32,17 @@ Podczas testowania, dla każdej metody segmentacji obrazu zamieniałem tylko imp
 \end{figure}
 
 \subsection{Narzędzia użyte do implementacji algorytmów}
-Opisane niżej algorytmy segmentacji obrazu zostały napisane w języku C++ i skompilowane w systemie operacyjnym Linux. Implementacja jest jednak niezależna od systemu operacyjnego, i dzięki uniwersalnemu systemowi budowania CMake \cite{cmake}, z powodzeniem można w łatwy sposób skompilować i uruchamiać algorytmy pod innymi popularnymi systemami operacyjnymi, takimi jak Windows czy Mac OSX.\\
-Ze względu na wykorzystanie w algorytmach segmentacji podstawowych operacji przetwarzania obrazu (takich jak dodawanie obrazu, operacje morfologiczne), zdecydowałem się użyć gotowej biblioteki OpenCV, udostępniającej wiele funkcji pomocnych przy implementacji złożonych algorytmów przetwarzania obrazów \cite{opencv}\cite{dawsonhowe14}.\\
-Do rozpoznawania tekstu wykorzystałem bibliotekę Tesseract \cite{tesseract}. Biblioteka Tesseract jest otwartym oprogramowaniem rozwijanym od 1985 roku. Służy do rozpoznawania znaków w obrazach cyfrowych.
+Opisane niżej algorytmy segmentacji obrazu zostały napisane w~języku C++ i~skompilowane w~systemie operacyjnym Linux. Implementacja jest jednak niezależna od systemu operacyjnego, i~dzięki uniwersalnemu systemowi budowania CMake \cite{cmake}, z~powodzeniem można w~łatwy sposób skompilować i~uruchamiać algorytmy pod innymi popularnymi systemami operacyjnymi, takimi jak Windows czy Mac OSX.\\
+Ze względu na wykorzystanie w~algorytmach segmentacji podstawowych operacji przetwarzania obrazu (takich jak dodawanie obrazu, operacje morfologiczne), zdecydowałem się użyć gotowej biblioteki OpenCV, udostępniającej wiele funkcji pomocnych przy implementacji złożonych algorytmów przetwarzania obrazów \cite{opencv}\cite{dawsonhowe14}.\\
+Do rozpoznawania tekstu wykorzystałem bibliotekę Tesseract \cite{tesseract}. Biblioteka Tesseract jest otwartym oprogramowaniem rozwijanym od 1985 roku. Służy do rozpoznawania znaków w~obrazach cyfrowych.
 \subsection{Aplikacja testująca}
-Podczas implementacji algorytmów, bardzo często musiałem zmieniać wartości ich parametrów. Każdorazowe zmiany w kodzie źródłowym i ponowna kompilacja algorytmów była czasochłonna, dlatego napisałem aplikację, która umożliwi mi zmianę parametrów algorytmów bez konieczności zmieniania wartości w kodzie źródłowym, ale podczas działania aplikacji.\\
+Podczas implementacji algorytmów, bardzo często musiałem zmieniać wartości ich parametrów. Każdorazowe zmiany w~kodzie źródłowym i~ponowna kompilacja algorytmów była czasochłonna, dlatego napisałem aplikację, która umożliwi mi zmianę parametrów algorytmów bez konieczności zmieniania wartości w~kodzie źródłowym, ale podczas działania aplikacji.\\
 Następnie do aplikacji dodałem możliwość uruchamiania testów automatycznych, których celem była szybka weryfikacja większej ilości danych testowych na raz, zwracając procentową wartość poprawnie rozpoznanych obrazów. Na rysunku~\ref{fig:tuner_screenshot} zamieszczone zostało okno główne aplikacji testującej. Aplikacja operuje na obrazach pochodzących ze wskazanego wcześniej repozytorium.
 
 \begin{figure}
   \centering
   \includegraphics[width=1\textwidth]{img/tuner-screenshot}
-  \caption{Widok okna głównego aplikacji do testowania i doboru parametrów algorytmów}
+  \caption{Widok okna głównego aplikacji do testowania i~doboru parametrów algorytmów}
   \label{fig:tuner_screenshot}
 \end{figure}
 
@@ -50,13 +50,13 @@ Następnie do aplikacji dodałem możliwość uruchamiania testów automatycznyc
 Poniżej wymieniłem oraz scharakteryzowałem metody segmentacji, które porównywałem na zestawie obrazów tablic rejestracyjnych. Ponadto omówiłem też metody wstępnego przetwarzania obrazu, które dla danej metody segmentacji poprawiają rezultaty. Przedstawiłem też parametry poszczególnych metod, jakie mogą wpływać na działanie algorytmu.
 
 \textbf{Wyszukiwanie szczytów histogramu}\\
-Zauważyłem, że metoda wyszukiwania szczytów histogramu zwraca o wiele lepsze wyniki, kiedy przed wykonaniem procesu wyszukiwania szczytów w histogramie, obraz zostanie wyostrzony. Operacja wyostrzenia spowoduje zniknięcie rozmytych krawędzi, dzięki czemu szczyty histogramów będą jednoznaczne. \\
-Parametrem dodatkowym algorytmu jest minimalna odległość pomiędzy wartościami szczytowymi w histogramie, opisanym na stronie~\pageref{sssec:histogram_peaks}. Przeprowadziłem badania dla różnych wartości minimalnej odległości. Wyniki badań zostały omówione na stronie~\pageref{sssec:histogram_peaks_results}.\\
+Zauważyłem, że metoda wyszukiwania szczytów histogramu zwraca o~wiele lepsze wyniki, kiedy przed wykonaniem procesu wyszukiwania szczytów w~histogramie, obraz zostanie wyostrzony. Operacja wyostrzenia spowoduje zniknięcie rozmytych krawędzi, dzięki czemu szczyty histogramów będą jednoznaczne. \\
+Parametrem dodatkowym algorytmu jest minimalna odległość pomiędzy wartościami szczytowymi w~histogramie, opisanym na stronie~\pageref{sssec:histogram_peaks}. Przeprowadziłem badania dla różnych wartości minimalnej odległości. Wyniki badań zostały omówione na stronie~\pageref{sssec:histogram_peaks_results}.\\
 
 \textbf{Wyszukiwanie minimum histogramu}\\
-Podobnie jak w przypadku metody wyszukiwania szczytów histogramu, również w metodzie wyszukiwania minimum histogramu zastosowałem operację wyostrzania obrazów, ponieważ skutkowało to znaczącą poprawą skuteczności algorytmu. Dodatkowo, do algorytmu wprowadziłem dwa ulepszenia, które mogły wpłynąć na poprawę skuteczności.\\
-W metodzie wyszukiwania minimum histogramu (przy założeniu, że podobnie jak w poprzedniej metodzie, ustawimy minimalną odległość od szczytów histogramu) dwa największe maksima lokalne na histogramie są bardzo dobrze widoczne, natomiast wartości znajdujące się pomiędzy nimi często mają charakter skokowy (mogą występować duże amplitudy pomiędzy wartościami sąsiednimi), dlatego nawet w skupisku wartości, które mogłyby jeszcze należeć do tła, może znaleźć się globalne minimum. Rysunek~\ref{fig:research_min_histogram} obrazuje omawiany problem. Rozmywanie histogramu zazwyczaj polega na wyznaczeniu średniej z przetwarzanego punktu, oraz dwóch jego sąsiednich punktów. Sprawdziłem, czy zwiększenie ilości sąsiadów dla operacji rozmycia histogramu poprawi skuteczność metody.\\
-Kolejnym ulepszeniem, które zastosowałem, jest zmiana sposobu wyszukiwania minimum histogramu. Domyślnie algorytm wyszukiwania minimum w histogramie rozpoczyna działanie od najmniejszego indeksu, i porównuje każdą kolejną liczbę z najmniejszą do tej pory znalezioną wartością. Zauważyłem, że w histogramie minimum globalne może wystąpić kilkukrotnie, natomiast algorytm weźmie pod uwagę tylko pierwsze znalezione minimum. Ponieważ zazwyczaj wartość progowa znajduje się w okolicach połowy przedziału pomiędzy wartościami szczytowymi, jako punkt startowy wyszukiwania zdefiniowałem środek tego przedziału, a przeszukiwanie wykonywane jest na lewo i na prawo od wskazanego środka równocześnie.\\
+Podobnie jak w~przypadku metody wyszukiwania szczytów histogramu, również w~metodzie wyszukiwania minimum histogramu zastosowałem operację wyostrzania obrazów, ponieważ skutkowało to znaczącą poprawą skuteczności algorytmu. Dodatkowo, do algorytmu wprowadziłem dwa ulepszenia, które mogły wpłynąć na poprawę skuteczności.\\
+ W~metodzie wyszukiwania minimum histogramu (przy założeniu, że podobnie jak w~poprzedniej metodzie, ustawimy minimalną odległość od szczytów histogramu) dwa największe maksima lokalne na histogramie są bardzo dobrze widoczne, natomiast wartości znajdujące się pomiędzy nimi często mają charakter skokowy (mogą występować duże amplitudy pomiędzy wartościami sąsiednimi), dlatego nawet w~skupisku wartości, które mogłyby jeszcze należeć do tła, może znaleźć się globalne minimum. Rysunek~\ref{fig:research_min_histogram} obrazuje omawiany problem. Rozmywanie histogramu zazwyczaj polega na wyznaczeniu średniej z~przetwarzanego punktu, oraz dwóch jego sąsiednich punktów. Sprawdziłem, czy zwiększenie ilości sąsiadów dla operacji rozmycia histogramu poprawi skuteczność metody.\\
+Kolejnym ulepszeniem, które zastosowałem, jest zmiana sposobu wyszukiwania minimum histogramu. Domyślnie algorytm wyszukiwania minimum w~histogramie rozpoczyna działanie od najmniejszego indeksu, i~porównuje każdą kolejną liczbę z~najmniejszą do tej pory znalezioną wartością. Zauważyłem, że w~histogramie minimum globalne może wystąpić kilkukrotnie, natomiast algorytm weźmie pod uwagę tylko pierwsze znalezione minimum. Ponieważ zazwyczaj wartość progowa znajduje się w~okolicach połowy przedziału pomiędzy wartościami szczytowymi, jako punkt startowy wyszukiwania zdefiniowałem środek tego przedziału, a~przeszukiwanie wykonywane jest na lewo i~na prawo od wskazanego środka równocześnie.\\
 
 \begin{figure}
   \centering
@@ -91,18 +91,18 @@ Kolejnym ulepszeniem, które zastosowałem, jest zmiana sposobu wyszukiwania min
   \label{fig:research_min_histogram}
 \end{figure}
 
-\textbf{Metoda Sauvola i Pietikainena} \\
-Metoda Sauvola i Pietikainena wymaga do obliczeń zdefiniowania zbioru najbliższych punktów dla każdego piksela. Przyjąłem, że zbiorem najbliższych punktów będzie obszar o kształcie kwadratu, którego środkiem jest punkt dla którego aktualnie wyznaczana jest wartość progowa. Długość boku obszaru ustanowiłem jako jeden z dwóch parametrów algorytmu, i oznaczyłem go symbolem $S$. \\
-Kolejnym parametrem jest wartość zmiennej $k$, która powinna zostać dobrana w zależności od problemu.\\
+\textbf{Metoda Sauvola i~Pietikainena} \\
+Metoda Sauvola i~Pietikainena wymaga do obliczeń zdefiniowania zbioru najbliższych punktów dla każdego piksela. Przyjąłem, że zbiorem najbliższych punktów będzie obszar o~kształcie kwadratu, którego środkiem jest punkt dla którego aktualnie wyznaczana jest wartość progowa. Długość boku obszaru ustanowiłem jako jeden z~dwóch parametrów algorytmu, i~oznaczyłem go symbolem $S$. \\
+Kolejnym parametrem jest wartość zmiennej $k$, która powinna zostać dobrana w~zależności od problemu.\\
 
-\textbf{Metoda rzutu jasności i rozrostu obszarów.}\\
-W metodzie rozrostu obszarów konieczne jest podanie punktów startowych, od których będzie mogła rozpocząć działanie. Do wyszukiwania punktów użyłem metody rzutu jasności, której wynikiem są lokalizacje potencjalnych znaków. Jako że nie jest z góry znane oświetlenie obrazu wejściowego, $\varepsilon$ wyliczany jest ze wzoru:
+\textbf{Metoda rzutu jasności i~rozrostu obszarów.}\\
+ W~metodzie rozrostu obszarów konieczne jest podanie punktów startowych, od których będzie mogła rozpocząć działanie. Do wyszukiwania punktów użyłem metody rzutu jasności, której wynikiem są lokalizacje potencjalnych znaków. Jako że nie jest z~góry znane oświetlenie obrazu wejściowego, $\varepsilon$ wyliczany jest ze wzoru:
 \begin{gather*}
   \varepsilon = srednia(f^{(in)}) \cdot r,
 \end{gather*}
-gdzie funkcja $srednia$ z argumentem $f^{(in)}$ zwraca średnią arytmetyczną wartości jasności obrazu wejściowego, a zmienna $r$ jest parametrem metody, którego wartość modyfikowałem podczas badań. Założyłem, że zmienna $r$ będzie przyjmowała wartości z przedziału $\big<0.1, 1.5\big>$. Użycie mniejszych wartości oznaczałoby, że bierzemy punkty o praktycznie tych samych wartościach jasności co punkt startowy, co powodowałoby utratę zalety tego algorytmu. Zastosowanie zbyt dużych wartości (większych od $1.5$) skutkowałoby akceptacją punktów o zbyt dużej różnicy jasności względem punktu startowego, co wiązałoby się z klasyfikacją tła jako szukanego obiektu.  \\
+gdzie funkcja $srednia$ z~argumentem $f^{(in)}$ zwraca średnią arytmetyczną wartości jasności obrazu wejściowego, a~zmienna $r$ jest parametrem metody, którego wartość modyfikowałem podczas badań. Założyłem, że zmienna $r$ będzie przyjmowała wartości z~przedziału $\big<0.1, 1.5\big>$. Użycie mniejszych wartości oznaczałoby, że bierzemy punkty o~praktycznie tych samych wartościach jasności co punkt startowy, co powodowałoby utratę zalety tego algorytmu. Zastosowanie zbyt dużych wartości (większych od $1.5$) skutkowałoby akceptacją punktów o~zbyt dużej różnicy jasności względem punktu startowego, co wiązałoby się z~klasyfikacją tła jako szukanego obiektu.  \\
 
 \textbf{Metoda krawędziowa}\\
-W badaniach ująłem też jedną metodę krawędziową. Do znajdowania krawędzi na obrazie wykorzystałem algorytm Canny'ego. Po otrzymaniu binarnego obrazu, użyłem algorytmu do znajdowania konturów, opracowanego przez Satoshi Suzuki oraz Keiichi Abe \cite{suzuki85}. Dla każdego znalezionego konturu wyznaczyłem jego położenie.\\
-Dla omawianej metody krawędziowej przyjąłem dwa parametry. Pierwszy z nich, oznaczany dalej literą $K$, to rozmiar obszaru użytego w operacji wygładzania obrazu. Kształt obszaru to kwadrat o długości boku $K$. Do wygładzania obrazu użyłem filtru uśredniającego. \\
+ W~badaniach ująłem też jedną metodę krawędziową. Do znajdowania krawędzi na obrazie wykorzystałem algorytm Canny'ego. Po otrzymaniu binarnego obrazu, użyłem algorytmu do znajdowania konturów, opracowanego przez Satoshi Suzuki oraz Keiichi Abe \cite{suzuki85}. Dla każdego znalezionego konturu wyznaczyłem jego położenie.\\
+Dla omawianej metody krawędziowej przyjąłem dwa parametry. Pierwszy z~nich, oznaczany dalej literą $K$, to rozmiar obszaru użytego w~operacji wygładzania obrazu. Kształt obszaru to kwadrat o~długości boku $K$. Do wygładzania obrazu użyłem filtru uśredniającego. \\
 Drugim parametrem jest rozmiar maski dla algorytmu Sobel.

@@ -1,49 +1,49 @@
 
 \section{Analiza obrazu}
 \subsection{Podstawowe informacje dotyczące przetwarzania obrazów}
-Określenie sposobu reprezentacji kolorów w obrazach rastrowych nazywamy \textbf{trybem koloru}. Wyróżniamy następujące tryby koloru:
+Określenie sposobu reprezentacji kolorów w~obrazach rastrowych nazywamy \textbf{trybem koloru}. Wyróżniamy następujące tryby koloru:
 \begin{itemize}
-  \item czarno-biały - w obrazie występują tylko kolory: biały i czarny,
-  \item skala szarości - oprócz koloru czarnego i białego, występuje cała gama jasności pośrednich,
-  \item tryb kolorowy - piksele mają przyporządkowane kolory z przestrzeni barw.
+  \item czarno-biały - w~obrazie występują tylko kolory: biały i~czarny,
+  \item skala szarości - oprócz koloru czarnego i~białego, występuje cała gama jasności pośrednich,
+  \item tryb kolorowy - piksele mają przyporządkowane kolory z~przestrzeni barw.
 \end{itemize}
 Symbolem $I$ będziemy oznaczać zbiór kolorów. Dla trybu czarno-białego
 \begin{gather*}
-  I = \{0, 1\}
-\end{gather*} gdzie 0 reprezentuje kolor czarny, a 1 kolor biały.\\
-W przypadku skali szarości
+ I~= \{0, 1\}
+\end{gather*} gdzie 0 reprezentuje kolor czarny, a~1 kolor biały.\\
+ W~przypadku skali szarości
 \begin{gather*}
-  I = \{0, 1, ..., 2^b-1\}
+ I~= \{0, 1, ..., 2^b-1\}
 \end{gather*}
-gdzie $b$ jest liczbą bitów potrzebnych do reprezentacji jasności, 0 oznacza kolor czarny, $2^b-1$ kolor biały, a pozostałe wartości opisują jasność koloru. Najczęściej wartość $b$ jest wielokrotnością liczby 8.\\
-W trybie kolorowym
+gdzie $b$ jest liczbą bitów potrzebnych do reprezentacji jasności, 0 oznacza kolor czarny, $2^b-1$ kolor biały, a~pozostałe wartości opisują jasność koloru. Najczęściej wartość $b$ jest wielokrotnością liczby 8.\\
+ W~trybie kolorowym
 \begin{gather*}
-  I = I_1 \times I_2 \times ... \times I_C,
+ I~= I_1 \times I_2 \times ... \times I_C,
 \end{gather*}
 gdzie
 \begin{gather*}
   I_1 = I_2 = ... = I_C = \{0, 1, ..., 2^b-1\}
 \end{gather*}
-oraz $C \in \mathbb{N} \; \text{i} \; n > 1$ jest liczbą kanałów z przestrzeni barw. \\
-Natomiast w przestrzeni barw RGB
+oraz $C \in \mathbb{N} \; \text{i} \; n > 1$ jest liczbą kanałów z~przestrzeni barw. \\
+Natomiast w~przestrzeni barw RGB
 \begin{gather*}
-  I = I_R \times I_G \times I_B
+ I~= I_R \times I_G \times I_B
 \end{gather*}
-gdzie $I_R$, $I_G$, $I_B$ oznaczają odpowiednio jasność kolorów czerwonego, zielonego i niebieskiego. Oczywiście, przestrzeń RGB jest trzykanałowa.
+gdzie $I_R$, $I_G$, $I_B$ oznaczają odpowiednio jasność kolorów czerwonego, zielonego i~niebieskiego. Oczywiście, przestrzeń RGB jest trzykanałowa.
 \\
 \paragraph{Obraz cyfrowy} definiujemy jako funkcję
 \begin{gather*}
   f: \{0, 1, ..., N-1\} \times \{0, 1, ..., M-1\} \times \{1, 2, ..., C\} \rightarrow I,
 \end{gather*}
-gdzie $M$, $N$ oznaczają odpowiednio szerokość i wysokość obrazu, natomiast $C$ oznacza liczbę kanałów w obrazie. W przypadku obrazów jednokanałowych, będziemy pomijać zbiór $\{1, 2, ..., C\}$.\\
-Wartość funkcji $f(x, y, c)$ nazywamy \textbf{pikselem}. Trzeci argument będziemy pomijać w przypadku obrazów jednokanałowych. \\
+gdzie $M$, $N$ oznaczają odpowiednio szerokość i~wysokość obrazu, natomiast $C$ oznacza liczbę kanałów w~obrazie. W~przypadku obrazów jednokanałowych, będziemy pomijać zbiór $\{1, 2, ..., C\}$.\\
+Wartość funkcji $f(x, y, c)$ nazywamy \textbf{pikselem}. Trzeci argument będziemy pomijać w~przypadku obrazów jednokanałowych. \\
 Obrazy cyfrowe możemy podzielić ze względu na tryb opisu koloru:
 \begin{itemize}
   \item czarno-białe,
   \item jednokanałowe (monochromatyczne),
   \item wielokanałowe (kolorowe).
 \end{itemize}
-Rysunek~\ref{fig:image_examples} przedstawia trzy obrazy, w których zastosowano wyżej wymienione tryby opisu koloru.\\
+Rysunek~\ref{fig:image_examples} przedstawia trzy obrazy, w~których zastosowano wyżej wymienione tryby opisu koloru.\\
 Symbolem $P_{N,M}$ będziemy oznaczać zbiór
 \begin{gather*}
   P_{N,M} = \{0, 1, ..., N-1\} \times \{0, 1, ..., M-1\}.
@@ -83,8 +83,8 @@ oznaczamy obraz wejściowy, natomiast
 będzie oznaczał obraz wyjściowy.
 
 \subsubsection{Kadrowanie obrazu}
-Operacja kadrowania polega na pozostawieniu na obrazie wejściowym tylko tych pikseli, które znajdują się w zdefiniowanym prostokątnym obszarze. Obraz wyjściowy po operacji kadrowania przyjmuje rozmiar obszaru, do którego kadrowany był obraz wejściowy.\\
-Na rysunku~\ref{fig:crop_image} przedstawiona została operacja kadrowania obrazu. Celem kadrowania jest usunięcie z obrazu informacji, które są zbędne podczas wykonywania analizy obrazu, ponieważ mogą negatywnie wpłynąć na czas oraz rezultaty wykonania algorytmów.
+Operacja kadrowania polega na pozostawieniu na obrazie wejściowym tylko tych pikseli, które znajdują się w~zdefiniowanym prostokątnym obszarze. Obraz wyjściowy po operacji kadrowania przyjmuje rozmiar obszaru, do którego kadrowany był obraz wejściowy.\\
+Na rysunku~\ref{fig:crop_image} przedstawiona została operacja kadrowania obrazu. Celem kadrowania jest usunięcie z~obrazu informacji, które są zbędne podczas wykonywania analizy obrazu, ponieważ mogą negatywnie wpłynąć na czas oraz rezultaty wykonania algorytmów.
 \begin{figure}
   \centering
   \begin{subfigure}[b]{0.45\textwidth}
@@ -101,7 +101,7 @@ Na rysunku~\ref{fig:crop_image} przedstawiona została operacja kadrowania obraz
   \caption{Operacja kadrowania obrazu}\label{fig:crop_image}
 \end{figure}
 \subsubsection{Progowanie (binaryzacja)} \label{sssec:threshold}
-W przypadku obrazów jednokanałowych, progowanie polega na podziale pikseli obrazu na dwie grupy, poprzez wybranie określonej wartości progowej $t$ \cite{phillips94}. Każdy piksel jest porównywany z wartością progową, i w zależności od tego, czy wartość piksela jest większa od wartości progowej, czy mniejsza, w tej samej pozycji nowo powstałego obrazu, przypisuje się wartość $1$, lub $0$. Zatem $I^{(out)} = \{0, 1\}$, natomiast $P^{(out)}_{N, M} = P^{(in)}_{N, M}$. Operację binaryzacji można opisać wzorem:
+ W~przypadku obrazów jednokanałowych, progowanie polega na podziale pikseli obrazu na dwie grupy, poprzez wybranie określonej wartości progowej $t$ \cite{phillips94}. Każdy piksel jest porównywany z~wartością progową, i~w zależności od tego, czy wartość piksela jest większa od wartości progowej, czy mniejsza, w~tej samej pozycji nowo powstałego obrazu, przypisuje się wartość $1$, lub $0$. Zatem $I^{(out)} = \{0, 1\}$, natomiast $P^{(out)}_{N, M} = P^{(in)}_{N, M}$. Operację binaryzacji można opisać wzorem:
 \begin{gather*}
   f^{(out)}(x, y) = \left\{\begin{matrix}
   1, dla \: f^{(in)}(x, y) > t,\\
@@ -123,7 +123,7 @@ Na rysunku~\ref{fig:threshold_image} przedstawiony został wynik operacji progow
     \caption{Obraz wyjściowy, poddany operacji progowania}
     \label{fig:threshold_after}
   \end{subfigure}
-  \caption{Operacja progowania z wartością progu $t=128$ dla obrazu jednokanałowego}\label{fig:threshold_image}
+  \caption{Operacja progowania z~wartością progu $t=128$ dla obrazu jednokanałowego}\label{fig:threshold_image}
 \end{figure}
 
 Zazwyczaj operacji progowania poddawane są obrazy jednokanałowe. Istnieje jednak możliwość wykonania operacji progowania dla obrazów wielokanałowych (np. dla obrazów RGB). Operacja ta definiowana jest następującym wzorem:
@@ -133,23 +133,23 @@ Zazwyczaj operacji progowania poddawane są obrazy jednokanałowe. Istnieje jedn
   0, \; \text{jeżeli} \; \exists c \in C, \; f^{(in)}(x, y, c) \leq t(c),
   \end{matrix}\right. \quad (x, y) \in P^{(in)}_{N,M} \;\; c=1,2,...,C,
 \end{gather*}
-gdzie $C$ to liczba kanałów w obrazie. \\
+gdzie $C$ to liczba kanałów w~obrazie. \\
 
-\textbf{Progowanie lokalne} znajduje zastosowanie w przypadku gdy obraz jest niejednolicie oświetlony. Trudno jest dobrać globalny próg w taki sposób, aby wyekstrachować z obrazu nawet większość pożądanych obiektów. Progowanie lokalne polega na wyznaczeniu danego progu w sąsiedztwie aktualnie przetwarzanego piksela. W przypadku obrazu jednokanałowego
+\textbf{Progowanie lokalne} znajduje zastosowanie w~przypadku gdy obraz jest niejednolicie oświetlony. Trudno jest dobrać globalny próg w~taki sposób, aby wyekstrachować z~obrazu nawet większość pożądanych obiektów. Progowanie lokalne polega na wyznaczeniu danego progu w~sąsiedztwie aktualnie przetwarzanego piksela. W~przypadku obrazu jednokanałowego
 \begin{gather*}
   f^{(out)}(x, y) = \left\{\begin{matrix}
   1, dla \: f^{(in)}(x, y) > T(x, y),\\
   0, dla \: f^{(in)}(x, y) \leq T(x, y),
   \end{matrix}\right. \quad (x, y) \in P^{(in)}_{N,M},
 \end{gather*}
-gdzie $T(x, y)$ to funkcja zwracająca próg w zadanym sąsiedztwie piksela o współrzędnych $(x, y)$. Zwykle jako funkcję wyznaczania progu przyjmuje się wartość średnią lub sumę ważoną, wykorzystującą krzywą Gaussa.
+gdzie $T(x, y)$ to funkcja zwracająca próg w~zadanym sąsiedztwie piksela o~współrzędnych $(x, y)$. Zwykle jako funkcję wyznaczania progu przyjmuje się wartość średnią lub sumę ważoną, wykorzystującą krzywą Gaussa.
 
 \subsubsection{Filtracja obrazu}
-Operacje filtracji mają na celu wykonanie zadanego przekształcenia matematycznego dla każdego piksela, generując tym samym nowy obraz. Filtrację obrazu stosuje się zwykle w celu wydobycia z obrazu żądanych informacji lub usunięcia szumu. \\
-Poprzez \textbf{jądro (maskę)} w kontekscie przetwarzania obrazów rozumiemy kształt którym parametryzowana jest operacja filtracji obrazu. Symbolami $k_N$, $k_M$ będę oznaczał rozmiar jądra (kolejno wysokość oraz szerokość).\\
+Operacje filtracji mają na celu wykonanie zadanego przekształcenia matematycznego dla każdego piksela, generując tym samym nowy obraz. Filtrację obrazu stosuje się zwykle w~celu wydobycia z~obrazu żądanych informacji lub usunięcia szumu. \\
+Poprzez \textbf{jądro (maskę)} w~kontekscie przetwarzania obrazów rozumiemy kształt którym parametryzowana jest operacja filtracji obrazu. Symbolami $k_N$, $k_M$ będę oznaczał rozmiar jądra (kolejno wysokość oraz szerokość).\\
 Poniżej wymienionych zostało kilka najczęściej używanych operacji filtrowania obrazu:
 \begin{itemize}
-\item filtr uśredniający - stosowany jest w celu rozmycia obrazu
+\item filtr uśredniający - stosowany jest w~celu rozmycia obrazu
   \begin{gather*}
     f^{(out)}(x, y) = \frac{\sum\limits_{a=-\frac{k_M}{2}}^{\frac{k_M}{2}} \sum\limits_{b=-\frac{k_N}{2}}^{\frac{k_N}{2}} f^{(in)}(x + a, y + b)}{k_M \cdot k_N}, \quad (x, y) \in P^{(in)}_{N,M},
   \end{gather*}
@@ -200,7 +200,7 @@ Rysunek~\ref{fig:lena_smooth} przedstawia zaszumiony obraz oraz wynik działania
   \label{fig:lena_smooth}
 \end{figure}
 \subsubsection{Dodawanie obrazów}
-W tym podrozdziale, jako $n$ oznaczać będziemy liczbę obrazów wejściowych poddawanych operacji dodawania, jako $P^{(in)}_{i}$ będziemy rozumieć $i-ty$ obraz wejściowy, natomiast poprzez $f^{(in)}_i$ będziemy oznaczać funkcję $i-tego$ obrazu przyporządkowującą punktowi kolor. Symbolem $w_i$ będziemy oznaczać wagę przyporządkowaną do $i-tego$ obrazu wejściowego. Zbiór wartości wag  musi spełniać następujące warunki:
+ W~tym podrozdziale, jako $n$ oznaczać będziemy liczbę obrazów wejściowych poddawanych operacji dodawania, jako $P^{(in)}_{i}$ będziemy rozumieć $i-ty$ obraz wejściowy, natomiast poprzez $f^{(in)}_i$ będziemy oznaczać funkcję $i-tego$ obrazu przyporządkowującą punktowi kolor. Symbolem $w_i$ będziemy oznaczać wagę przyporządkowaną do $i-tego$ obrazu wejściowego. Zbiór wartości wag  musi spełniać następujące warunki:
 \begin{gather*}
   \displaystyle\sum_i w_i = 1\\
   w_i \in \mathbb{R}: 0 \leqslant w_i \leqslant 1.
@@ -215,23 +215,23 @@ definiowana jest wzorem:
 \end{gather*} gdzie funkcja $min$ definiowana jest wzorem
 \begin{gather*}
   min(a, b) = \left\{\begin{matrix}
-  a, \; \text{jeżeli} \; a < b \\
-  b, \; \text{jeżeli} \; a \geqslant b
+  a, \; \text{jeżeli} \; a~< b \\
+  b, \; \text{jeżeli} \; a~\geqslant b
   \end{matrix}\right. 
 \end{gather*}
-\paragraph{Dodawanie obrazów z wagami} \mbox{}\\
-Dodawanie obrazów z wagami zdefiniowane jest wzorem:
+\paragraph{Dodawanie obrazów z~wagami} \mbox{}\\
+Dodawanie obrazów z~wagami zdefiniowane jest wzorem:
 \begin{gather*}
   f^{(out)}(x, y) = \big\lceil \displaystyle\sum_{i=1}^{n} f^{(in)}_i(x, y) \cdot w_i\big\rceil, \quad (x, y) \in P^{(in)}_{N,M}.
 \end{gather*}
 \paragraph{Dodawanie obrazów wielokanałowych} \mbox{}\\
-W przypadku obrazów wielokanałowych, operację dodawania wykonujemy dla każdego kanału osobno:
+ W~przypadku obrazów wielokanałowych, operację dodawania wykonujemy dla każdego kanału osobno:
 \begin{gather*}
   f^{(out)}(x, y, c) = min\big(\displaystyle\sum_{i=1}^{n} f^{(i)}(x, y, c), 2^b-1\big), \quad (x, y, c) \in P^{(in)}_{N,M},
 \end{gather*}
 dla każdego $c \in \{1, 2, ..., C\}$.
 \subsubsection{Wyostrzenie obrazu}
-W celu uzyskania efektu wyostrzonych krawędzi obrazu, należy wykonać na obrazie wejściowym operację rozmycia Gaussa, a następnie obraz wynikowy dodać do obrazu wejściowego z wagami:
+ W~celu uzyskania efektu wyostrzonych krawędzi obrazu, należy wykonać na obrazie wejściowym operację rozmycia Gaussa, a~następnie obraz wynikowy dodać do obrazu wejściowego z~wagami:
 \begin{itemize}
   \item 1.5 dla obrazu wejściowego,
   \item -0.5 dla obrazu poddanego operacji rozmycia Gaussa.
@@ -251,11 +251,11 @@ W celu uzyskania efektu wyostrzonych krawędzi obrazu, należy wykonać na obraz
   \label{fig:image_sharpen}
 \end{figure}
 \subsubsection{Normalizacja obrazu}
-Operacja normalizacji służy do zmiany przedziału wartości jasności pikseli występujących w obrazie \cite{gonzalez02}. Symbolem $\min_{in}$ oraz $max_{in}$ oznaczamy minimalną i maksymalną wartość funkcji jasności obrazu wejściowego, natomiast jako $min_{out}$ oraz $max_{out}$ będziemy oznaczać minimalną i maksymalną pożądaną wartość funkcji jasności obrazu wyjściowego. Funkcję jasności obrazu wyjściowego opisujemy wzorem
+Operacja normalizacji służy do zmiany przedziału wartości jasności pikseli występujących w~obrazie \cite{gonzalez02}. Symbolem $\min_{in}$ oraz $max_{in}$ oznaczamy minimalną i~maksymalną wartość funkcji jasności obrazu wejściowego, natomiast jako $min_{out}$ oraz $max_{out}$ będziemy oznaczać minimalną i~maksymalną pożądaną wartość funkcji jasności obrazu wyjściowego. Funkcję jasności obrazu wyjściowego opisujemy wzorem
 \begin{gather*}
   f^{(out)}(x, y) = (f^{(in)}(x, y) - min_{in}) \cdot \frac{max_{out} - min_{out}}{max_{in} - min_{in}}+min_{in}, \quad  (x, y) \in P^{(in)}_{N,M}.
 \end{gather*}
-Rysunek~\ref{fig:image_normalize} prezentuje działanie algorytmu normalizacji. Obraz wejściowy został wykonany w bardzo ciemnym otoczeniu, natomiast po wykonaniu operacji kontrast obrazu został poprawiony.
+Rysunek~\ref{fig:image_normalize} prezentuje działanie algorytmu normalizacji. Obraz wejściowy został wykonany w~bardzo ciemnym otoczeniu, natomiast po wykonaniu operacji kontrast obrazu został poprawiony.
 \begin{figure}
   \centering
   \begin{subfigure}[b]{0.45\textwidth}
@@ -271,59 +271,59 @@ Rysunek~\ref{fig:image_normalize} prezentuje działanie algorytmu normalizacji. 
   \label{fig:image_normalize}
 \end{figure}
 \subsection{Operacje morfologiczne}
-Operacje morfologiczne na obrazach wykorzystywane są do filtracji morfologicznej oraz analizy kształtów obiektów na obrazie \cite{soille03}. Definiują one zbiór punktów, jakie powinny pozostać na obrazie. W praktyce jest to realizowane poprzez ustawianie wartości jasności danego piksela na wartość 0 w przypadku nieistnienia danego punktu w zbiorze, lub wartości maksymalnej dla funkcji jasności, jeśli piksel o danych współrzędnych znajduje się w zbiorze. Przekształcenia morfologiczne są podstawą dla wielu bardziej złożonych algorytmów wizji komputerowej.\\
-Jako symbol $A$ będziemy oznaczali zbiór punktów w których obraz wejściowy posiada wartość jasności równą 1, symbol $B$ będzie reprezentował maskę dla operacji morfologicznej. Funkcja $translacja(a, b)$ definiuje przesunięcie elementu strukturalnego (maski) $a$ na pozycję określoną przez współrzędne $b$.
+Operacje morfologiczne na obrazach wykorzystywane są do filtracji morfologicznej oraz analizy kształtów obiektów na obrazie \cite{soille03}. Definiują one zbiór punktów, jakie powinny pozostać na obrazie. W~praktyce jest to realizowane poprzez ustawianie wartości jasności danego piksela na wartość 0 w~przypadku nieistnienia danego punktu w~zbiorze, lub wartości maksymalnej dla funkcji jasności, jeśli piksel o~danych współrzędnych znajduje się w~zbiorze. Przekształcenia morfologiczne są podstawą dla wielu bardziej złożonych algorytmów wizji komputerowej.\\
+Jako symbol $A$ będziemy oznaczali zbiór punktów w~których obraz wejściowy posiada wartość jasności równą 1, symbol $B$ będzie reprezentował maskę dla operacji morfologicznej. Funkcja $translacja(a, b)$ definiuje przesunięcie elementu strukturalnego (maski) $a$ na pozycję określoną przez współrzędne $b$.
 \subsubsection{Dylatacja obrazu}
 Dylatacja to rozszerzenie obrazu wykorzystując zadaną maskę. Operacja definiowana jest wzorem
 \begin{gather*}
-  A \oplus B \equiv \{ (x, y) \in A | A \cap translacja(B, (x, y)) \neq \emptyset \}.
+ A~\oplus B \equiv \{ (x, y) \in A~| A~\cap translacja(B, (x, y)) \neq \emptyset \}.
 \end{gather*}
 Przykładowy wynik operacji dylatacji przedstawiony jest na rysunku~\ref{fig:dilate}. Proces nakładania maski na obraz wejściowy został zobrazowany na rysunku~\ref{fig:dilate_better_example}. Na czarno zaznaczony został obraz wejściowy, natomiast na fioletowo, obraz wyjściowy (obraz wejściowy zakrywa część obrazu wyjściowego). Maska została oznaczona kolorem szarym (jako maska użyty został wypełniony kwadrat). Rysunek przedstawia zastosowanie maski dla dwóch pikseli (zaznaczonych na czerwono).
 \begin{figure}
   \centering
   \includegraphics[width=15cm]{img/dilate}
-  \caption{Obraz binarny poddany procesowi dylatacji z zadanym elementem strukturalnym}
+  \caption{Obraz binarny poddany procesowi dylatacji z~zadanym elementem strukturalnym}
   \label{fig:dilate}
 \end{figure}
 \begin{figure}
   \centering
   \includegraphics[width=5cm]{img/dilate-better-example}
-  \caption{Proces dylatacji obrazu z zastosowaniem elementu strukturalnego - wypełnionego kwadratu}
+  \caption{Proces dylatacji obrazu z~zastosowaniem elementu strukturalnego - wypełnionego kwadratu}
   \label{fig:dilate_better_example}
 \end{figure}
 \subsubsection{Erozja obrazu} 
-Erozja obrazu polega na zwężaniu obrazu z wykorzystaniem zadanego elementu strukturalnego. Operacja definiowana jest wzorem
+Erozja obrazu polega na zwężaniu obrazu z~wykorzystaniem zadanego elementu strukturalnego. Operacja definiowana jest wzorem
 \begin{gather*}
-  A \ominus B \equiv \{ (x, y) \in A | translacja(B, (x, y) \subset A \}.
+ A~\ominus B \equiv \{ (x, y) \in A~| translacja(B, (x, y) \subset A~\}.
 \end{gather*}
-Przykładowy wynik operacji erozji obrazu przedstawiony został na rysunku~\ref{fig:erode}. Rysunek~\ref{fig:erode_better_example} przedstawia proces erozji dla dwóch pikseli (zaznaczonych na czerwono). Obraz wejściowy zaznaczony jest kolorem czarnym, a obraz wyjściowy, kolorem fioletowym (obraz wyjściowy zakrywa część obrazu wejściowego). Kolorem szarym wypełniony został element strukturalny (w kształcie kwadratu). Rysunek przedstawia zastosowanie maski dla dwóch pikseli (zaznaczonych na czerwono).
+Przykładowy wynik operacji erozji obrazu przedstawiony został na rysunku~\ref{fig:erode}. Rysunek~\ref{fig:erode_better_example} przedstawia proces erozji dla dwóch pikseli (zaznaczonych na czerwono). Obraz wejściowy zaznaczony jest kolorem czarnym, a~obraz wyjściowy, kolorem fioletowym (obraz wyjściowy zakrywa część obrazu wejściowego). Kolorem szarym wypełniony został element strukturalny (w kształcie kwadratu). Rysunek przedstawia zastosowanie maski dla dwóch pikseli (zaznaczonych na czerwono).
 \begin{figure}
   \centering
   \includegraphics[width=15cm]{img/erode}
-  \caption{Obraz binarny poddany procesowi erozji z zadanym elementem strukturalnym}
+  \caption{Obraz binarny poddany procesowi erozji z~zadanym elementem strukturalnym}
   \label{fig:erode}
 \end{figure}
 \begin{figure}
   \centering
   \includegraphics[width=5cm]{img/erode-better-example}
-  \caption{Proces erozji obrazu z użyciem elementu strukturalnego - wypełnionego kwadratu}
+  \caption{Proces erozji obrazu z~użyciem elementu strukturalnego - wypełnionego kwadratu}
   \label{fig:erode_better_example}
 \end{figure}
-\subsubsection{Zamknięcie i otwarcie obrazu}
-Operacje zamknięcia i otwarcia obrazu to złożenie dwóch wyżej wymienionych operacji (dylatacji oraz erozji) w odpowiedni sposób.
+\subsubsection{Zamknięcie i~otwarcie obrazu}
+Operacje zamknięcia i~otwarcia obrazu to złożenie dwóch wyżej wymienionych operacji (dylatacji oraz erozji) w~odpowiedni sposób.
 \begin{itemize}
-\item zamknięcie obrazu definiowane jest w następujący sposób:
+\item zamknięcie obrazu definiowane jest w~następujący sposób:
   \begin{gather*}
-    A \bullet B = (A \oplus B) \ominus B,
+ A~\bullet B = (A \oplus B) \ominus B,
   \end{gather*} 
-czyli najpierw wykonywana jest operacja dylatacji obrazu, a następnie przekształcony obraz poddawany jest operacji erozji
+czyli najpierw wykonywana jest operacja dylatacji obrazu, a~następnie przekształcony obraz poddawany jest operacji erozji
 \item otwarcie obrazu definiowane jest wzorem:
   \begin{gather*}
-    A \circ B = (A \ominus B) \oplus B.
+ A~\circ B = (A \ominus B) \oplus B.
   \end{gather*}
-W przypadku algorytmu otwarcia obrazu, w pierwszej kolejności wykonywana jest operacja erozji, a następnie operacja dylatacji obrazu.
+ W~przypadku algorytmu otwarcia obrazu, w~pierwszej kolejności wykonywana jest operacja erozji, a~następnie operacja dylatacji obrazu.
 \end{itemize}
-Na rysunku~\ref{fig:open_close} przedstawiony został wynik działania obydwu algorytmów na tym samym obrazie, z tym samym elementem strukturalnym.
+Na rysunku~\ref{fig:open_close} przedstawiony został wynik działania obydwu algorytmów na tym samym obrazie, z~tym samym elementem strukturalnym.
 \begin{figure}
   \centering
   \includegraphics[width=15cm]{img/open-close}
@@ -331,8 +331,8 @@ Na rysunku~\ref{fig:open_close} przedstawiony został wynik działania obydwu al
   \label{fig:open_close}
 \end{figure}
 \subsubsection{Transformata odległościowa}
-Transformata odległościowa, inaczej zwana funkcją odległości, służy do wyznaczania minimalnej odległości punktu o wartości 1 od punktu o wartości 0. Dla punktów o wartości 0 automatycznie przypisywana jest wartość 0. \\
-Tabela~\ref{tab:distance_transform} przedstawia wynik działania operacji na macierzy zawierającej obrazy binarne, natomiast rysunek~\ref{fig:distance_transform} prezentuje wynik działania tej samej operacji na obrazie. W celu podkreślenia wyniku operacji, obraz wyjściowy został poddany operacji normalizacji.
+Transformata odległościowa, inaczej zwana funkcją odległości, służy do wyznaczania minimalnej odległości punktu o~wartości 1 od punktu o~wartości 0. Dla punktów o~wartości 0 automatycznie przypisywana jest wartość 0. \\
+Tabela~\ref{tab:distance_transform} przedstawia wynik działania operacji na macierzy zawierającej obrazy binarne, natomiast rysunek~\ref{fig:distance_transform} prezentuje wynik działania tej samej operacji na obrazie. W~celu podkreślenia wyniku operacji, obraz wyjściowy został poddany operacji normalizacji.
 
 \begin{table}
 \centering
@@ -385,7 +385,7 @@ Tabela~\ref{tab:distance_transform} przedstawia wynik działania operacji na mac
 \end{figure}
 
 \subsection{Operacje na histogramach}
-Bardzo często podczas analizy obrazu w celu jego segmentacji, wykorzystywana jest analiza histogramu. W celu ułatwienia analizy, a także poprawy jej wyników, przed jej rozpoczęciem można zastosować niżej wymienione zabiegi.
+Bardzo często podczas analizy obrazu w~celu jego segmentacji, wykorzystywana jest analiza histogramu. W~celu ułatwienia analizy, a~także poprawy jej wyników, przed jej rozpoczęciem można zastosować niżej wymienione zabiegi.
 \begin{figure}
   \centering
   \begin{subfigure}[b]{0.45\textwidth}
@@ -400,20 +400,20 @@ Bardzo często podczas analizy obrazu w celu jego segmentacji, wykorzystywana je
   \caption{Jednokanałowy obraz oraz jego histogram}
   \label{fig:image_histogram_g}
 \end{figure}
-\textbf{Histogram obrazu} jest reprezentacją rozkładu częstości występowania danej wartości jasności w obrazie. Przykładowy obraz oraz jego histogram przedstawiony został na rysunku~\ref{fig:image_histogram_g}. Ponieważ obraz jest bardzo ciemny, większość wartości na histogramie jest bliska wartości 0 (ta wartość reprezentuje kolor czarny).\\
-Jako $H$ będziemy oznaczali funkcję zwracającą wartość histogramu w podanym punkcie. Poprzez symbol $H_{max}$ oznaczać będziemy funkcję zwracającą największy indeks $i$ znajdujący się w histogramie, taki że $H(i) \neq 0$. Symbolem $H_{in}$ oznaczać będziemy histogram wejściowy, a symbolem $H_{out}$ histogram wyjściowy.\\
+\textbf{Histogram obrazu} jest reprezentacją rozkładu częstości występowania danej wartości jasności w~obrazie. Przykładowy obraz oraz jego histogram przedstawiony został na rysunku~\ref{fig:image_histogram_g}. Ponieważ obraz jest bardzo ciemny, większość wartości na histogramie jest bliska wartości 0 (ta wartość reprezentuje kolor czarny).\\
+Jako $H$ będziemy oznaczali funkcję zwracającą wartość histogramu w~podanym punkcie. Poprzez symbol $H_{max}$ oznaczać będziemy funkcję zwracającą największy indeks $i$ znajdujący się w~histogramie, taki że $H(i) \neq 0$. Symbolem $H_{in}$ oznaczać będziemy histogram wejściowy, a~symbolem $H_{out}$ histogram wyjściowy.\\
 
 \subsubsection{Wyrównanie histogramu}\label{sssec:histogram_eq}
-Metoda wyrównywania histogramu ma na celu zmianę kontrastu obrazu \cite{acharya05}. Metoda ta wykorzystywany jest w przypadku, gdy zarówno tło, jak i pierwszy plan obrazu, są ciemne lub jasne. Wadą metody wyrównywania histogramu jest możliwe wzmocnienie zakłóceń występujących na obrazie, gdyż algorytm traktuje je jak sygnał opisujący prawidłowy obraz. Przed zastosowaniem tej metody, warto zatem zastosować jeden z algorytmów rozmycia obrazu, opisywany we wcześniejszej części tego rozdziału.\\
-Metoda wyrównania histogramu sprowadza się do wyznaczenia tablicy LUT (\textit{ang. Lookup table}), na podstawie której wyznaczone zostaną wartości jasności poszczególnych pikseli obrazu wejściowego. W celu wyznaczenia tablicy LUT, należy wyznaczyć dystrybuantę rozkładu prawdopodobieństwa dla wartości pikseli obrazu:
+Metoda wyrównywania histogramu ma na celu zmianę kontrastu obrazu \cite{acharya05}. Metoda ta wykorzystywany jest w~przypadku, gdy zarówno tło, jak i~pierwszy plan obrazu, są ciemne lub jasne. Wadą metody wyrównywania histogramu jest możliwe wzmocnienie zakłóceń występujących na obrazie, gdyż algorytm traktuje je jak sygnał opisujący prawidłowy obraz. Przed zastosowaniem tej metody, warto zatem zastosować jeden z~algorytmów rozmycia obrazu, opisywany we wcześniejszej części tego rozdziału.\\
+Metoda wyrównania histogramu sprowadza się do wyznaczenia tablicy LUT (\textit{ang. Lookup table}), na podstawie której wyznaczone zostaną wartości jasności poszczególnych pikseli obrazu wejściowego. W~celu wyznaczenia tablicy LUT, należy wyznaczyć dystrybuantę rozkładu prawdopodobieństwa dla wartości pikseli obrazu:
 \begin{gather*}
   D(i) = \sum\limits_{j=0}^i p(j),
 \end{gather*}
-gdzie $i$ jest wartością jasności występującą na obrazie, a $p(j)$ jest prawdopodobieństwem wystąpienia wartości $j$ w obrazie. Wykorzystując wyznaczone wartości dystrybuanty, możemy opisać tablicę LUT za pomocą wzoru:
+gdzie $i$ jest wartością jasności występującą na obrazie, a~$p(j)$ jest prawdopodobieństwem wystąpienia wartości $j$ w~obrazie. Wykorzystując wyznaczone wartości dystrybuanty, możemy opisać tablicę LUT za pomocą wzoru:
 \begin{gather*}
   LUT(i) = \frac{D(i)-D_0}{1-D_0} \cdot K,
 \end{gather*}
-gdzie $i$ to wartość jasności składowej obrazu wejściowego, $D_0$ to pierwsza wartość dystrybuanty różna od zera, a $K$ jest maksymalną wartością jasności występującą w obrazie wejściowym.\\
+gdzie $i$ to wartość jasności składowej obrazu wejściowego, $D_0$ to pierwsza wartość dystrybuanty różna od zera, a~$K$ jest maksymalną wartością jasności występującą w~obrazie wejściowym.\\
 Rysunek~\ref{fig:equalize_histogram} przedstawia efekt działania operacji wyrównania histogramu na przykładowym obrazie.
 \begin{figure}
   \centering
@@ -444,7 +444,7 @@ Rysunek~\ref{fig:equalize_histogram} przedstawia efekt działania operacji wyró
 \end{figure}
 
 \subsubsection{Wygładzenie histogramu}
-Często histogram obrazu zawiera w sobie nagłe skoki wartości, które utrudniają analizę histogramu, gdyż mogą reprezentować fałszywe ekstrema. Wygładzanie histogramu ma na celu usunięcie takich skoków, zachowując przy tym oryginalny kształt histogramu. Dla każdej wartości histogramu wejściowego \textit{$H_{in}$} należy zastosować następującą operację:
+Często histogram obrazu zawiera w~sobie nagłe skoki wartości, które utrudniają analizę histogramu, gdyż mogą reprezentować fałszywe ekstrema. Wygładzanie histogramu ma na celu usunięcie takich skoków, zachowując przy tym oryginalny kształt histogramu. Dla każdej wartości histogramu wejściowego \textit{$H_{in}$} należy zastosować następującą operację:
 \begin{gather*}
   \forall_{i} \in \big< H_{in}(0), H_{in}(H_{max}(H_{in})) \big> :  H_{out}(i) = \frac{H_{in}(i-1) + H_{in}(i) + H_{in}(i+1)}{3}.
 \end{gather*}
