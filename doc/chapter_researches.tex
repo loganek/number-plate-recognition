@@ -37,7 +37,7 @@ Ze względu na wykorzystanie w algorytmach segmentacji podstawowych operacji prz
 Do rozpoznawania tekstu wykorzystałem bibliotekę Tesseract \cite{tesseract}. Biblioteka Tesseract jest otwartym oprogramowaniem rozwijanym od 1985 roku. Służy do rozpoznawania znaków w obrazach cyfrowych.
 \subsection{Aplikacja testująca}
 Podczas implementacji algorytmów, bardzo często musiałem zmieniać wartości ich parametrów. Każdorazowe zmiany w kodzie źródłowym i ponowna kompilacja algorytmów była czasochłonna, dlatego napisałem aplikację, która umożliwi mi zmianę parametrów algorytmów bez konieczności zmieniania wartości w kodzie źródłowym, ale podczas działania aplikacji.\\
-Następnie do aplikacji dodałem możliwość uruchamiania testów automatycznych, których celem była szybka weryfikacja większej ilości danych testowych na raz, zwracając procentową wartość poprawnie rozpoznanych obrazów. Na rysunku~\ref{fig:tuner_screenshot} zamieszczone zostało okno główne aplikacji testującej.
+Następnie do aplikacji dodałem możliwość uruchamiania testów automatycznych, których celem była szybka weryfikacja większej ilości danych testowych na raz, zwracając procentową wartość poprawnie rozpoznanych obrazów. Na rysunku~\ref{fig:tuner_screenshot} zamieszczone zostało okno główne aplikacji testującej. Aplikacja operuje na obrazach pochodzących ze wskazanego wcześniej repozytorium.
 
 \begin{figure}
   \centering
@@ -104,5 +104,5 @@ gdzie funkcja $srednia$ z argumentem $f^{(in)}$ zwraca średnią arytmetyczną w
 
 \textbf{Metoda krawędziowa}\\
 W badaniach ująłem też jedną metodę krawędziową. Do znajdowania krawędzi na obrazie wykorzystałem algorytm Canny'ego. Po otrzymaniu binarnego obrazu, użyłem algorytmu do znajdowania konturów, opracowanego przez Satoshi Suzuki oraz Keiichi Abe \cite{suzuki85}. Dla każdego znalezionego konturu wyznaczyłem jego położenie.\\
-Dla omawianej metody krawędziowej przyjąłem dwa parametry. Pierwszy z nich, oznaczany dalej literą $S$, to rozmiar obszaru użytego w operacji wygładzania obrazu. Kształt obszaru to kwadrat o długości boku $S$. Do wygładzania obrazu użyłem filtru uśredniającego. \\
+Dla omawianej metody krawędziowej przyjąłem dwa parametry. Pierwszy z nich, oznaczany dalej literą $K$, to rozmiar obszaru użytego w operacji wygładzania obrazu. Kształt obszaru to kwadrat o długości boku $K$. Do wygładzania obrazu użyłem filtru uśredniającego. \\
 Drugim parametrem jest rozmiar maski dla algorytmu Sobel.
